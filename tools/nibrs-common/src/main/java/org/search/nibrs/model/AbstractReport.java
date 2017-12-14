@@ -70,6 +70,7 @@ public abstract class AbstractReport implements ValidationTarget, Identifiable, 
 	
 	public abstract String getUniqueReportDescription();
 	public abstract String getGloballyUniqueReportIdentifier();
+	public abstract String getAdminSegmentLength();
 
 	public char getReportActionType() {
 		return reportActionType;

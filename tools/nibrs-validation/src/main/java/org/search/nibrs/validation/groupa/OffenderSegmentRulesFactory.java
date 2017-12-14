@@ -194,7 +194,7 @@ public class OffenderSegmentRulesFactory {
 				NIBRSAge age = offenderSegment.getAge();
 				NIBRSError e = null;
 				if (RelationshipOfVictimToOffenderCode.SE.code.equals(relationship) && age != null && !age.isUnknown() && age.getError() == null 
-						&& !age.hasInvalidLength() && age.getAgeMin() < 10) {
+						&& !age.hasInvalidLength() && age.getAgeMin() < 13) {
 					e = offenderSegment.getErrorTemplate();
 					e.setDataElementIdentifier("37");
 					e.setValue(age);
@@ -220,7 +220,9 @@ public class OffenderSegmentRulesFactory {
 	Rule<OffenderSegment> getRule552ForEthnicity() {
 		return new UnknownOffenderDemographicsRule("ethnicity", "39A");
 	}
-	
+
+	// Removed with Tech Spec 3.1
+	/*
 	Rule<OffenderSegment> getRule553() {
 		return new RelatedVictimAndOffenderRule() {
 			// note:  Per FBI, this rule will soon be changed
@@ -243,6 +245,7 @@ public class OffenderSegmentRulesFactory {
 			}
 		};
 	}
+	*/
 	
 	Rule<OffenderSegment> getRule554() {
 		return new RelatedVictimAndOffenderRule() {

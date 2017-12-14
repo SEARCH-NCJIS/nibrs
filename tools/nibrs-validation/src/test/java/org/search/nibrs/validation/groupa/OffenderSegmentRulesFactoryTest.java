@@ -353,7 +353,9 @@ public class OffenderSegmentRulesFactoryTest {
 		e = rule.apply(offenderSegment);
 		assertNull(e);
 	}
-	
+
+	// Removed with Tech Spec 3.1
+	/*
 	@Test
 	public void testRule553() {
 		
@@ -402,6 +404,7 @@ public class OffenderSegmentRulesFactoryTest {
 		assertNull(nibrsError);
 		
 	}
+	*/
 	
 	@Test
 	public void testRule554() {

@@ -179,7 +179,7 @@ public class VictimSegmentRulesFactory {
 		rulesList.add(getRule476());
 		rulesList.add(getRule477());
 		rulesList.add(getRule478());
-//		rulesList.add(getRule479());
+		rulesList.add(getRule479());
 		rulesList.add(getRule481ForAgeOfVictim());		
 		rulesList.add(getRule482ForTypeOfVictim());
 		rulesList.add(getRule483ForTypeOfOfficerActivity());
@@ -1395,15 +1395,19 @@ public class VictimSegmentRulesFactory {
 			@Override
 			public NIBRSError apply(VictimSegment victimSegment) {
 				NIBRSError e = null;
-				List<String> typeOfInjuryList = new ArrayList<>();
-				typeOfInjuryList.addAll(victimSegment.getTypeOfInjuryList());
-				typeOfInjuryList.removeIf(item -> item == null);
-				
+				List<String> typeOfInjuryList = victimSegment.getTypeOfInjuryList()
+						.stream()
+						.filter(Objects::nonNull)
+						.collect(Collectors.toList());
 				boolean containsOnly13B = victimSegment.getUcrOffenseCodeList().stream()
 						.filter(Objects::nonNull)
 						.distinct()
 						.allMatch(item->Objects.equals(item, OffenseCode._13B.code));
-				if (containsOnly13B && typeOfInjuryList.contains(TypeInjuryCode.M.code)) {
+				boolean containsOnlyMinorInjuries = typeOfInjuryList
+						.stream()
+						.allMatch(injury->Objects.equals(injury, TypeInjuryCode.N.code) ||
+								Objects.equals(injury, TypeInjuryCode.M.code));
+				if (containsOnly13B && !containsOnlyMinorInjuries) {
 					e = victimSegment.getErrorTemplate();
 					e.setDataElementIdentifier("33");
 					e.setNIBRSErrorCode(NIBRSErrorCode._479);

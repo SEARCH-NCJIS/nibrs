@@ -246,7 +246,7 @@ public class NIBRSAge {
 		if (e != null) {
 			return "Invalid age: " + getAgeString();
 		}
-		return isNonNumeric() ? getNonNumericAge() : (isAgeRange() ? ageMin + "-" + ageMax : ageMin.toString());
+		return isNonNumeric() ? getNonNumericAge() : (isAgeRange() ? ageMin + "" + ageMax : ageMin.toString());
 	}
 
 	public boolean isYoungerThan(NIBRSAge age, boolean lenientRange) {

@@ -33,6 +33,7 @@ public class OffenseSegment extends AbstractSegment
 	public static final int OFFENDERS_SUSPECTED_OF_USING_COUNT = 3;
 
 	public static final char OFFENSE_SEGMENT_TYPE_IDENTIFIER = '2';
+    public static final String OFFENSE_SEGMENT_LENGTH = "0071";
 	
 	private String ucrOffenseCode;
     private String offenseAttemptedCompleted;
@@ -279,5 +280,11 @@ public class OffenseSegment extends AbstractSegment
 	public Object getWithinSegmentIdentifier() {
 		return ucrOffenseCode;
 	}
+
+    @Override
+    public String getSegmentLength()
+    {
+        return OFFENSE_SEGMENT_LENGTH;
+    }
 
 }

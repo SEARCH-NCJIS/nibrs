@@ -38,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class VictimSegment extends AbstractPersonSegment {
 	
 	public static final char VICTIM_SEGMENT_TYPE_IDENTIFIER = '4';
+	public static final String VICTIM_WITH_LEOKA_SEGMENT_LENGTH = "0141";
+	public static final String VICTIM_WITHOUT_LEOKA_SEGMENT_LENGTH = "0129";
 	public static final int UCR_OFFENSE_CODE_CONNECTION_COUNT = 10;
 	public static final int AGGRAVATED_ASSAULT_HOMICIDE_CIRCUMSTANCES_COUNT = 2;
 	public static final int TYPE_OF_INJURY_COUNT = 5;
@@ -353,6 +355,14 @@ public class VictimSegment extends AbstractPersonSegment {
 	@Override
 	public Object getWithinSegmentIdentifier() {
 		return victimSequenceNumber.getValue();
+	}
+
+	@Override
+	public String getSegmentLength()
+	{
+		return ((GroupAIncidentReport) getParentReport()).includesLeoka()
+				? VICTIM_WITH_LEOKA_SEGMENT_LENGTH
+				: VICTIM_WITHOUT_LEOKA_SEGMENT_LENGTH;
 	}
 
 	private void initVictimOffenderRelationship() {
