@@ -30,7 +30,7 @@
 	</parent>
 
 	<properties>
-		<apache-tika-version>1.18</apache-tika-version>
+		<apache-tika-version>1.22</apache-tika-version>
 		<owner>SEARCH-The National Consortium for Justice Information and Statistics</owner>
 	</properties>
 
