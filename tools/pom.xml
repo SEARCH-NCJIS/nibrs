@@ -38,4 +38,18 @@
       <module>nibrs-apps</module>
   </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j-core.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <log4j-core.version>2.15.0</log4j-core.version>
+    </properties>
+
 </project>
