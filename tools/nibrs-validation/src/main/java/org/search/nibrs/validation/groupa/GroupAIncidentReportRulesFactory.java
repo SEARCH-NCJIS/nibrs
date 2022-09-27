@@ -841,10 +841,7 @@ public class GroupAIncidentReportRulesFactory {
 				
 				List<OffenseSegment> qualifiedOffenses = subject.getOffenses().stream()
 						.filter(offense -> ("C".equals(offense.getOffenseAttemptedCompleted()) 
-								&& (OffenseCode.isCrimeAgainstPropertyCode(offense.getUcrOffenseCode()) 
-										|| OffenseCode.isGamblingOffenseCode(offense.getUcrOffenseCode())
-										|| OffenseCode._35A.code.equals(offense.getUcrOffenseCode())
-										|| OffenseCode._100.code.equals(offense.getUcrOffenseCode())) ))
+								&& (OffenseCode.isCrimeAllowsPropertySegement(offense.getUcrOffenseCode())) ))
 						.collect(Collectors.toList());
 				
 				if (qualifiedOffenses.size() > 0){
@@ -965,12 +962,20 @@ public class GroupAIncidentReportRulesFactory {
 						TypeOfPropertyLossCode._8.code);
 			case "35A": 
 			case "35B": 
+			case "521": 
+			case "522": 
+			case "526": 
+			case "58A": 
+			case "61A": 
+			case "61B": 
+			case "620": 
 				return Arrays.asList(
 						TypeOfPropertyLossCode._1.code, 
 						TypeOfPropertyLossCode._6.code);
 			case "200": 
 				return Arrays.asList(TypeOfPropertyLossCode._2.code);
 			case "250": 
+			case "58B": 
 				return Arrays.asList(
 						TypeOfPropertyLossCode._3.code, 
 						TypeOfPropertyLossCode._5.code, 
@@ -995,6 +1000,7 @@ public class GroupAIncidentReportRulesFactory {
 			case "26E": 
 			case "26F": 
 			case "26G": 
+			case "26H": 
 			case "270": 
 				return Arrays.asList(
 						TypeOfPropertyLossCode._5.code, 
