@@ -753,11 +753,7 @@ public class GroupAIncidentReportRulesFactory {
 				
 				boolean isPropertySegmentAllowable = subject.getOffenses()
 						.stream().map(OffenseSegment::getUcrOffenseCode)
-						.anyMatch(code-> OffenseCode.isCrimeRequirePropertySegement(code)
-								|| OffenseCode.isCommerceViolations(code)
-								|| Objects.equals(code, OffenseCode._521.code)
-								|| Objects.equals(code, OffenseCode._522.code)
-								|| Objects.equals(code, OffenseCode._526.code)); 
+						.anyMatch(OffenseCode::isCrimeAllowsPropertySegement); 
 				
 				if ( !isPropertySegmentAllowable && !subject.getProperties().isEmpty()) {
 					ret = subject.getErrorTemplate();
@@ -780,10 +776,7 @@ public class GroupAIncidentReportRulesFactory {
 				
 				String qualifiedUcrCode = subject.getOffenses().stream()
 						.filter(offense -> (offense.getOffenseAttemptedIndicator() 
-								&& (OffenseCode.isCrimeAgainstPropertyCode(offense.getUcrOffenseCode()) 
-										|| OffenseCode.isGamblingOffenseCode(offense.getUcrOffenseCode())
-										|| OffenseCode._100.code.equals(offense.getUcrOffenseCode()) 
-										|| OffenseCode._35A.code.equals(offense.getUcrOffenseCode())) ))
+								&& (OffenseCode.isCrimeAllowsPropertySegement(offense.getUcrOffenseCode()))))
 						.limit(1)
 						.map(i->i.getUcrOffenseCode())
 						.reduce("", String::concat);

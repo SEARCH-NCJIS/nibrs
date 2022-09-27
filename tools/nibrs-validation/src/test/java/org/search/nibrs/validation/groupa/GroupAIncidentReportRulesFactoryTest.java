@@ -845,6 +845,44 @@ public class GroupAIncidentReportRulesFactoryTest {
 		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
 		assertThat(e.getValue(), equalTo("100"));
 		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._35B.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("35B"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._26H.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("26H"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._58A.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("58A"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._521.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("521"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._522.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("522"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._526.code);
+		e = rule.apply(report);
+		assertEquals(NIBRSErrorCode._077, e.getNIBRSErrorCode());
+		assertThat(e.getValue(), equalTo("526"));
+		assertEquals("14", e.getDataElementIdentifier());
+		offenseSegment.setUcrOffenseCode(OffenseCode._13A.code);
+		e = rule.apply(report);
+		assertNull(e);
 	}
 	
 	@Test

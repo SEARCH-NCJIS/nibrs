@@ -250,6 +250,14 @@ public enum OffenseCode {
 				|| isDrugNarcoticOffense(code);
 	}
 	
+	public static final boolean isCrimeAllowsPropertySegement(String code) {
+		return isCrimeRequirePropertySegement(code)
+				|| _521.code.equals(code)
+				|| _522.code.equals(code)
+				|| _526.code.equals(code)
+				|| isCommerceViolations(code);
+	}
+	
 	public static final boolean isCrimeRequireIncidentHour(String code) {
 		return Arrays.asList(_09A.code, _13A.code, _13B.code, _13C.code).contains(code);
 	}
