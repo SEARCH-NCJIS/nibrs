@@ -177,6 +177,23 @@ public enum OffenseCode {
 		_90Z.code).contains(code);
 	}
 	
+	public static final boolean isCrimeAgainstSocietyExcludeGovermentCode(String code) {
+		if (isCrimeAgainstGovernmentCode(code)) {
+			return false; 
+		}
+		OffenseCode offenseCode = OffenseCode.forCode(code); 
+		if (offenseCode != null) {
+			return offenseCode.getCrimeAgainst() == CrimeAgainstCode.Society;
+		}
+		return false; 
+	}
+	
+	public static final boolean isCrimeAgainstGovernmentCode(String code) {
+		return Arrays.asList(_26H.code,
+		_521.code, _522.code, _526.code, _58A.code,
+		_58B.code, _61A.code, _61B.code, _620.code).contains(code);
+	}
+	
 	public static final boolean isCommerceViolations(String code) {
 		return Arrays.asList(
 				_58A.code, _58B.code, _61A.code, _61B.code,

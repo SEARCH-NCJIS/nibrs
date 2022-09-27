@@ -414,13 +414,33 @@ public class VictimSegment extends AbstractPersonSegment {
 		boolean containOffenses = this.getUcrOffenseCodeList().stream().filter(Objects::nonNull).count() > 0;
 		boolean containsOnlyCrimeAgainstSocietyOffenses = this.getUcrOffenseCodeList().stream()
 				.filter(Objects::nonNull)
-				.allMatch(OffenseCode::isCrimeAgainstSocietyCode);
+				.allMatch(OffenseCode::isCrimeAgainstSocietyExcludeGovermentCode);
 				
 		return TypeOfVictimCode.S.code.equals(this.getTypeOfVictim()) 
 				&& containOffenses 
 				&& containsOnlyCrimeAgainstSocietyOffenses;
 	}
 
+	public boolean isVictimOfCrimeAgainstSocietyExludeGoverment() {
+		boolean containOffenses = this.getUcrOffenseCodeList().stream().filter(Objects::nonNull).count() > 0;
+		boolean containsOnlyCrimeAgainstSocietyOffenses = this.getUcrOffenseCodeList().stream()
+				.filter(Objects::nonNull)
+				.allMatch(OffenseCode::isCrimeAgainstSocietyExcludeGovermentCode);
+		
+		return	containOffenses 
+				&& containsOnlyCrimeAgainstSocietyOffenses;
+	}
+	
+	public boolean isVictimOfCrimeAgainstGoverment() {
+		boolean containOffenses = this.getUcrOffenseCodeList().stream().filter(Objects::nonNull).count() > 0;
+		boolean containsOnlyCrimeAgainstGivernmentOffenses = this.getUcrOffenseCodeList().stream()
+				.filter(Objects::nonNull)
+				.allMatch(OffenseCode::isCrimeAgainstGovernmentCode);
+		
+		return	containOffenses 
+				&& containsOnlyCrimeAgainstGivernmentOffenses;
+	}
+	
 	public boolean isAggravatedAssaultHomicideCircumstancesMandatory() {
 		return this.getUcrOffenseCodeList()
 				.stream()

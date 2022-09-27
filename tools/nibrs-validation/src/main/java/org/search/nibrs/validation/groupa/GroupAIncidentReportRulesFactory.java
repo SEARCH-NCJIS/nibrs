@@ -51,6 +51,7 @@ import org.search.nibrs.model.codes.RaceCode;
 import org.search.nibrs.model.codes.RelationshipOfVictimToOffenderCode;
 import org.search.nibrs.model.codes.SexCode;
 import org.search.nibrs.model.codes.TypeOfPropertyLossCode;
+import org.search.nibrs.model.codes.TypeOfVictimCode;
 import org.search.nibrs.validation.ValidatorProperties;
 import org.search.nibrs.validation.rules.BlankRightFillStringRule;
 import org.search.nibrs.validation.rules.NotBlankRule;
@@ -710,15 +711,32 @@ public class GroupAIncidentReportRulesFactory {
 			public NIBRSError apply(GroupAIncidentReport subject) {
 				NIBRSError ret = null;
 
-				boolean containsCrimesAgainstSociety = subject.getOffenses().stream()
-						.anyMatch(offense -> OffenseCode.isCrimeAgainstSocietyCode(offense.getUcrOffenseCode())) ;
+				boolean containsOnlyCrimesAgainstSociety = subject.getOffenses().stream()
+						.anyMatch(offense -> OffenseCode.isCrimeAgainstSocietyExcludeGovermentCode(offense.getUcrOffenseCode())) ;
 				
-				Long crimeAgainsSocietyVictimCount = subject.getVictims()
+				List<String> victimOfCrimeAgainstSocietyTypes = subject.getVictims()
 						.stream()
-						.filter(VictimSegment::isVictimOfCrimeAgainstSociety)
-						.count();
-						
-				if (containsCrimesAgainstSociety && crimeAgainsSocietyVictimCount > 1) {
+						.filter(VictimSegment::isVictimOfCrimeAgainstSocietyExludeGoverment)
+						.map(VictimSegment::getTypeOfVictim)
+						.collect(Collectors.toList());
+				
+				boolean containsOnlyCrimeAgainstGovernment = subject.getOffenses().stream()
+						.anyMatch(offense -> OffenseCode.isCrimeAgainstGovernmentCode(offense.getUcrOffenseCode())) ;
+
+				List<String> victimOfCrimeAgainstGovernmentTypes = subject.getVictims()
+						.stream()
+						.filter(VictimSegment::isVictimOfCrimeAgainstGoverment)
+						.map(VictimSegment::getTypeOfVictim)
+						.collect(Collectors.toList());
+				
+				if ((victimOfCrimeAgainstSocietyTypes.size() > 0 
+						&& containsOnlyCrimesAgainstSociety 
+						&& (victimOfCrimeAgainstSocietyTypes.size() > 1 
+								|| !TypeOfVictimCode.S.code.equals(victimOfCrimeAgainstSocietyTypes.get(0))))
+					|| (victimOfCrimeAgainstGovernmentTypes.size() > 0 
+						&& containsOnlyCrimeAgainstGovernment 
+						&& (victimOfCrimeAgainstGovernmentTypes.size() > 1 
+								|| !TypeOfVictimCode.G.code.equals(victimOfCrimeAgainstGovernmentTypes.get(0))))) {
 					ret = subject.getErrorTemplate();
 					ret.setSegmentType('0');
 					ret.setNIBRSErrorCode(NIBRSErrorCode._080);
