@@ -930,7 +930,9 @@ public class GroupAIncidentReportRulesFactoryTest {
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._7), equalTo(false));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._8), equalTo(false));
 				break; 
-			case _35A: case _35B:
+			case _35A: case _35B: case _521: 
+			case _522: case _526: case _58A: 
+			case _61A: case _61B: case _620: 
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._1), equalTo(false));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._2), equalTo(true));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._3), equalTo(true));
@@ -950,7 +952,7 @@ public class GroupAIncidentReportRulesFactoryTest {
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._7), equalTo(true));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._8), equalTo(true));
 				break;
-			case _250:
+			case _250: case _58B:
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._1), equalTo(true));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._2), equalTo(true));
 				assertThat(reject081(offense, "C",  TypeOfPropertyLossCode._3), equalTo(false));
@@ -973,7 +975,7 @@ public class GroupAIncidentReportRulesFactoryTest {
 			case _120: case _210: case _240:
 			case _270: case _26A: case _26B: 
 			case _26C: case _26D: case _26E:
-			case _26F: 
+			case _26F: case _26H: 
 			case _26G: case _23A: case _23B:
 			case _23C: case _23D: case _23E:
 			case _23F: case _23G: case _23H:

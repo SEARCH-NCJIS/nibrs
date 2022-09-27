@@ -897,16 +897,9 @@ public class GroupAIncidentReportRulesFactory {
 				List<OffenseSegment> qualifiedOffenses = subject.getOffenses().stream()
 						.filter(offense -> 
 							("C".equals(offense.getOffenseAttemptedCompleted()) 
-								&& (OffenseCode.isCrimeAgainstPropertyCode(offense.getUcrOffenseCode()) 
-									|| OffenseCode.isGamblingOffenseCode(offense.getUcrOffenseCode())
-									|| OffenseCode._35A.code.equals(offense.getUcrOffenseCode())
-									|| OffenseCode._35B.code.equals(offense.getUcrOffenseCode())
-									|| OffenseCode._100.code.equals(offense.getUcrOffenseCode()))
+								&& (OffenseCode.isCrimeAllowsPropertySegement(offense.getUcrOffenseCode())) 
 							|| (offense.getOffenseAttemptedIndicator() 
-								&& (OffenseCode.isCrimeAgainstPropertyCode(offense.getUcrOffenseCode()) 
-									|| OffenseCode.isGamblingOffenseCode(offense.getUcrOffenseCode())
-									|| OffenseCode._100.code.equals(offense.getUcrOffenseCode()) 
-									|| OffenseCode.isDrugNarcoticOffense(offense.getUcrOffenseCode()))
+								&& (OffenseCode.isCrimeAllowsPropertySegement(offense.getUcrOffenseCode()))
 							)))
 						.collect(Collectors.toList()); 
 									
@@ -922,7 +915,6 @@ public class GroupAIncidentReportRulesFactory {
 					existingPropertyLosses.removeAll(getValidPropertyLossCodes(qualifiedOffenses));
 					ret = setError081(subject, ret, existingPropertyLosses);
 				}
-				
 				else if (subject.getOffenses().stream().anyMatch(Objects::nonNull)){
 					existingPropertyLosses.removeAll(TypeOfPropertyLossCode.noneOrUnknownValueCodeSet());
 					ret = setError081(subject, ret, existingPropertyLosses);
