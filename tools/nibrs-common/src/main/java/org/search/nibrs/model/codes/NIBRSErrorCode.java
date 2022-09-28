@@ -66,17 +66,21 @@ public enum NIBRSErrorCode {
 /**
  * 088 not implemented	
  */
-	_088("088","Structure Check","GROUP A AND GROUP B ARREST REPORTS CANNOT HAVE SAME IDENTIFIER","Segment Level 6 (Arrestee Segment) and Segment Level 7 (Group B Arrest Report Segment) cannot have the same data values entered in Data Element 2 (Incident Number) and Data Element 41 (Arrest Transaction Number), respectively, for the same ORI."),
+	_088("088","Structure Check","GROUP A AND GROUP B CANNOT HAVE SAME IDENTIFIER","Segment Level 6 (Arrestee Segment) and Segment Level 7 (Group B Arrest Report Segment) cannot have the same data values entered in Data Element 2 (Incident Number) and Data Element 41 (Arrest Transaction Number), respectively, for the same ORI."),
 /**
  * 090-94 not implemented	
  */
+	_093("093","Structure Check","ZERO REPORT MONTH/YEAR IS PRIOR TO AGENCY CONVERSION TO THE NIBRS","Zero Report Month and Zero Report Year cannot precede the month and year in the date the LEA converted to NIBRS."),	
+	_094("094","Structure Check","ZERO REPORT MONTH/YEAR EXCEEDED MONTH/YEAR OF SUBMISSION","A Segment Level 0 was submitted with a month and year entered into positions 38 through 43 that was later than the Month of Electronic submission and Year of Electronic submission entered into positions 7 through 12."),	
+	_096("096","Structure Check","ZERO REPORT MONTH & ZERO REPORT YEAR CANNOT BE ON OR AFTER DATE AGENCY IS PLACED ON COVERED-BY STATUS","The combined Zero Report Month and Zero Report Year cannot be on or after the date a LEA is placed in Covered-by Status. When Zero Report data are received for a LEA in Covered-by Status, the FBI will remove the agency from Covered-by Status, process the submission, and notify the Agency. Additionally, adjustments to previously submitted data from an agency now in Covered-by Status will be processed and no error generated."),	
 /**
  * 096 cannot be validated
  */
 	_091("091","Structure Check","ZERO-REPORTING YEAR IS INVALID","A Segment Level 0 was submitted that did not have four numeric digits in positions 40 through 43."),
 	_099("099","Structure Check","GROUP B ARREST REPORT CAN HAVE ONLY ONE ARRESTEE","Only one arrestee can be reported in a group B arrest report."),
 	_101("101","Admin Segment","MUST BE PRESENT— MANDATORY FIELD","The referenced data element in a Group A Incident Report must contain data when the referenced data element is mandatory or when the conditions are met for data that must be entered into a conditionally mandatory field."),
-	_104("104","Admin Segment","INVALID DATA VALUE—NOT ON FBI VALIDATION TABLE","The referenced data element must contain a valid data value when it is entered."),
+	_104("104","Admin Segment","INVALID DATA VALUE—NOT ON FBI VALIDATION TABLE","The referenced data element must contain a valid 104 FBI VALIDATION TABLE data value when it is entered; blank is permissible\n"
+			+ "on nonmandatorynonmandatory fields."),
 	_105("105","Admin Segment","INVALID DATA VALUE FOR DATE","The data element in error contains a date that is not entered correctly. Each component of the date must be valid; that is, months must be 01 through 12, days must be 01 through 31, and year must include the century (i.e., 19xx, 20xx). In addition, days cannot exceed maximum for the month (e.g., June cannot have 31days). Also, the date cannot exceed the current date."),
 	_106("106","Admin Segment","INVALID DATA VALUE FOR HOUR","For Offenses of 09A, 13A, 13B and 13C ONLY–When data element 25 (Type of Victim) = L (Law Enforcement Officer) then Data Element 3 (Incident Date/Hour) must be populated with a valid hour (00-23). Incident Hour Unknown (Blank) is not a valid entry."),
 	_115("115","Admin Segment","CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS","(Incident Number) Must be blank right-fill if under 12 characters in length. Cannot have embedded blanks between the first and last characters entered."),
@@ -88,7 +92,7 @@ public enum NIBRSErrorCode {
 /**
  * 118 cannot be validated	
  */
-	_118("118","Admin Segment","DATE CANNOT BE ON OR AFTER THE INACTIVE DATE [yyyymmdd] OF THE ORI","The UCR Program has determined that an ORI will no longer be submitting data to the FBI as of an inactive date. No data from this ORI will be accepted after this date."),
+	_118("118","Admin Segment","DATE CANNOT BE ON OR AFTER THE INACTIVE DATE OF THE ORI","The UCR Program has determined that an ORI will no longer be submitting data to the FBI as of an inactive date. The UCR Program will not accept data from the ORI after this date."),
 	_119("119","Admin Segment","CARGO THEFT DATA CAN ONLY BE SUBMITTED FOR SPECIFIC OFFENSES","Data Element 2A (Cargo Theft) must be blank, unless Data Element 6 (UCR Offense Code) includes at least one of the following:120=Robbery 210=Extortion/Blackmail 220=Burglary/Breaking & Entering 23D=Theft From Building 23F=Theft From Motor Vehicle 24H=All Other Larceny 240=Motor Vehicle Theft 26A=False Pretenses/Swindle/Confidence Game 26B=Credit Card/Automated Teller Machine Fraud 26C=Impersonation 26E=Wire Fraud 26F = Identity Theft 26G = Hacking/Computer Invasion 270=Embezzlement 510=Bribery"),
 	_122("122","Admin Segment","CARGO THEFT VALUE REQUIRED WITH SPECIFIC OFFENSES","Data Element 2A (Cargo Theft) must be populated with a Y = Yes or N = No when Data Element 6 (UCR Offense Code) includes at least one of the following: 120=Robbery 210=Extortion/Blackmail 220=Burglary/Breaking & Entering 23D=Theft From Building 23F=Theft From Motor Vehicle 24H=All Other Larceny 240=Motor Vehicle Theft 26A=False Pretenses/Swindle/Confidence Game 26B=Credit Card/Automated Teller Machine Fraud 26C=Impersonation 26E=Wire Fraud 26F = Identity Theft 26G = Hacking/Computer Invasion 270=Embezzlement 510=Bribery"),
 /**
@@ -97,9 +101,9 @@ public enum NIBRSErrorCode {
 	_151("151","Admin Segment","REPORT INDICATOR MUST BE BLANK OR R","This field must be blank if the incident date is known. If the incident date is unknown, then the report date would be entered instead and must be indicated with an R in the Report Indicator field within the Administrative Segment."),
 	_152("152","Admin Segment","INVALID HOUR ENTRY","If Hour is entered within Data Element 3 (Incident Date/Hour), it must be 00 through 23. If 00=Midnight is entered, be careful that the Incident Date is entered as if the time was 1 minute past midnight. Note: When an incident occurs exactly at midnight, Data Element 3 (Incident Date) would be entered as if the time is 1 minute past midnight. For example, when a crime occurred exactly at midnight on Thursday, Friday's date would be entered."),
 	_153("153","Admin Segment","VALUE ENTERED CONFLICTS WITH PRESENCE OF AN ENTRY IN EXCEPTIONAL CLEARANCE DATE","Data Element 4 (Cleared Exceptionally) cannot be N=Not Applicable if Data Element 5 (Exceptional Clearance Date) is entered."),
-	_155("155","Admin Segment","CLEARANCE DATE [yyyymmdd] PREDATES INCIDENT DATE [yyyymmdd]","Data Element 5 (Exceptional Clearance Date) is earlier than Data Element 3 (Incident Date/Hour)."),
+	_155("155","Admin Segment","CLEARANCE DATE PREDATES INCIDENT DATE","Data Element 5 (Exceptional Clearance Date) is earlier than Data Element 3 (Incident Date/Hour)."),
 	_156("156","Admin Segment","AN ENTRY MUST BE MADE WHEN CLEARED EXCEPTIONALLY HAS ENTRIES OF A-E","Data Element 5 (Exceptional Clearance Date) must be present if the case was cleared exceptionally. Data Element 4 (Cleared Exceptionally) has an entry of A through E; therefore, the date must also be entered."),
-	_170("170","Admin Segment","INCIDENT DATE CANNOT BE AFTER YEAR [yyyy] AND MONTH [mm] OF ELECTRONIC SUBMISSION","Data Element 3 The date cannot be later than the year and month the electronic submission represents. For example, the May 1999 electronic submission cannot contain incidents happening after this date."),
+	_170("170","Admin Segment","INCIDENT DATE CANNOT BE AFTER MONTH AND YEAR OF ELECTRONIC SUBMISSION","Data Element 3 (Incident Date/Hour) The date cannot be later than the year and month the electronic submission represents. For example, the May 1999 electronic submission cannot contain incidents happening after this date."),
 /**
  * 171 not in 3.1	
  */
@@ -112,7 +116,7 @@ public enum NIBRSErrorCode {
 /**
  * 175 not implemented	
  */
-	_175("175","Admin Segment","CANNOT CALCULATE BASE DATE FROM INCIDENT DATE [yyymmdd]","The electronic submission control date (positions 7 through 12, month and year) and Data Element 3 (Incident Date/Hour) must both be valid dates for calculating timeframes."),
+	_175("175","Admin Segment","CANNOT CALCULATE BASE DATE FROM INCIDENT DATE","The electronic submission control date (positions 7 through 12, month and year) and Data Element 3 (Incident Date/Hour) must both be valid dates for calculating timeframes."),
 	_178("178","Admin Segment","THIS ADMINISTRATIVE SEGMENT HAS A CONFLICTING LENGTH","Segment Length for the Administrative Segment (Level 1) must be 87 characters (not reporting Cargo Theft) or 88 characters (reporting Cargo Theft). All Administrative Segments in a submission must be formatted in only one of these two lengths."),
 /**
  * 197 not implemented	
