@@ -422,6 +422,7 @@ public class OffenseSegmentRulesFactory {
 		assaultOrHomicideCodeSet.add(OffenseCode._13A.code);
 		assaultOrHomicideCodeSet.add(OffenseCode._13B.code);
 		assaultOrHomicideCodeSet.add(OffenseCode._13C.code);
+		assaultOrHomicideCodeSet.add(OffenseCode._360.code);
 		return new Rule<OffenseSegment>() {
 			@Override
 			public NIBRSError apply(OffenseSegment subject) {

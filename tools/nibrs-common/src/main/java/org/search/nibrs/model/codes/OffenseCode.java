@@ -97,7 +97,8 @@ public enum OffenseCode {
 	_11C("11C", "Sexual Assault With An Object", "A", CrimeAgainstCode.Person),
 	_11D("11D", "Fondling ", "A", CrimeAgainstCode.Person),
 	_36A("36A", "Incest ", "A", CrimeAgainstCode.Person),
-	_36B("36B", "Statutory Rape ", "A", CrimeAgainstCode.Person),
+	_36B("36B", "Statutory Rape", "A", CrimeAgainstCode.Person),
+	_360("360", "Failure to Register as a Sex Offender*", "A", CrimeAgainstCode.Society),
 	_280("280", "Stolen PropertySegment Offenses ", "A", CrimeAgainstCode.Property),
 	_101("101", "Treason*", "A", CrimeAgainstCode.Society),
 	_520("520", "Weapon Law Violations", "A", CrimeAgainstCode.Society),
@@ -299,6 +300,29 @@ public enum OffenseCode {
 				_526.code, 
 				_64A.code,
 				_64B.code).contains(code);
+	}
+	
+	public static final boolean isFederalAndTribalOffense(String code) {
+		return Arrays.asList(
+				_26H.code,
+				_101.code,
+				_103.code,
+				_30A.code,
+				_30B.code,
+				_30C.code,
+				_30D.code,
+				_360.code,
+				_49A.code,
+				_49B.code,
+				_49C.code,
+				_521.code, 
+				_522.code, 
+				_526.code, 
+				_58A.code,
+				_58B.code,
+				_620.code,
+				_61A.code,
+				_61B.code).contains(code);
 	}
 	
 	public static final boolean isGamblingOffenseCode(String code) {
