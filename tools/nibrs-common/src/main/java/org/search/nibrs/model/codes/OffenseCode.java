@@ -294,6 +294,9 @@ public enum OffenseCode {
 				_13B.code,
 				_210.code,
 				_520.code,
+				_521.code, 
+				_522.code, 
+				_526.code, 
 				_64A.code,
 				_64B.code).contains(code);
 	}
