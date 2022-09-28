@@ -80,11 +80,21 @@ public class OffenseSegmentRulesFactory {
 			offenseSet1.addAll(Arrays.asList(new String[] {
 				OffenseCode._250.code,
 				OffenseCode._280.code,
+				OffenseCode._30C.code,
 				OffenseCode._35A.code,
 				OffenseCode._35B.code,
 				OffenseCode._39C.code,
 				OffenseCode._370.code,
-				OffenseCode._520.code
+				OffenseCode._49A.code,
+				OffenseCode._520.code, 
+				OffenseCode._521.code, 
+				OffenseCode._522.code, 
+				OffenseCode._526.code, 
+				OffenseCode._58A.code, 
+				OffenseCode._58B.code, 
+				OffenseCode._61A.code, 
+				OffenseCode._61B.code, 
+				OffenseCode._620.code, 
 			}));
 			
 			activitySet2.addAll(Arrays.asList(new String[] {
