@@ -275,7 +275,17 @@ public enum NIBRSErrorCode {
 /**
  * 461 not in 3.1
  */
-	_461("461","Victim Segment","VICTIM TYPE CANNOT EQUAL 'S' WITH AN OFFENSE OF 220","Data Element 25 (Type of Victim) cannot have a value of S=Society/Public when the offense is 220=Burglary/Breaking and Entering."),
+	_461("461","Victim Segment","ENTRY FOR TYPE OF VICTIM MUST BE \"G\" WHEN THIS OFFENSE CODE IS ENTERED","(Type of Victim) Must have a value of G = Government when Data Element 24 (Victim Connected to UCR Offense Code) contains one of the following:\n"
+			+ "26H = Money Laundering*\n"
+			+ "521 = National Firearm Act 1934*\n"
+			+ "522 = Weapons of Mass Destruction*\n"
+			+ "526 = Explosives*\n"
+			+ "58A = Import Violations*\n"
+			+ "58B = Export Violations*\n"
+			+ "61A = Federal Liquor Offenses*\n"
+			+ "61B = Federal Tobacco Offenses*\n"
+			+ "620 = Wildlife Trafficking*\n"
+			+ "*Denotes offenses for federal and tribal LEA reporting only"),
 	_462("462","Victim Segment","INVALID AGGRAVATED ASSAULT/HOMICIDE FOR 13A OFFENSE","An Offense Segment (Level 2) was submitted for 13A=Aggravated Assault. Accordingly, Data Element 31 (Aggravated Assault/Homicide Circumstances) can only have codes of 01 through 06 and 08 through 10. All other codes, including 07=Mercy Killing, are not valid because they do not relate to an aggravated assault"),
 	_463("463","Victim Segment","INVALID AGGRAVATED ASSAULT/HOMICIDE FOR 09C OFFENSE","When a Justifiable Homicide is reported, Data Element 31 (Aggravated Assault/Homicide Circumstances) can only have codes of 20=Criminal Killed by Private Citizen or 21=Criminal Killed by Police Officer. In this case, a code other than the two mentioned was entered."),
 	_464("464","Victim Segment","ENTRY FOR TYPE OF VICTIM MUST BE 'I' OR 'L' WHEN THIS OFFENSE CODE IS ENTERED","Data Element 24 (Victim Connected to UCR Offense Codes) contains a Crime Against Person, but Data Element 25 (Type of Victim) is not I=Individual or L=Law Enforcement Officer when Data Element 24 (Victim Connected to UCR Offense Code) contains a Crime Against Person."),

@@ -206,6 +206,8 @@ public class VictimSegmentRulesFactory {
 		
 		rulesList__2019 = new ArrayList<Rule<VictimSegment>>();
 		rulesList__2019.addAll(rulesList__3_1);
+		rulesList__2019.add(getRule452());
+		rulesList__2019.add(getRule461ForTypeOfVictim());
 		rulesList__2019.remove(getRule459ForOffenderNumberToBeRelated());
 		
 	}
@@ -1076,11 +1078,16 @@ public class VictimSegmentRulesFactory {
 			@Override
 			public NIBRSError apply(VictimSegment victimSegment) {
 				NIBRSError e = null;
-				if (victimSegment.getUcrOffenseCodeList().contains(OffenseCode._220.code) && TypeOfVictimCode.S.code.equals(victimSegment.getTypeOfVictim())) {
+
+				boolean containsCrimeAgainstGovernment = victimSegment.getUcrOffenseCodeList()
+						.stream()
+						.anyMatch(OffenseCode::isCrimeAgainstGovernmentCode); 
+						
+				if (containsCrimeAgainstGovernment && !TypeOfVictimCode.G.code.equals(victimSegment.getTypeOfVictim())) {
 					e = victimSegment.getErrorTemplate();
 					e.setNIBRSErrorCode(NIBRSErrorCode._461);
 					e.setDataElementIdentifier("25");
-					e.setValue(TypeOfVictimCode.S.code);
+					e.setValue(victimSegment.getTypeOfVictim());
 				}
 				return e;
 			}
@@ -1303,6 +1310,29 @@ public class VictimSegmentRulesFactory {
 		};
 	}
 
+	Rule<VictimSegment> getRule452() {
+		return new Rule<VictimSegment>() {
+			@Override
+			public NIBRSError apply(VictimSegment victimSegment) {
+				
+				NIBRSError e = null;
+				NIBRSAge age = victimSegment.getAge();
+				
+				if ( "L".equals(victimSegment.getTypeOfVictim()) 
+						&& (age == null 
+						|| age.isNonNumeric() || age.getAverage() < 17 || age.getAverage() > 98)) {
+					e = victimSegment.getErrorTemplate();
+					e.setDataElementIdentifier("26");
+					e.setNIBRSErrorCode(NIBRSErrorCode._452);
+					e.setValue(age);
+				}
+				
+				return e;
+				
+			}
+		};
+	}
+	
 	Rule<VictimSegment> getRule482ForTypeOfVictim() {
 		return new Rule<VictimSegment>() {
 			@Override

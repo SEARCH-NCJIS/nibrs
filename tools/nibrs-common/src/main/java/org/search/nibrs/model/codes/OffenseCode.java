@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -193,6 +194,12 @@ public enum OffenseCode {
 		return Arrays.asList(_26H.code,
 		_521.code, _522.code, _526.code, _58A.code,
 		_58B.code, _61A.code, _61B.code, _620.code).contains(code);
+	}
+	
+	public static List<String> getCrimeAgainstGovernmentCode(){
+		return Arrays.asList(_26H.code,
+		_521.code, _522.code, _526.code, _58A.code,
+		_58B.code, _61A.code, _61B.code, _620.code);
 	}
 	
 	public static final boolean isCommerceViolations(String code) {
