@@ -208,6 +208,7 @@ public class VictimSegmentRulesFactory {
 		rulesList__2019.addAll(rulesList__3_1);
 		rulesList__2019.add(getRule452());
 		rulesList__2019.add(getRule461ForTypeOfVictim());
+		rulesList__2019.add(getRule485ForOffenderNumberToBeRelated());
 		rulesList__2019.remove(getRule459ForOffenderNumberToBeRelated());
 		
 	}
@@ -1041,6 +1042,35 @@ public class VictimSegmentRulesFactory {
 		};
 	}
 
+	Rule<VictimSegment> getRule485ForOffenderNumberToBeRelated() {
+		return new Rule<VictimSegment>() {
+			@Override
+			public NIBRSError apply(VictimSegment victimSegment) {
+				
+				NIBRSError e = null;
+				
+				List<Integer> offenderNumberList = new ArrayList<>();
+				offenderNumberList.addAll(victimSegment.getDistinctValidRelatedOffenderNumberList());
+				offenderNumberList.removeIf(item -> item == null);
+				
+				List<String> offenseCodeList = new ArrayList<>();
+				offenseCodeList.addAll(victimSegment.getUcrOffenseCodeList());
+				offenseCodeList.removeIf(item -> item == null);
+				
+				if (!offenderNumberList.isEmpty() && offenseCodeList.contains(OffenseCode._360.code) 
+						&& offenderNumberList.contains(Integer.valueOf(0))) {
+					e = victimSegment.getErrorTemplate();
+					e.setDataElementIdentifier("34");
+					e.setNIBRSErrorCode(NIBRSErrorCode._485);
+					e.setValue(offenderNumberList);
+				}
+				
+				return e;
+				
+			}
+		};
+	}
+	
 	Rule<VictimSegment> getRule460ForRelationshipOfVictimToOffender() {
 		return new Rule<VictimSegment>() {
 			@Override

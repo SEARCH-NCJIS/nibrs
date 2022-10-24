@@ -173,10 +173,13 @@ public enum OffenseCode {
 		return Arrays.asList(_720.code,
 		_35A.code, _35B.code, _39A.code, _39B.code,
 		_39C.code, _39D.code, _370.code, _40A.code,
-		_40B.code, _40C.code, _520.code, _90A.code, 
+		_40B.code, _40C.code, _520.code, 
 		_90B.code, _90C.code, _90D.code, _90E.code,
 		_90F.code, _90G.code, _90H.code, _90J.code,
-		_90Z.code).contains(code);
+		_90K.code, _90L.code, _90M.code,
+		_90Z.code, _103.code, _30A.code, _30B.code, 
+		_30C.code, _30D.code, _49A.code, _49B.code,
+		_49C.code, _360.code, _101.code ).contains(code);
 	}
 	
 	public static final boolean isCrimeAgainstSocietyExcludeGovermentCode(String code) {
@@ -221,7 +224,8 @@ public enum OffenseCode {
 				_26G.code, _23A.code, _23B.code,
 				_23C.code, _23D.code, _23E.code,
 				_23F.code, _23G.code, _23H.code,
-				_240.code, _120.code, _280.code					
+				_240.code, _120.code, _280.code, 
+				_90A.code
 		).contains(code);
 	}
 	
