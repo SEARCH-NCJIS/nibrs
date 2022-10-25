@@ -440,7 +440,7 @@ public enum NIBRSErrorCode {
 /**
  * 720 not implemented	
  */
-	_720("720","Group B Arrest Segment","ARREST DATE CANNOT PREDATE BASE DATE","Group 'B' Arrest Report (Level 7) submitted with a Segment Action Type of A=Add cannot have Data Element 42 (Arrest Date) earlier than the Base Date."),
+	_720("720","Group B Arrest Segment","GROUP B ADD CANNOT PREDATE NIBRS START DATE","Group 'B' Arrest Report (Level 7) submitted with a Segment Action Type of A=Add cannot have Data Element 42 (Arrest Date) earlier than the Base Date."),
 	_722("722","Group B Arrest Segment","AGE RANGE CANNOT HAVE '00' IN FIRST TWO POSITIONS","Data Element 47 (Age of Arrestee) was entered as an age-range. Therefore, the first age component cannot be 00 (unknown)."),
 /**
  * 740 not in 3.1	
@@ -515,9 +515,6 @@ public enum NIBRSErrorCode {
  * 094 not implemented
  */
 	_094_ZeroReport("094","Zero Report Segment","ZERO REPORT MONTH/YEAR EXCEEDED MONTH/YEAR OF SUBMISSION","Zero Report Month and Zero Report Year must be earlier than Month of Submission and Year of Submission.");
-/**
- * 930 cannot be implemented
- */
 	/**
 	 * 931 cannot be implemented
 	 */
@@ -528,7 +525,7 @@ public enum NIBRSErrorCode {
 	 * 933 cannot be implemented
 	 */
 	/**
-	 * 934 cannot be implemented
+	 * 934, 935, 937, 938, 939, 940, 941  cannot be implemented
 	 */
 	/**
 	 * 952 cannot be implemented
