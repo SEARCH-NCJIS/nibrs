@@ -19,201 +19,201 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Group B Arrest Detail</title>
-		<th:block th:include="fragments/general.html :: headerfiles"></th:block>
-		<link rel="stylesheet" type="text/css" th:href="@{/webjars/datatables/1.10.19/css/dataTables.bootstrap4.min.css}" />
-		<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.2.0/css/all.css}" />
-		<link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+		<th:block th:include="fragments/general :: headerfiles"></th:block>
 	</head>
 	<body>
-	    <!-- Begin page content -->
-  <div th:fragment="detail">
-    <div class="card">
-  		<div class="card-header font-weight-bold">REPORT INFO</div>
-  		<div class="card-body">
-  			<table class="table table-bordered">
-    			<thead>
-      				<tr>
-				        <th>Action Type</th>
-				        <th>Submission Month</th>
-				        <th>Submission Year</th>
-					</tr>
-    			</thead>
-    			<tbody>
-					<tr>
-					  <td th:text="${arrestReportSegment.segmentActionType.stateDescription}">segmentActionType</td>
-					  <td th:text="${arrestReportSegment.monthOfTape}">Month of Tape</td>
-					  <td th:text="${arrestReportSegment.yearOfTape}">Year of Tape</td>
-					</tr>
-				</tbody>
-			</table>	
-  		</div> 
-	</div>
-    <div class="card">
-  		<div class="card-header font-weight-bold">ARREST AGENCY</div>
-  		<div class="card-body">
-  			<table class="table table-bordered">
-    			<thead>
-      				<tr>
-				        <th>STATE</th>
-				        <th>ORI </th>
-				        <th>NAME</th>
-				        <th>CITY INDICATOR</th>
-					</tr>
-    			</thead>
-    			<tbody>
-					<tr>
-					  <td th:text="${arrestReportSegment.stateCode}">State</td>
-					  <td th:text="${arrestReportSegment.ori}">ORI</td>
-					  <td th:text="${arrestReportSegment.agency.agencyName}">Name</td>
-					  <td th:text="${arrestReportSegment.cityIndicator?:''}">City Indicator</td>
-					</tr>
-				</tbody>
-			</table>	
-  		</div> 
-	</div>
-    <div class="card">
-  		<div class="card-header font-weight-bold">ARREST</div>
-  		<div class="card-body">
-  			<table class="table table-bordered">
-    			<thead>
-      				<tr>
-				        <th>ATS</th>
-				        <th>ARREST DATE </th>
-				        <th>ARREST TYPE</th>
-				        <th>OFFENSE CODE</th>
-					</tr>
-    			</thead>
-    			<tbody>
-					<tr>
-					  <td th:text="${arrestReportSegment.arrestTransactionNumber}">arrestTransactionNumber</td>
-					  <td th:text="${arrestReportSegment.arrestDate}">arrestDate</td>
-					  <td th:text="${arrestReportSegment.typeOfArrestType.stateDescription}">typeOfArrestType</td>
-					  <td th:text="${arrestReportSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
-					</tr>
-				</tbody>
-			</table>	
-  		</div> 
-	</div>
-    <div class="card">
-  		<div class="card-header font-weight-bold">ARRESTEE</div>
-  		<div class="card-body">
-  			<table class="table table-bordered">
-    			<tbody>
-					<tr>
-					  <th>SEX</th>
-					  <td th:text="${arrestReportSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
-					  <th>RACE</th>
-					  <td th:text="${arrestReportSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
-				    </tr>
-					<tr>
-					  <th>ETHNICITY</th>
-					  <td th:text="${arrestReportSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
-					  <th>RESIDENT STATUS</th>
-					  <td th:text="${arrestReportSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
-				    </tr>
-					<tr>
-					  <th>AVERAGE AGE</th>
-					  <td th:text="${arrestReportSegment.averageAge}">averageAge</td>
-					  <th>AGE UNKNOWN</th>
-					  <td th:text="${arrestReportSegment.ageUnknown}">ageUnknown</td>
-				    </tr>
-					<tr>
-					  <th>MIN AGE</th>
-					  <td th:text="${arrestReportSegment.ageOfArresteeMin}">ageOfArresteeMin</td>
-					  <th>MAX</th>
-					  <td th:text="${arrestReportSegment.ageOfArresteeMax}">ageOfArresteeMax</td>
-				    </tr>
-					<tr>
-					  <th>NONNUMERIC AGE</th>
-					  <td th:text="${arrestReportSegment.nonNumericAge ?:'' }">nonNumericAge</td>
-					  <th>JUVENILE</th>
-					  <td th:text="${arrestReportSegment.juvenile}">juvenile</td>
-			    </tr>
-					<tr>
-					  <th>DISPOSITION UNDER 18</th>
-					  <td th:text="${arrestReportSegment.dispositionOfArresteeUnder18Type.stateCode}">dispositionOfArresteeUnder18Type</td>
-					  <th>ARMED WITH</th>
-					  <td>
-							<p th:each="armedWith : ${arrestReportSegment.arrestReportSegmentWasArmedWiths}">
-								<span th:text="${armedWith.arresteeWasArmedWithType.stateDescription}"></span>
-								<span th:if="${armedWith.automaticWeaponIndicator != ''}"> - </span>
-								<span th:text="${armedWith.automaticWeaponIndicator}"></span>
-							</p>
-				   </td>
-			    </tr>
-				</tbody>
-			</table>	
-  		</div> 
-	  </div>
-    <div class="card" th:if="${allowSubmitToFbi}">
-      <div class="card-header font-weight-bold">FBI SUBMISSION</div>
-      <div class="card-body">
-        <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <th>STATUS</th>  
-              <td th:text="${arrestReportSegment.fbiStatus}">FBI submission Status</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null}">
-              <th>SUBMISSION TIMESTAMP</th>
-              <td th:text="${arrestReportSegment.submission.submissionTimestamp}">submissionTimestamp</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null}">
-              <th>REQUEST FILE PATH</th>
-              <td th:text="${arrestReportSegment.submission.requestFilePath}">requestFilePath</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null}">
-              <th>RESPONSE TIMESTAMP</th>
-              <td th:text="${arrestReportSegment.submission.responseTimestamp}">responseTimestamp</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null}">
-              <th>RESPONSE FILE PATH</th>
-              <td th:text="${arrestReportSegment.submission.responseFilePath}">responseFilePath</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null and arrestReportSegment.submission.faultCode != null}">
-              <th>FAULT CODE</th>
-              <td th:text="${arrestReportSegment.submission.faultCode}">faultCode</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null and arrestReportSegment.submission.faultDescription != null}">
-              <th>FAULT DESCRIPTION</th>
-              <td th:text="${arrestReportSegment.submission.faultDescription}">faultDescription</td>
-            </tr>
-            <tr th:if="${arrestReportSegment.submission != null and !arrestReportSegment.submission.violations.empty}">
-              <td colspan="2">
-                <div class="card">
-                  <div class="card-header font-weight-bold">VIOLATIONS</div>
-                  <div class="card-body">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Violation Code</th>
-                          <th>Violation Description</th>
-                          <th>Violation Level</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <th:block th:each="violation: ${arrestReportSegment.submission.violations}">
-                          <tr>
-                            <td th:text="${violation.violationCode}"/>
-                            <td th:text="${violation.violationDescription}"/>
-                            <td th:text="${violation.violationLevel}"/>
-                          </tr>
-                        </th:block>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>  
-      </div>
-    </div>
-	
-    <script th:inline="javascript">
-		$(function(){
-		});
-    </script>
-  </div>
+    <!-- Begin page content -->
+	  <main class="container">
+		  <div th:fragment="detail">
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">REPORT INFO</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<thead>
+		      				<tr>
+						        <th>Action Type</th>
+						        <th>Submission Month</th>
+						        <th>Submission Year</th>
+							</tr>
+		    			</thead>
+		    			<tbody>
+							<tr>
+							  <td th:text="${arrestReportSegment.segmentActionType.stateDescription}">segmentActionType</td>
+							  <td th:text="${arrestReportSegment.monthOfTape}">Month of Tape</td>
+							  <td th:text="${arrestReportSegment.yearOfTape}">Year of Tape</td>
+							</tr>
+						</tbody>
+					</table>	
+		  		</div> 
+			</div>
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">ARREST AGENCY</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<thead>
+		      				<tr>
+						        <th>STATE</th>
+						        <th>ORI </th>
+						        <th>NAME</th>
+						        <th>CITY INDICATOR</th>
+							</tr>
+		    			</thead>
+		    			<tbody>
+							<tr>
+							  <td th:text="${arrestReportSegment.stateCode}">State</td>
+							  <td th:text="${arrestReportSegment.ori}">ORI</td>
+							  <td th:text="${arrestReportSegment.agency.agencyName}">Name</td>
+							  <td th:text="${arrestReportSegment.cityIndicator?:''}">City Indicator</td>
+							</tr>
+						</tbody>
+					</table>	
+		  		</div> 
+			</div>
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">ARREST</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<thead>
+		      				<tr>
+						        <th>ATS</th>
+						        <th>ARREST DATE </th>
+						        <th>ARREST TYPE</th>
+						        <th>OFFENSE CODE</th>
+							</tr>
+		    			</thead>
+		    			<tbody>
+							<tr>
+							  <td th:text="${arrestReportSegment.arrestTransactionNumber}">arrestTransactionNumber</td>
+							  <td th:text="${arrestReportSegment.arrestDate}">arrestDate</td>
+							  <td th:text="${arrestReportSegment.typeOfArrestType.stateDescription}">typeOfArrestType</td>
+							  <td th:text="${arrestReportSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
+							</tr>
+						</tbody>
+					</table>	
+		  		</div> 
+			</div>
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">ARRESTEE</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<tbody>
+							<tr>
+							  <th>SEX</th>
+							  <td th:text="${arrestReportSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
+							  <th>RACE</th>
+							  <td th:text="${arrestReportSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
+						    </tr>
+							<tr>
+							  <th>ETHNICITY</th>
+							  <td th:text="${arrestReportSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
+							  <th>RESIDENT STATUS</th>
+							  <td th:text="${arrestReportSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
+						    </tr>
+							<tr>
+							  <th>AVERAGE AGE</th>
+							  <td th:text="${arrestReportSegment.averageAge}">averageAge</td>
+							  <th>AGE UNKNOWN</th>
+							  <td th:text="${arrestReportSegment.ageUnknown}">ageUnknown</td>
+						    </tr>
+							<tr>
+							  <th>MIN AGE</th>
+							  <td th:text="${arrestReportSegment.ageOfArresteeMin}">ageOfArresteeMin</td>
+							  <th>MAX</th>
+							  <td th:text="${arrestReportSegment.ageOfArresteeMax}">ageOfArresteeMax</td>
+						    </tr>
+							<tr>
+							  <th>NONNUMERIC AGE</th>
+							  <td th:text="${arrestReportSegment.nonNumericAge ?:'' }">nonNumericAge</td>
+							  <th>JUVENILE</th>
+							  <td th:text="${arrestReportSegment.juvenile}">juvenile</td>
+					    </tr>
+							<tr>
+							  <th>DISPOSITION UNDER 18</th>
+							  <td th:text="${arrestReportSegment.dispositionOfArresteeUnder18Type.stateCode}">dispositionOfArresteeUnder18Type</td>
+							  <th>ARMED WITH</th>
+							  <td>
+									<p th:each="armedWith : ${arrestReportSegment.arrestReportSegmentWasArmedWiths}">
+										<span th:text="${armedWith.arresteeWasArmedWithType.stateDescription}"></span>
+										<span th:if="${armedWith.automaticWeaponIndicator != ''}"> - </span>
+										<span th:text="${armedWith.automaticWeaponIndicator}"></span>
+									</p>
+						   </td>
+					    </tr>
+						</tbody>
+					</table>	
+		  		</div> 
+			  </div>
+		    <div class="card" th:if="${allowSubmitToFbi}">
+		      <div class="card-header font-weight-bold">FBI SUBMISSION</div>
+		      <div class="card-body">
+		        <table class="table table-bordered">
+		          <tbody>
+		            <tr>
+		              <th>STATUS</th>  
+		              <td th:text="${arrestReportSegment.fbiStatus}">FBI submission Status</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null}">
+		              <th>SUBMISSION TIMESTAMP</th>
+		              <td th:text="${arrestReportSegment.submission.submissionTimestamp}">submissionTimestamp</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null}">
+		              <th>REQUEST FILE PATH</th>
+		              <td th:text="${arrestReportSegment.submission.requestFilePath}">requestFilePath</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null}">
+		              <th>RESPONSE TIMESTAMP</th>
+		              <td th:text="${arrestReportSegment.submission.responseTimestamp}">responseTimestamp</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null}">
+		              <th>RESPONSE FILE PATH</th>
+		              <td th:text="${arrestReportSegment.submission.responseFilePath}">responseFilePath</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null and arrestReportSegment.submission.faultCode != null}">
+		              <th>FAULT CODE</th>
+		              <td th:text="${arrestReportSegment.submission.faultCode}">faultCode</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null and arrestReportSegment.submission.faultDescription != null}">
+		              <th>FAULT DESCRIPTION</th>
+		              <td th:text="${arrestReportSegment.submission.faultDescription}">faultDescription</td>
+		            </tr>
+		            <tr th:if="${arrestReportSegment.submission != null and !arrestReportSegment.submission.violations.empty}">
+		              <td colspan="2">
+		                <div class="card">
+		                  <div class="card-header font-weight-bold">VIOLATIONS</div>
+		                  <div class="card-body">
+		                    <table class="table table-bordered">
+		                      <thead>
+		                        <tr>
+		                          <th>Violation Code</th>
+		                          <th>Violation Description</th>
+		                          <th>Violation Level</th>
+		                        </tr>
+		                      </thead>
+		                      <tbody>
+		                        <th:block th:each="violation: ${arrestReportSegment.submission.violations}">
+		                          <tr>
+		                            <td th:text="${violation.violationCode}"/>
+		                            <td th:text="${violation.violationDescription}"/>
+		                            <td th:text="${violation.violationLevel}"/>
+		                          </tr>
+		                        </th:block>
+		                      </tbody>
+		                    </table>
+		                  </div>
+		                </div>
+		              </td>
+		            </tr>
+		          </tbody>
+		        </table>  
+		      </div>
+		    </div>
+			
+		    <script th:inline="javascript">
+				$(function(){
+				});
+		    </script>
+		  </div>
+		  <th:block th:include="fragments/general.html :: baseJavascripts"></th:block>
+		</main>
 	</body>
 </html>

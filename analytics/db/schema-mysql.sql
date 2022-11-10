@@ -30,6 +30,7 @@ CREATE TABLE Owner (
                 LastName VARCHAR(100) NOT NULL,
                 PRIMARY KEY (OwnerId)
 );
+create unique index owner_federationId_idx on Owner(FederationId); 
 
 
 CREATE TABLE NibrsErrorCodeType (
@@ -450,7 +451,7 @@ CREATE TABLE ArrestReportSegment (
                 UCROffenseCodeTypeID INT NOT NULL,
                 SubmissionID INT,
                 OwnerId INT,
-                ReportTimestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 PRIMARY KEY (ArrestReportSegmentID)
 );
 
