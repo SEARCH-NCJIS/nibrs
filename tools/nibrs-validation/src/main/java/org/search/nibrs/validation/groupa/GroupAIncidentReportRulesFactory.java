@@ -1149,7 +1149,8 @@ public class GroupAIncidentReportRulesFactory {
 				PropertySegment stolenSegment = subject.getStolenPropertySegment();
 				if (recoveredSegment != null 
 						&& subject.getOffenseForOffenseCode(OffenseCode._250.code) == null 
-						&& subject.getOffenseForOffenseCode(OffenseCode._280.code) == null) {
+						&& subject.getOffenseForOffenseCode(OffenseCode._280.code) == null
+						&& subject.getOffenseForOffenseCode(OffenseCode._58B.code) == null) {
 					List<String> recoveredPropertyTypes = new ArrayList<>();
 					recoveredPropertyTypes.addAll(Arrays.asList(recoveredSegment.getPropertyDescription()));
 					recoveredPropertyTypes.removeIf(element -> element == null);
