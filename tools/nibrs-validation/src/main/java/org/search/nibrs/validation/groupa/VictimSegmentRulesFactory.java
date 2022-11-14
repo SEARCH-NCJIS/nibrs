@@ -1099,10 +1099,6 @@ public class VictimSegmentRulesFactory {
 		};
 	}
 
-	/**
-	 * Removed in specs v3-1. Remove it from the rule list. 
-	 * @return
-	 */
 	Rule<VictimSegment> getRule461ForTypeOfVictim() {
 		return new Rule<VictimSegment>() {
 			@Override

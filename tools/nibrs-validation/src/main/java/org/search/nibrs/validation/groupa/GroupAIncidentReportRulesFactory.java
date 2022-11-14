@@ -721,23 +721,10 @@ public class GroupAIncidentReportRulesFactory {
 						.map(VictimSegment::getTypeOfVictim)
 						.collect(Collectors.toList());
 				
-				boolean containsOnlyCrimeAgainstGovernment = subject.getOffenses().stream()
-						.anyMatch(offense -> OffenseCode.isCrimeAgainstGovernmentCode(offense.getUcrOffenseCode())) ;
-
-				List<String> victimOfCrimeAgainstGovernmentTypes = subject.getVictims()
-						.stream()
-						.filter(VictimSegment::isVictimOfCrimeAgainstGoverment)
-						.map(VictimSegment::getTypeOfVictim)
-						.collect(Collectors.toList());
-				
 				if ((victimOfCrimeAgainstSocietyTypes.size() > 0 
 						&& containsOnlyCrimesAgainstSociety 
 						&& (victimOfCrimeAgainstSocietyTypes.size() > 1 
-								|| !TypeOfVictimCode.S.code.equals(victimOfCrimeAgainstSocietyTypes.get(0))))
-					|| (victimOfCrimeAgainstGovernmentTypes.size() > 0 
-						&& containsOnlyCrimeAgainstGovernment 
-						&& (victimOfCrimeAgainstGovernmentTypes.size() > 1 
-								|| !TypeOfVictimCode.G.code.equals(victimOfCrimeAgainstGovernmentTypes.get(0))))) {
+								|| !TypeOfVictimCode.S.code.equals(victimOfCrimeAgainstSocietyTypes.get(0))))) {
 					ret = subject.getErrorTemplate();
 					ret.setSegmentType('0');
 					ret.setNIBRSErrorCode(NIBRSErrorCode._080);
