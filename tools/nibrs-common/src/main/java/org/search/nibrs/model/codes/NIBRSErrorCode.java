@@ -401,6 +401,27 @@ public enum NIBRSErrorCode {
  */
 	_1640("640","Arrestee Segment","WARNING–NO DISPOSITION FOR POSSIBLE JUVENILE ARRESTEE","Data Element 52 (Disposition of Arrestee Under 18) was not entered, but Data Element 47 (Age of Arrestee) indicates an age-range for a juvenile. The low age is a juvenile and the high age is an adult, but the average age is a juvenile. Note: When an age-range is not entered and the age is a juvenile, then the disposition must be entered. These circumstances were flagged by the computer as a possible discrepancy between age and disposition and should be checked for possible correction by the participant."),
 	_1641("641","Arrestee Segment","WARNING - ARRESTEE HAD AN AGE OF 99 OR OLDER","Data Element 47 (Age of Arrestee) was entered with a value of 99 which means the arrestee was over 98 years old. Verify that the submitter of data is not confusing the 99=Over 98 Years Old with 00=Unknown."),
+	_650("650","Arrestee Segment","ARREST OFFENSE CODE CAN ONLY BE USED BY FEDERAL AND TRIBALAGENCIES","(UCR Arrest Offense Code) The following values for Data Element 45 (UCR Arrest Offense Code) are valid only for use by federal and tribal agencies:\n"
+			+ "26H = Money Laundering*\n"
+			+ "101 = Treason*\n"
+			+ "103 = Espionage*\n"
+			+ "30A = Illegal Entry into the United States* 30B = False Citizenship*\n"
+			+ "30C = Smuggling Aliens*\n"
+			+ "30D = Re-entry after Deportation*\n"
+			+ "360 = Failure to Register as a Sex Offender* 49A = Harboring Escapee/Concealing from Arrest*\n"
+			+ "49B = Flight to Avoid Prosecution*\n"
+			+ "49C = Flight to Avoid Deportation*\n"
+			+ "521 = Violation of National Firearm Act of 1934* 522 = Weapons of Mass Destruction*\n"
+			+ "526 = Explosives *\n"
+			+ "58A = Import Violations*\n"
+			+ "58B = Export Violations*\n"
+			+ "61A = Federal Liquor Offenses*\n"
+			+ "61B = Federal Tobacco Offenses*\n"
+			+ "620 = Wildlife Trafficking*\n"
+			+ "90K = Failure to Appear*\n"
+			+ "90L = Federal Resource Violations*\n"
+			+ "90M = Perjury*\n"
+			+ "*Denotes offenses for federal and tribal LEA reporting only"),
 	_652("652","Arrestee Segment","DISPOSITION MUST BE ENTERED WHEN AGE IS LESS THAN 18","Data Element 52 (Disposition of Juvenile) was not entered, but Data Element 47 (Age of Arrestee) is under 18. Whenever an arrestee's age indicates a juvenile, the disposition must be entered."),
 	_653("653","Arrestee Segment","FOR AGE GREATER THAN 17 DISPOSITION SHOULD NOT BE ENTERED","Data Element 52 (Disposition of Juvenile) was entered, but Data Element 47 (Age of Arrestee) is 18 or greater. Whenever an arrestee's age indicates an adult, the juvenile disposition cannot be entered because it does not apply."),
 	_654("654","Arrestee Segment","AUTOMATIC INDICATOR MUST BE BLANK OR 'A'","Data Element 46 (Arrestee Was Armed With) does not have A=Automatic or a blank in the third position of field."),
@@ -447,6 +468,30 @@ public enum NIBRSErrorCode {
  */
 	_740("740","Group B Arrest Segment","WARNING–NO DISPOSITION FOR POSSIBLE JUVENILE ARRESTEE","Data Element 52 (Disposition of Arrestee Under 18) was not entered, but Data Element 47 (Age of Arrestee) indicates an age-range for a juvenile. The low age is a juvenile and the high age is an adult, but the average age is a juvenile. Note: When an age-range is not entered and the age is a juvenile, the disposition must be entered. These circumstances were flagged by the computer as a possible discrepancy between age and disposition and should be checked for possible correction by the participant"),
 	_741("741","Group B Arrest Segment","WARNING–ARRESTEE IS OVER AGE 98","Data Element 47 (Age of Arrestee) was entered with a value of 99, which means the arrestee is over 98 years old. The submitter should verify that 99=Over 98 Years Old is not being confused the with 00=Unknown."),
+	_750("750","Group B Arrest Segment","ARREST OFFENSE CODE CAN ONLY BE USED BY FEDERAL AND TRIBAL AGENCIES","(UCR Arrest Offense Code) The following values for Data Element 45 (UCR Arrest Offense Code) are only valid for use by federal and tribal agencies:\n"
+			+ "26H =\n"
+			+ "101 =\n"
+			+ "103 =\n"
+			+ "30A =\n"
+			+ "30B =\n"
+			+ "30C =\n"
+			+ "30D =\n"
+			+ "360 =\n"
+			+ "49A =\n"
+			+ "Arrest\n"
+			+ "49B =\n"
+			+ "49C =\n"
+			+ "521 =\n"
+			+ "522 =\n"
+			+ "526 =\n"
+			+ "58A =\n"
+			+ "58B =\n"
+			+ "61A =\n"
+			+ "61B =\n"
+			+ "620 =\n"
+			+ "90K =\n"
+			+ "90L =\n"
+			+ "90M = Perjury"),
 /**
  * 751 not implemented
  */

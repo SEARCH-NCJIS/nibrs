@@ -17,10 +17,12 @@ package org.search.nibrs.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.search.nibrs.common.NIBRSError;
@@ -48,6 +50,14 @@ public abstract class AbstractReport implements ValidationTarget, Identifiable, 
 	private boolean hasUpstreamErrors;
 	private List<ArresteeSegment> arresteeSegmentList;
 	private ReportSource source;
+	private String federalJucicialDistrictCode; 
+	private List<String>  federalTribalSpecialCharatersInOris = Arrays.asList("AFO", "AMX", "ASC", "ATF", "BIA",
+			"CAP", "CBP", "CIS", "FDS", "CGH", "MCD", "MCO", "CGO", "DCO", "DEA", "DHS",
+			"DIS", "DOA", "DOD", "D0D", "DOE", "D0E", "DOI", "DOJ", "D0J", "GA0", "NAV", 
+			"TAR", "DOL", "D0L", "DOS", "D0S", "DUL", "EPA", "FAA", "FAM", "FBI", "FDA", 
+			"FEM", "FPS", "FRB", "FTF", "FTT", "GPO", "HHS", "ICS", "INS", "INT", "IRS", 
+			"NIS", "OPM", "OSI", "PO0", "RTI", "SS1", "SS2", "SS3", "SS4", "SS6", "SS8", 
+			"TIX", "TRE", "TSA", "TSC", "UCP", "USA", "USC", "USM", "USN", "VA0", "WNS"); 
 	
 	public AbstractReport(char adminSegmentLevel) {
 		this.adminSegmentLevel = adminSegmentLevel;
@@ -200,4 +210,27 @@ public abstract class AbstractReport implements ValidationTarget, Identifiable, 
 		this.ownerId = ownerId;
 	}
 
+	public String getFederalJucicialDistrictCode() {
+		return federalJucicialDistrictCode;
+	}
+
+	public void setFederalJucicialDistrictCode(String federalJucicialDistrictCode) {
+		this.federalJucicialDistrictCode = federalJucicialDistrictCode;
+	}
+
+	public boolean isFederalOrTribalReport() {
+		boolean result = false; 
+		
+		if (StringUtils.isNotBlank(federalJucicialDistrictCode)) {
+			result = true; 
+		}
+		else {
+			String ori3To5 = StringUtils.substring(ori, 2, 5); 
+			if (federalTribalSpecialCharatersInOris.contains(ori3To5)) {
+				result = true; 
+			}
+		}
+		return result;
+	}
+	
 }

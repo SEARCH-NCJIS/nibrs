@@ -368,6 +368,19 @@ public enum OffenseCode {
 
 	}
 
+	public static final boolean isFederalOrTribalOffenseCode(String code){
+		return Arrays.asList(
+				_26H.code, _101.code, _103.code, _30A.code,
+				_30B.code, _30C.code, _30D.code,
+				_360.code, _49A.code, _49B.code, _49C.code,
+				_521.code, _522.code, _526.code,
+				_58A.code, _58B.code, _61A.code,
+				_61B.code, _620.code, _90K.code,
+				_90L.code, _90M.code
+				).contains(code);
+		
+	}
+	
 	public CrimeAgainstCode getCrimeAgainst() {
 		return crimeAgainst;
 	}

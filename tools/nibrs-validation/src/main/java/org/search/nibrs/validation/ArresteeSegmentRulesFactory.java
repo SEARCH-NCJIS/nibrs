@@ -87,6 +87,8 @@ public class ArresteeSegmentRulesFactory {
 		rulesList.add(getRuleX01ForMultipleArresteeIndicator());
 		rulesList.add(getRuleX01ForUCRArrestOffenseCode());
 		rulesList.add(getRule670());
+		rulesList.add(getRule650());
+		rulesList.add(getRule750());
 		rulesList.add(getRule760());
 		rulesList.add(getRuleX01ForArresteeWasArmedWith());
 		rulesList.add(getRuleX04ForArresteeWasArmedWith());
@@ -212,7 +214,7 @@ public class ArresteeSegmentRulesFactory {
 			}
 		};
 	}
-	
+		
 	Rule<ArresteeSegment> getRuleX01ForTypeOfArrest() {
 		return new ValidValueListRule<ArresteeSegment>("typeOfArrest", "43", ArresteeSegment.class, isGroupAMode() ? NIBRSErrorCode._601 : NIBRSErrorCode._701, TypeOfArrestCode.codeSet(), false);
 	}
@@ -236,6 +238,50 @@ public class ArresteeSegmentRulesFactory {
 				if (OffenseCode._09C.code.equals(offenseCode)) {
 					e = arresteeSegment.getErrorTemplate();
 					e.setNIBRSErrorCode(NIBRSErrorCode._670);
+					e.setDataElementIdentifier("45");
+					e.setValue(offenseCode);
+				}
+				return e;
+			}
+		};
+	}
+	
+	Rule<ArresteeSegment> getRule650() {
+		return new Rule<ArresteeSegment>() {
+			@Override
+			public NIBRSError apply(ArresteeSegment arresteeSegment) {
+				NIBRSError e = null;
+				String offenseCode = arresteeSegment.getUcrArrestOffenseCode();
+				boolean isFederalOrTribalReport = arresteeSegment.getParentReport()
+						.isFederalOrTribalReport();
+				OffenseCode offenseCodeEnum = OffenseCode.forCode(offenseCode);
+				if (isGroupAMode() && offenseCodeEnum.group.equals("A")
+						&& OffenseCode.isFederalOrTribalOffenseCode(offenseCode)
+						&& !isFederalOrTribalReport) {
+					e = arresteeSegment.getErrorTemplate();
+					e.setNIBRSErrorCode(NIBRSErrorCode._650);
+					e.setDataElementIdentifier("45");
+					e.setValue(offenseCode);
+				}
+				return e;
+			}
+		};
+	}
+	
+	Rule<ArresteeSegment> getRule750() {
+		return new Rule<ArresteeSegment>() {
+			@Override
+			public NIBRSError apply(ArresteeSegment arresteeSegment) {
+				NIBRSError e = null;
+				String offenseCode = arresteeSegment.getUcrArrestOffenseCode();
+				boolean isFederalOrTribalReport = arresteeSegment.getParentReport()
+						.isFederalOrTribalReport();
+				OffenseCode offenseCodeEnum = OffenseCode.forCode(offenseCode);
+				if (!isGroupAMode() && offenseCodeEnum.group.equals("B")
+						&& OffenseCode.isFederalOrTribalOffenseCode(offenseCode)
+						&& !isFederalOrTribalReport ) {
+					e = arresteeSegment.getErrorTemplate();
+					e.setNIBRSErrorCode(NIBRSErrorCode._750);
 					e.setDataElementIdentifier("45");
 					e.setValue(offenseCode);
 				}

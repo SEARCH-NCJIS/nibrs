@@ -331,6 +331,59 @@ public class ArresteeSegmentRulesFactoryTest {
 	}
 	
 	@Test
+	public void testRule750() {
+		Rule<ArresteeSegment> rule = groupARulesFactory.getRule750();
+		ArresteeSegment arresteeSegment = buildBaseGroupASegment();
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._26H.code);
+		NIBRSError nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+		rule = groupBRulesFactory.getRule750();
+		arresteeSegment = buildBaseGroupBSegment();
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._90A.code);
+		nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._26H.code);
+		nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+		
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._90K.code);
+		nibrsError = rule.apply(arresteeSegment);
+		assertNotNull(nibrsError);
+		assertEquals(NIBRSErrorCode._750, nibrsError.getNIBRSErrorCode());
+		assertEquals("45", nibrsError.getDataElementIdentifier());
+		assertEquals(OffenseCode._90K.code, nibrsError.getValue());
+		arresteeSegment.getParentReport().setFederalJucicialDistrictCode("xxx");
+		nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+	}
+	
+	@Test
+	public void testRule650() {
+		Rule<ArresteeSegment> rule = groupARulesFactory.getRule650();
+		ArresteeSegment arresteeSegment = buildBaseGroupASegment();
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._90K.code);
+		NIBRSError nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+		rule = groupBRulesFactory.getRule650();
+		arresteeSegment = buildBaseGroupBSegment();
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._90K.code);
+		nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+		
+		rule = groupARulesFactory.getRule650();
+		arresteeSegment = buildBaseGroupASegment();
+		arresteeSegment.setUcrArrestOffenseCode(OffenseCode._26H.code);
+		nibrsError = rule.apply(arresteeSegment);
+		assertNotNull(nibrsError);
+		assertEquals(NIBRSErrorCode._650, nibrsError.getNIBRSErrorCode());
+		assertEquals("45", nibrsError.getDataElementIdentifier());
+		assertEquals(OffenseCode._26H.code, nibrsError.getValue());
+		arresteeSegment.getParentReport().setFederalJucicialDistrictCode("xxx");
+		nibrsError = rule.apply(arresteeSegment);
+		assertNull(nibrsError);
+	}
+	
+	@Test
 	public void testRuleX01ForArresteeWasArmedWith() {
 		Rule<ArresteeSegment> rule = groupARulesFactory.getRuleX01ForArresteeWasArmedWith();
 		ArresteeSegment arresteeSegment = buildBaseGroupASegment();

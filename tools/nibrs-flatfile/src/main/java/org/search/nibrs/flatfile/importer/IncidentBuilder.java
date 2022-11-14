@@ -200,7 +200,11 @@ public class IncidentBuilder extends AbstractIncidentBuilder {
 		ret.setOri(s.getOri());
 		ret.setReportActionType(s.getActionType());
 		int length = s.getSegmentLength();
-		if (length == 66) {
+		if (length == 66 || length == 69) {
+			if (length == 69) {
+				String federalJucicialDistrictCode = StringUtils.getStringBetweenNoTrim(67, 69, segmentData);
+				ret.setFederalJucicialDistrictCode(federalJucicialDistrictCode);
+			}
 			ret.setMonthOfTape(getIntValueFromSegment(s, 7, 8, newErrorList, NIBRSErrorCode._701));
 			ret.setYearOfTape(getIntValueFromSegment(s, 9, 12, newErrorList, NIBRSErrorCode._701));
 			ret.setCityIndicator(StringUtils.getStringBetween(13, 16, segmentData));
@@ -310,7 +314,7 @@ public class IncidentBuilder extends AbstractIncidentBuilder {
 		newIncident.setReportActionType(s.getActionType());
 		String segmentData = s.getData();
 		int length = s.getSegmentLength();
-		if (length == 87 || length == 88) {
+		if (length == 87 || length == 88 || length==91) {
 			newIncident.setMonthOfTape(getIntValueFromSegment(s, 7, 8, newErrorList, NIBRSErrorCode._101));
 			newIncident.setYearOfTape(getIntValueFromSegment(s, 9, 12, newErrorList, NIBRSErrorCode._101));
 			newIncident.setCityIndicator(StringUtils.getStringBetween(13, 16, segmentData));
@@ -408,7 +412,7 @@ public class IncidentBuilder extends AbstractIncidentBuilder {
 			}
 			newIncident.setExceptionalClearanceDate(clearanceDate);
 			
-			boolean cargoTheft = length == 88;
+			boolean cargoTheft = (length == 88 || length == 91);
 			if (cargoTheft) {
 				String cargoTheftYN = StringUtils.getStringBetweenNoTrim(88, 88, segmentData);
 				
@@ -425,6 +429,11 @@ public class IncidentBuilder extends AbstractIncidentBuilder {
 //					e.setDataElementIdentifier("2A");
 //					e.setNIBRSErrorCode(NIBRSErrorCode._101);
 //					newErrorList.add(e);
+				}
+				
+				if (length == 91) {
+					String federalJucicialDistrictCode = StringUtils.getStringBetweenNoTrim(89, 91, segmentData);
+					newIncident.setFederalJucicialDistrictCode(federalJucicialDistrictCode);
 				}
 			}
 			
