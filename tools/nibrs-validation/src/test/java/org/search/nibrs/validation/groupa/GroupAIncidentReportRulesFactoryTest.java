@@ -175,6 +175,12 @@ public class GroupAIncidentReportRulesFactoryTest {
 		assertEquals("39", e.getDataElementIdentifier());
 		assertEquals(NIBRSErrorCode._559, e.getNIBRSErrorCode());
 		assertEquals(RaceCode.U.code, e.getValue());
+		offenseSegment.setUcrOffenseCode(OffenseCode._360.code);
+		e = rule.apply(report);
+		assertNotNull(e);
+		assertEquals("39", e.getDataElementIdentifier());
+		assertEquals(NIBRSErrorCode._559, e.getNIBRSErrorCode());
+		assertEquals(RaceCode.U.code, e.getValue());
 	}
 	
 	@Test

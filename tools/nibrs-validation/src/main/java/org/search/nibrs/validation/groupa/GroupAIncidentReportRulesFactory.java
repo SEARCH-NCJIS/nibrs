@@ -369,7 +369,8 @@ public class GroupAIncidentReportRulesFactory {
 				int offenseCount = subject.getOffenseCount();
 				for (int i=0;i < offenseCount && !ret;i++) {
 					OffenseSegment os = subject.getOffenses().get(i);
-					ret = OffenseCode._09C.code.equals(os.getUcrOffenseCode());
+					ret = OffenseCode._09C.code.equals(os.getUcrOffenseCode()) 
+							|| OffenseCode._360.code.equals(os.getUcrOffenseCode());
 				}
 				return ret;
 			}
