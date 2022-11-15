@@ -141,14 +141,7 @@ public enum FederalJudicialDistrictCode {
 		}
 		return ret;
 	}
-	
-	public static final Set<String> noneOrUnknownValueCodeSet() {
-		Set<String> ret = new HashSet<>();
-		ret.add(_88.code);
-		ret.add(_99.code);
-		return ret;
-	}
-	
+		
 	public static final FederalJudicialDistrictCode valueOfIepdCode(String iepdCode){
 		return	Arrays.stream(FederalJudicialDistrictCode.values()).filter(i->i.iepdCode.equals(iepdCode)).findFirst().orElse(null); 
 	}
