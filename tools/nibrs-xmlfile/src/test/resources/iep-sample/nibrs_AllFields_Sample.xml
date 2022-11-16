@@ -128,6 +128,9 @@
 		<!-- Element 9, Location Type -->
 		<nc:Location s:id="Location1">
 			<nibrs:LocationCategoryCode>58</nibrs:LocationCategoryCode>
+      <nc:LocationLocale>
+        <cjis:JudicialDistrictCode>ALABAMA_MIDDLE</cjis:JudicialDistrictCode>
+      </nc:LocationLocale>
 		</nc:Location>
 	    <nc:Item>
 	        <!-- Element 14, Type Property Loss/etc  Substituted for nc:ItemStatus -->

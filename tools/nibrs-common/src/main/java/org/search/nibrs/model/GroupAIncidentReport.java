@@ -473,7 +473,8 @@ public class GroupAIncidentReport extends AbstractReport
 		sb.append("GroupAIncidentReport:\n");
 		sb.append(super.toString());
 		sb.append("[incidentNumber=" + incidentNumber + ", incidentDate=" + incidentDate + ", reportDateIndicator=" + reportDateIndicator + ", incidentHour=" + incidentHour
-				+ ", exceptionalClearanceCode=" + exceptionalClearanceCode + ", exceptionalClearanceDate=" + exceptionalClearanceDate + ", cargoTheftIndicator=" + cargoTheftIndicator + ", includesLeoka=" + includesLeoka);
+				+ ", exceptionalClearanceCode=" + exceptionalClearanceCode + ", exceptionalClearanceDate=" + exceptionalClearanceDate + ", cargoTheftIndicator=" 
+				+ cargoTheftIndicator + ", includesLeoka=" + includesLeoka);
 		sb.append("\n").append(offenseSegmentList.size() + " OffenseSegment Segments:\n");
 		for (OffenseSegment o : offenseSegmentList) {
 			sb.append("\t").append(o.toString()).append("\n");

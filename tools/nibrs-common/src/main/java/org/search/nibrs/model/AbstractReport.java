@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -164,7 +165,7 @@ public abstract class AbstractReport implements ValidationTarget, Identifiable, 
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("[monthOfTape=" + monthOfTape + ", yearOfTape=" + yearOfTape + ", cityIndicator=" + cityIndicator + ", ori=" + ori + ", adminSegmentLevel=" + adminSegmentLevel
-				+ ", reportActionType=" + reportActionType + ", hasUpstreamErrors=" + hasUpstreamErrors + "]");
+				+ ", reportActionType=" + reportActionType + ", hasUpstreamErrors=" + hasUpstreamErrors + ", federalJucicialDistrictCode=" + Objects.toString(getFederalJucicialDistrictCode()) + "]");
 		sb.append("\n").append(arresteeSegmentList.size() + " Arrestee Segments:\n");
 		for (ArresteeSegment a : arresteeSegmentList) {
 			sb.append("\t").append(a.toString()).append("\n");

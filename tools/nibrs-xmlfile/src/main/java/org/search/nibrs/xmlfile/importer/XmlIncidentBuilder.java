@@ -57,6 +57,7 @@ import org.search.nibrs.model.VictimSegment;
 import org.search.nibrs.model.ZeroReport;
 import org.search.nibrs.model.codes.AutomaticWeaponIndicatorCode;
 import org.search.nibrs.model.codes.BiasMotivationCode;
+import org.search.nibrs.model.codes.FederalJudicialDistrictCode;
 import org.search.nibrs.model.codes.NIBRSErrorCode;
 import org.search.nibrs.model.codes.PropertyDescriptionCode;
 import org.search.nibrs.model.codes.RelationshipOfVictimToOffenderCode;
@@ -263,6 +264,11 @@ public class XmlIncidentBuilder extends AbstractIncidentBuilder{
 				"nibrs:ReportHeader/nibrs:ReportingAgency/cjis:OrganizationAugmentation/cjis:DirectReportingCityIdentification/nc:IdentificationID");
 		ret.setCityIndicator(cityIndicator);
 
+		String judicialDistrictCode = XmlUtils.xPathStringSearch(reportElement, "nc:Location/nc:LocationLocale/ cjis:JudicialDistrictCode");
+		if (StringUtils.isNotBlank(judicialDistrictCode)) {
+			ret.setFederalJucicialDistrictCode(FederalJudicialDistrictCode.valueOfIepdCode(judicialDistrictCode).code);
+		}
+
 		newErrorList.addAll(getSubmissionYearMonth(reportBaseData,  ret, NIBRSErrorCode._701));
 
 		buildGroupBArresteeSegments(reportBaseData, newErrorList, ret, reportElement);
@@ -435,6 +441,11 @@ public class XmlIncidentBuilder extends AbstractIncidentBuilder{
 		String cityIndicator = XmlUtils.xPathStringSearch(reportElement, 
 				"nibrs:ReportHeader/nibrs:ReportingAgency/cjis:OrganizationAugmentation/cjis:DirectReportingCityIdentification/nc:IdentificationID");
 		newIncident.setCityIndicator(cityIndicator);
+		
+		String judicialDistrictCode = XmlUtils.xPathStringSearch(reportElement, "nc:Location/nc:LocationLocale/ cjis:JudicialDistrictCode");
+		if (StringUtils.isNotBlank(judicialDistrictCode)) {
+			newIncident.setFederalJucicialDistrictCode(FederalJudicialDistrictCode.valueOfIepdCode(judicialDistrictCode).code);
+		}
 		
 		ParsedObject<LocalDate> incidentDate = newIncident.getIncidentDate();
 		incidentDate.setMissing(false);

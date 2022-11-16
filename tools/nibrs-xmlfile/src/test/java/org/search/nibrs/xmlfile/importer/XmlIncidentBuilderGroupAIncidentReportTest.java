@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,6 +76,8 @@ public class XmlIncidentBuilderGroupAIncidentReportTest {
 		GroupAIncidentReport groupAIncident = groupAIncidentList.get(0); 
 		assertNotNull(groupAIncident);
 		
+		
+		assertThat(groupAIncident.getFederalJucicialDistrictCode(), is("002"));
 		assertThat(groupAIncident.getAdminSegmentLevel(), is('1'));
 		assertThat(groupAIncident.getIncidentNumber(), is("54236732")); 
 		assertThat(groupAIncident.getOri(), is("WVNDX0100"));
