@@ -61,6 +61,7 @@ public final class BaselineIncidentFactory {
 		incident.setExceptionalClearanceDate(new ParsedObject<>(LocalDate.of(2016, 5, 12)));
 		incident.setCityIndicator("Y");
 		incident.setReportDateIndicator(null);	
+		incident.setFederalJucicialDistrictCode("002");
 		
 		OffenseSegment o = new OffenseSegment();
 		incident.addOffense(o);
@@ -418,6 +419,7 @@ public final class BaselineIncidentFactory {
 		report.setMonthOfTape(5);
 		report.setCityIndicator("Y");;
 		report.setOri("agencyORI");
+		report.setFederalJucicialDistrictCode("002");
 		ArresteeSegment arrestee = new ArresteeSegment(ArresteeSegment.GROUP_B_ARRESTEE_SEGMENT_TYPE_IDENTIFIER);
 		report.addArrestee(arrestee);
 		arrestee.setArresteeSequenceNumber(new ParsedObject<>(1));

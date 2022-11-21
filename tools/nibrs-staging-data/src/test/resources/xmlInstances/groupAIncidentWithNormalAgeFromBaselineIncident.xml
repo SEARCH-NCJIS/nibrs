@@ -80,6 +80,11 @@
         <nc:Location s:id="Location-13A">
             <nibrs:LocationCategoryCode>15</nibrs:LocationCategoryCode>
         </nc:Location>
+        <nc:Location s:id="Location1">
+            <nc:LocationLocale> 
+              <cjis:JudicialDistrictCode>ALABAMA_MIDDLE</cjis:JudicialDistrictCode>
+            </nc:LocationLocale>
+        </nc:Location>
         <nc:Item>
             <nc:ItemStatus>
                 <cjis:ItemStatusCode>SEIZED</cjis:ItemStatusCode>

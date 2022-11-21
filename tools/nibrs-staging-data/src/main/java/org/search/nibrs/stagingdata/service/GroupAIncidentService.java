@@ -326,6 +326,7 @@ public class GroupAIncidentService {
 					codeTableService.getCodeTableType(groupAIncidentReport.getCargoTheftIndicator(), 
 							cargoTheftIndicatorTypeRepository::findFirstByStateCode, CargoTheftIndicatorType::new); 
 			administrativeSegment.setCargoTheftIndicatorType(cargoTheftIndicatorType);
+			administrativeSegment.setFederalJudicialDistrictCode(groupAIncidentReport.getFederalJucicialDistrictCode());
 			administrativeSegment.setReportTimestamp(LocalDateTime.now());
 			processProperties(administrativeSegment, groupAIncidentReport);
 			processOffenses(administrativeSegment, groupAIncidentReport);

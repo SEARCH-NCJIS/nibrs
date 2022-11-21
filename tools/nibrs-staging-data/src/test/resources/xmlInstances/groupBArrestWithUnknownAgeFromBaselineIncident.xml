@@ -76,6 +76,11 @@
             </j:ArrestCharge>
             <j:ArrestCategoryCode>O</j:ArrestCategoryCode>
         </j:Arrest>
+        <nc:Location s:id="Location1">
+            <nc:LocationLocale> 
+              <cjis:JudicialDistrictCode>ALABAMA_MIDDLE</cjis:JudicialDistrictCode>
+            </nc:LocationLocale>
+        </nc:Location>
         <j:ArrestSubjectAssociation>
             <nc:Activity s:ref="Arrest-1"/>
             <j:Subject s:ref="Arrestee-1"/>

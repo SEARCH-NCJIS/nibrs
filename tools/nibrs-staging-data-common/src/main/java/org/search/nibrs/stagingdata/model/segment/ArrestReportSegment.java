@@ -104,6 +104,7 @@ public class ArrestReportSegment {
 	private Integer ageOfArresteeMax;
 	private Integer ageNumArrestee;
 	private String nonNumericAge;
+	private String federalJudicialDistrictCode; 
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="sexOfPersonTypeId") 
@@ -422,7 +423,9 @@ public class ArrestReportSegment {
 				+ ", sexOfPersonType=" + sexOfPersonType + ", raceOfPersonType=" + raceOfPersonType
 				+ ", ethnicityOfPersonType=" + ethnicityOfPersonType + ", residentStatusOfPersonType="
 				+ residentStatusOfPersonType + ", dispositionOfArresteeUnder18Type=" + dispositionOfArresteeUnder18Type
-				+ ", ucrOffenseCodeType=" + ucrOffenseCodeType + "submission=" + submission==null?"null":submission + "]";
+				+ ", ucrOffenseCodeType=" + ucrOffenseCodeType 
+				+ ", federalJudicialDistrictCode="  + Objects.toString(getFederalJudicialDistrictCode())  
+				+ ",submission=" + submission==null?"null":submission + "]";
 	}
 	public String getNonNumericAge() {
 		return nonNumericAge;
@@ -494,6 +497,12 @@ public class ArrestReportSegment {
 	}
 	public void setAgeNumArrestee(Integer ageNumArrestee) {
 		this.ageNumArrestee = ageNumArrestee;
+	}
+	public String getFederalJudicialDistrictCode() {
+		return federalJudicialDistrictCode;
+	}
+	public void setFederalJudicialDistrictCode(String federalJudicialDistrictCode) {
+		this.federalJudicialDistrictCode = federalJudicialDistrictCode;
 	}
 
 }

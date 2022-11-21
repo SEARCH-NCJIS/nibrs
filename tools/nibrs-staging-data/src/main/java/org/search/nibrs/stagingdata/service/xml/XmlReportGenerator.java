@@ -46,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.search.nibrs.model.codes.BiasMotivationCode;
+import org.search.nibrs.model.codes.FederalJudicialDistrictCode;
 import org.search.nibrs.model.codes.PropertyDescriptionCode;
 import org.search.nibrs.model.codes.RelationshipOfVictimToOffenderCode;
 import org.search.nibrs.model.codes.TypeOfPropertyLossCode;
@@ -260,6 +261,7 @@ public class XmlReportGenerator {
 				arrestReportSegment.getUcrOffenseCodeType(), 
 				arrestReportSegment.getTypeOfArrestType());
 		
+		addLocationElements(arrestReportSegment, reportElement);
 		addArrestSubjectAssociationElement(reportElement, arrestReportSegment.getArresteeSequenceNumber());
 		
 		NibrsNamespaceContext namespaceContext = new NibrsNamespaceContext();
@@ -267,6 +269,20 @@ public class XmlReportGenerator {
 		return document;
 	}
 	
+	private void addLocationElements(ArrestReportSegment arrestReportElement, Element reportElement) {
+		if (StringUtils.isNotBlank(arrestReportElement.getFederalJudicialDistrictCode())) {
+			FederalJudicialDistrictCode federalJudicialDistrictCode = 
+					FederalJudicialDistrictCode.valueOfCode(arrestReportElement.getFederalJudicialDistrictCode());
+			
+			if (federalJudicialDistrictCode != null) {
+				Element locationElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Location");
+				XmlUtils.addAttribute(locationElement, Namespace.S, "id", "Location1");
+				Element locationLocaleElement = XmlUtils.appendChildElement(locationElement, Namespace.NC, "LocationLocale");
+				XmlUtils.appendElementAndValue(locationLocaleElement, Namespace.CJIS, "JudicialDistrictCode", federalJudicialDistrictCode.iepdCode);
+			}
+		}
+	}
+
 	private void addArresteeElements(ArrestReportSegment arrestReportSegment, Element reportElement) {
 		Set<String> arresteeArmedWithTypeCodes = new HashSet<>(); 
 		
@@ -457,6 +473,18 @@ public class XmlReportGenerator {
 			Element locationElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Location");
 			XmlUtils.addAttribute(locationElement, Namespace.S, "id", "Location-" + offense.getUcrOffenseCodeType().getNibrsCode());
 			XmlUtils.appendElementAndValue(locationElement, Namespace.NIBRS, "LocationCategoryCode", offense.getLocationType().getNibrsCode());
+		}
+		
+		if (StringUtils.isNotBlank(administrativeSegment.getFederalJudicialDistrictCode())) {
+			FederalJudicialDistrictCode federalJudicialDistrictCode = 
+					FederalJudicialDistrictCode.valueOfCode(administrativeSegment.getFederalJudicialDistrictCode());
+			
+			if (federalJudicialDistrictCode != null) {
+				Element locationElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Location");
+				XmlUtils.addAttribute(locationElement, Namespace.S, "id", "Location1");
+				Element locationLocaleElement = XmlUtils.appendChildElement(locationElement, Namespace.NC, "LocationLocale");
+				XmlUtils.appendElementAndValue(locationLocaleElement, Namespace.CJIS, "JudicialDistrictCode", federalJudicialDistrictCode.iepdCode);
+			}
 		}
 	}
 

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -123,6 +124,7 @@ public class AdministrativeSegment implements Comparable<AdministrativeSegment>,
 	
 	private String reportDateIndicator; 
 	private String incidentHour;
+	private String federalJudicialDistrictCode; 
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="clearedExceptionallyTypeId") 
@@ -314,7 +316,9 @@ public class AdministrativeSegment implements Comparable<AdministrativeSegment>,
 				+ ", exceptionalClearanceDate=" + exceptionalClearanceDate + ", exceptionalClearanceDateType="
 				+ exceptionalClearanceDateType + ", reportDateIndicator=" + reportDateIndicator + ", incidentHour="
 				+ incidentHour + ", clearedExceptionallyType=" + clearedExceptionallyType + ", cargoTheftIndicatorType="
-				+ cargoTheftIndicatorType + "submission=" + submission== null? "null":submission + "]";
+				+ cargoTheftIndicatorType + ", federalJudicialDistrictCode="  + Objects.toString(federalJudicialDistrictCode) 
+
+				+ ", submission=" + submission== null? "null":submission + "]";
 	}
 
 	@Override
@@ -510,6 +514,14 @@ public class AdministrativeSegment implements Comparable<AdministrativeSegment>,
 
 	public void setOwner(Owner owner) {
 		this.owner = owner;
+	}
+
+	public String getFederalJudicialDistrictCode() {
+		return federalJudicialDistrictCode;
+	}
+
+	public void setFederalJudicialDistrictCode(String federalJudicialDistrictCode) {
+		this.federalJudicialDistrictCode = federalJudicialDistrictCode;
 	}
 
 }

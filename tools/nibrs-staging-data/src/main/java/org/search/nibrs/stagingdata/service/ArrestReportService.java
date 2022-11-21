@@ -262,6 +262,8 @@ public class ArrestReportService {
 				Owner owner = new Owner(groupBArrestReport.getOwnerId());
 				arrestReportSegment.setOwner(owner);
 			}
+			
+			arrestReportSegment.setFederalJudicialDistrictCode(groupBArrestReport.getFederalJucicialDistrictCode());
 
 			arrestReportSegment.setArrestTransactionNumber(groupBArrestReport.getIdentifier());
 			arrestReportSegment.setAgency(agencyRepository.findFirstByAgencyOri(groupBArrestReport.getOri()));
@@ -364,9 +366,10 @@ public class ArrestReportService {
 					UcrOffenseCodeType::new);;
 			arrestReportSegment.setUcrOffenseCodeType(ucrOffenseCodeType);
 			arrestReportSegment.setReportTimestamp(LocalDateTime.now());
-			
+
 			processArrestReportSegmentArmedWiths(arrestReportSegment, arrestee);
 			
+			arrestReportSegment.setFederalJudicialDistrictCode(groupBArrestReport.getFederalJucicialDistrictCode());
 			arrestReportSegments.add(arrestReportSegment);
 		}
 		return arrestReportSegments;

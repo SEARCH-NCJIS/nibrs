@@ -450,6 +450,7 @@ CREATE TABLE ArrestReportSegment (
                 ResidentStatusOfPersonTypeID INTEGER NOT NULL,
                 DispositionOfArresteeUnder18TypeID INTEGER NOT NULL,
                 UCROffenseCodeTypeID INTEGER NOT NULL,
+                FederalJudicialDistrictCode VARCHAR(3),
                 SubmissionID INTEGER,
                 OwnerId INTEGER,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -485,6 +486,7 @@ CREATE TABLE AdministrativeSegment (
                 ExceptionalClearanceDateID INTEGER NOT NULL,
                 CargoTheftIndicatorTypeID INTEGER NOT NULL,
                 SubmissionID INTEGER,
+                FederalJudicialDistrictCode VARCHAR(3),
                 OwnerId INTEGER,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 CONSTRAINT AdministrativeSegment_pk PRIMARY KEY (AdministrativeSegmentID)
