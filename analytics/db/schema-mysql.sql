@@ -449,6 +449,7 @@ CREATE TABLE ArrestReportSegment (
                 ResidentStatusOfPersonTypeID INT NOT NULL,
                 DispositionOfArresteeUnder18TypeID INT NOT NULL,
                 UCROffenseCodeTypeID INT NOT NULL,
+                FederalJudicialDistrictCode VARCHAR(3),
                 SubmissionID INT,
                 OwnerId INT,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -486,6 +487,7 @@ CREATE TABLE AdministrativeSegment (
                 ExceptionalClearanceDate DATE,
                 ExceptionalClearanceDateID INT NOT NULL,
                 CargoTheftIndicatorTypeID INT NOT NULL,
+                FederalJudicialDistrictCode VARCHAR(3),
                 SubmissionID INT,
                 OwnerId INT,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -697,6 +699,7 @@ CREATE TABLE ZeroReportingSegment (
                 IncidentHour VARCHAR(4),
                 CleardExceptionally VARCHAR(1),
                 ExceptionalClearanceDate DATE,
+                FederalJudicialDistrictCode VARCHAR(3),
                 OwnerId INT,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 PRIMARY KEY (ZeroReportingSegmentID)
@@ -714,6 +717,7 @@ CREATE TABLE LEOKASegment (
                 CityIndicator VARCHAR(4),
                 Filler VARCHAR(12),
                 LEOKAData VARCHAR(600),
+                FederalJudicialDistrictCode VARCHAR(3),
                 OwnerId INT,
                 ReportTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 PRIMARY KEY (LEOKASegmentID)
