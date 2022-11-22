@@ -313,29 +313,6 @@ public enum OffenseCode {
 				_64B.code).contains(code);
 	}
 	
-	public static final boolean isFederalAndTribalOffense(String code) {
-		return Arrays.asList(
-				_26H.code,
-				_101.code,
-				_103.code,
-				_30A.code,
-				_30B.code,
-				_30C.code,
-				_30D.code,
-				_360.code,
-				_49A.code,
-				_49B.code,
-				_49C.code,
-				_521.code, 
-				_522.code, 
-				_526.code, 
-				_58A.code,
-				_58B.code,
-				_620.code,
-				_61A.code,
-				_61B.code).contains(code);
-	}
-	
 	public static final boolean isGamblingOffenseCode(String code) {
 		return codeMatchesRegex(code, "39[ABCD]");
 	}

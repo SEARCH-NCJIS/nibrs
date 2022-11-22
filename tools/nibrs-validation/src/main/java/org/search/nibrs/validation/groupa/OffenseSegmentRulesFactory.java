@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.search.nibrs.common.NIBRSError;
 import org.search.nibrs.common.ParsedObject;
+import org.search.nibrs.model.ArresteeSegment;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.OffenseSegment;
 import org.search.nibrs.model.VictimSegment;
@@ -208,6 +209,7 @@ public class OffenseSegmentRulesFactory {
 		rulesList.add(getRule267());
 		rulesList.add(getRule269());
 		rulesList.add(getRule270());
+		rulesList.add(getRule250());
 		
 		rulesList.add(getRule065());
 		
@@ -467,6 +469,26 @@ public class OffenseSegmentRulesFactory {
 			@Override
 			public boolean ignore(OffenseSegment o) {
 				return o != null && !OffenseCode._220.code.equals(o.getUcrOffenseCode());
+			}
+		};
+	}
+	
+	Rule<OffenseSegment> getRule250() {
+		return new Rule<OffenseSegment>() {
+			@Override
+			public NIBRSError apply(OffenseSegment offenseSegment) {
+				NIBRSError e = null;
+				String offenseCode = offenseSegment.getUcrOffenseCode();
+				boolean isFederalOrTribalReport = offenseSegment.getParentReport()
+						.isFederalOrTribalReport();
+				if (OffenseCode.isFederalOrTribalOffenseCode(offenseCode)
+						&& !isFederalOrTribalReport) {
+					e = offenseSegment.getErrorTemplate();
+					e.setNIBRSErrorCode(NIBRSErrorCode._250);
+					e.setDataElementIdentifier("6");
+					e.setValue(offenseCode);
+				}
+				return e;
 			}
 		};
 	}

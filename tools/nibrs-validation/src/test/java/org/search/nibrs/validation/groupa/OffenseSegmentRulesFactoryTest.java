@@ -129,6 +129,49 @@ public class OffenseSegmentRulesFactoryTest {
 	}
 	
 	@Test
+	public void testRule250() {
+		Rule<OffenseSegment> rule = rulesFactory.getRule250();
+		OffenseSegment o = buildBaseSegment();
+		o.setUcrOffenseCode(null);
+		NIBRSError e = rule.apply(o);
+		assertNull(e);
+		
+		List<OffenseCode> offenseCodeList = 
+				Arrays.asList(
+						OffenseCode._26H, OffenseCode._101, OffenseCode._103, OffenseCode._30A,
+						OffenseCode._30B, OffenseCode._30C, OffenseCode._30D,
+						OffenseCode._360, OffenseCode._49A, OffenseCode._49B, OffenseCode._49C,
+						OffenseCode._521, OffenseCode._522, OffenseCode._526,
+						OffenseCode._58A, OffenseCode._58B, OffenseCode._61A,
+						OffenseCode._61B, OffenseCode._620, OffenseCode._90K,
+						OffenseCode._90L, OffenseCode._90M
+						);		
+		for (OffenseCode offenseCode : OffenseCode.values()){
+			o.setUcrOffenseCode(offenseCode.code);
+			e = rule.apply(o);
+			if (offenseCodeList.contains(offenseCode)){
+				assertNotNull(e);
+				assertEquals('2', e.getSegmentType());
+				assertEquals("6", e.getDataElementIdentifier());
+				assertEquals(offenseCode.code, e.getValue());
+				assertEquals(NIBRSErrorCode._250, e.getNIBRSErrorCode());			}
+			else{
+				assertNull(e);
+			}
+			
+		}
+		
+		o.getParentReport().setFederalJucicialDistrictCode("002");
+		
+		for (OffenseCode offenseCode : OffenseCode.values()){
+			o.setUcrOffenseCode(offenseCode.code);
+			e = rule.apply(o);
+			assertNull(e);
+		}
+		
+	}
+	
+	@Test
 	public void testRule270() {
 		Rule<OffenseSegment> rule = rulesFactory.getRule270();
 		OffenseSegment o = buildBaseSegment();

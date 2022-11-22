@@ -29,7 +29,7 @@ public enum NIBRSErrorCode {
  */
 	_052("052","Structure Check","NOT A VALID ORI–NOT IN UCR ORI FILE","Data Element 1 (ORI) and Data Element 25C (Officer–ORI Other Jurisdiction) must be a valid nine-character NCIC ORI."),
 /**
- * 055 not implemented	
+ * 055 not implemented, implementable 	
  */
 	_055("055","Structure Check","CANNOT HAVE A GROUP A INCIDENT REPORT WITHOUT LEVEL 1 SEGMENT","Segment Level 1 (Administrative Segment) with Segment Action Type I=Incident Report must be the first segment submitted for each Group A Incident Report."),
 /**
@@ -37,15 +37,15 @@ public enum NIBRSErrorCode {
  */
 	_056("056","Structure Check","DUPLICATE INCIDENT– PREVIOUSLY ADDED","Data Element 2 (Incident Number) must be a unique number for each incident submitted. No two incidents can have the same incident number."),
 /**
- * 058 not implemented	
+ * 058 not implemented	implementable 
  */
 	_058("058","Structure Check","ALL SEGMENTS IN A SUBMISSION MUST HAVE SAME MONTH AND YEAR OF SUBMISSION","Month of Submission and Year of Submission must contain the same data values for each segment in a NIBRS submission. The first segment processed will be compared with all other segments to check for this condition."),
 /**
- * 059 not implemented	
+ * 059 not implemented	implementable 
  */
 	_059("059","Structure Check","ALL SEGMENTS IN SUBMISSION MUST BE FROM SAME STATE","Data Element 1 (ORI) must contain the same state abbreviation code (e.g., SC, MD, etc.) in the first two positions (record positions 17 & 18). For nonfederal LEAs, every segment in a submission must have the same state code in the first two positions of the ORI."),
 /**
- * 060 not implemented	
+ * 060 not implemented 
  */
 	_060("060","Structure Check","PROCESSING DATE PRECEDES MONTH AND YEAR OF SUBMISSION","Month of Submission and Year of Submission must precede the date the FBI receives and processes a NIBRS submission. This edit checks for data submitted for a future month/year."),
 	_065("065","Structure Check","EACH LEVEL 2 OFFENSE MUST HAVE AT LEAST ONE VICTIM","Segment Level 2 (Offense Segment) must have at least one Segment Level 4 (Victim Segment) connected to it by entering the offense code identified in Data Element 6 (UCR Offense Code) in Data Element 24 (Victim Connected to UCR Offense Code)."),
@@ -93,7 +93,7 @@ public enum NIBRSErrorCode {
 	_106("106","Admin Segment","INVALID DATA VALUE FOR HOUR","For Offenses of 09A, 13A, 13B and 13C ONLY–When data element 25 (Type of Victim) = L (Law Enforcement Officer) then Data Element 3 (Incident Date/Hour) must be populated with a valid hour (00-23). Incident Hour Unknown (Blank) is not a valid entry."),
 	_115("115","Admin Segment","CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS","(Incident Number) Must be blank right-fill if under 12 characters in length. Cannot have embedded blanks between the first and last characters entered."),
 /**
- * 116 not implemented
+ * 116 not implemented -- implementable 
  */
 	_116("116","Admin Segment","MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION","(Incident Number) must be left-justified with blank right-fill. Since the number is less than 12 characters, it must begin in position 1"),
 	_117("117","Admin Segment","CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS","(Incident Number) can only have character combinations of A through Z, 0 through 9, hyphens, and/or blanks. For example, 89-123-SC is valid, but 89+123*SC is invalid."),
@@ -165,9 +165,6 @@ public enum NIBRSErrorCode {
 	_220("220","Offense Segment","DATA MUST BE ENTERED FOR SPECIFIC OFFENSES","Data Element 12 (Type Criminal Activity/Gang Information) Must be populated with a valid data value and cannot be blank when Data Element 6 (UCR Offense Code) is: 250=Counterfeiting/Forgery 280=Stolen Property Offenses 35A=Drug/Narcotic Violations 35B=Drug Equipment Violations 39C=Gambling Equipment Violations 370=Pornography/Obscene Material 520=Weapon Law Violations 720=Animal Cruelty"),
 	_221("221","Offense Segment","DATA MUST BE ENTERED FOR SPECIFIC OFFENSES","Data Element 13 (Type Weapon/Force Involved) must be populated with a valid data value and cannot be blank when Data Element 6 (UCR Offense Code) is: 09A=Murder and Non-negligent Manslaughter 09B=Negligent Manslaughter 09C=Justifiable Homicide 100=Kidnapping/Abduction 11A=Rape 11B=Sodomy 11C=Sexual Assault With An Object 11D=Fondling 120=Robbery 13A=Aggravated Assault 13B=Simple Assault 210=Extortion/Blackmail 520=Weapon Law Violations 64A=Human Trafficking, Commercial Sex Acts 64B=Human Trafficking, Involuntary Servitude"),
 	_222("222","Offense Segment","DATA CAN ONLY BE BE ENTERED FOR SPECIFIC OFFENSES","Data Element 13 (Type Weapon/Force Involved) must be populated with a valid data value and cannot be blank when Data Element 6 (UCR Offense Code) is: 09A=Murder and Non-negligent Manslaughter 09B=Negligent Manslaughter 09C=Justifiable Homicide 100=Kidnapping/Abduction 11A=Rape 11B=Sodomy 11C=Sexual Assault With An Object 11D=Fondling 120=Robbery 13A=Aggravated Assault 13B=Simple Assault 210=Extortion/Blackmail 520=Weapon Law Violations 64A=Human Trafficking, Commercial Sex Acts 64B=Human Trafficking, Involuntary Servitude"),
-/**
- * 250 not implemented	
- */
 	_250("250","Offense Segment","OFFENSE CODE CAN ONLY BE USED BY FEDERAL AGENCIES","OFFENSE CODE CAN ONLY BE USED BY FEDERAL AGENCIES"),
 	_251("251","Offense Segment","INVALID CODE","(Offense Attempted/Completed) Must be a valid code of A=Attempted or C=Completed."),
 	_252("252","Offense Segment","OFFENSE CODE MUST BE 220 WITH A LOCATION TYPE OF 14 OR 19 FOR DATA TO BE ENTERED","When Data Element 10 (Number of Premises Entered) is entered, Data Element 9 (Location Type) must be 14=Hotel/Motel/Etc. or 19=Rental Storage Facility, and Data Element 6 (UCR Offense Code) must be 220 (Burglary)."),
