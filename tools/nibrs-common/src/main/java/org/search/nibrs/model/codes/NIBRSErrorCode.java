@@ -471,7 +471,7 @@ public enum NIBRSErrorCode {
  */
 	_718("718","Group B Arrest Segment","ARREST DATE CANNOT BE ON OR AFTER THE INACTIVE DATE OF THE ORI","Data Element 42 (Arrest Date) The UCR Program has determined that an ORI will no longer be submitting data to the FBI as of an inactive date. No arrest data from this ORI will be accepted after this date."),
 /**
- * 720 not implemented	
+ * 720 cannot be validated	
  */
 	_720("720","Group B Arrest Segment","GROUP B ADD CANNOT PREDATE NIBRS START DATE","Group B Arrest Report (Level 7) submitted with a Segment Action Type of A = Add cannot have Data Element 42 (Arrest Date) earlier than the Base Date."),
 	_722("722","Group B Arrest Segment","AGE RANGE CANNOT HAVE '00' IN FIRST TWO POSITIONS","Data Element 47 (Age of Arrestee) was entered as an age-range. Therefore, the first age component cannot be 00 (unknown)."),
@@ -505,7 +505,7 @@ public enum NIBRSErrorCode {
 			+ "90L =\n"
 			+ "90M = Perjury"),
 /**
- * 751 not implemented
+ * 751 cannot be validated
  */
 	_751("751","Group B Arrest Segment","ARRESTEE SEQUENCE NUMBER ALREADY EXISTS","When a Group 'B' Arrest Report (Level 7) has two or more arrestees, the individual segments comprising the report cannot contain duplicates. In this case, two arrestee segments were submitted having the same entry in Data Element 40 (Arrestee Sequence Number)."),
 	_752("752","Group B Arrest Segment","DISPOSITION MUST BE ENTERED WHEN AGE IS LESS THAN 18","Data Element 52 (Disposition of Juvenile) was not entered, but Data Element 47 (Age of Arrestee) is under 18. Whenever an arrestee's age indicates a juvenile, the disposition must be entered."),
@@ -535,7 +535,7 @@ public enum NIBRSErrorCode {
  */
 	_798("798","Group B Arrest Segment","MISSING ARREST DATE FOR DELETE -ARREST TRANSACTION NUMBER MATCHES GROUP B ARREST REPORT WITH ARREST DATE OUTSIDE TWO YEAR WINDOW","Data Element 42 (Arrest Date) is missing for a Group B Arrest Report with a Segment Action Type of D=Delete; at least one Group B Arrest Report is on file that matches Data Element 41 (Arrest Transaction Number) with an Arrest Date outside the two year window."),
 /**
- *799 new to 3.1	
+ *799 new to 3.1	cannot be validated	
  */
 	_799("799","Group B Arrest Segment","MISSING ARREST DATE FOR DELETE -ARREST TRANSACTION NUMBER MATCHES MULTIPLE GROUP B ARREST REPORTS","Data Element 42 (Arrest Date) is missing for a Group B Arrest Report with a Segment Action Type of D=Delete; multiple Group B Arrest Reports are on file that match Data Element 41 (Arrest Transasction Number)."),	
 

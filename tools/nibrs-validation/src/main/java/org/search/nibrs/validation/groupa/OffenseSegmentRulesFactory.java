@@ -28,7 +28,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.search.nibrs.common.NIBRSError;
 import org.search.nibrs.common.ParsedObject;
-import org.search.nibrs.model.ArresteeSegment;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.OffenseSegment;
 import org.search.nibrs.model.VictimSegment;
@@ -484,7 +483,7 @@ public class OffenseSegmentRulesFactory {
 				if (OffenseCode.isFederalOrTribalOffenseCode(offenseCode)
 						&& !isFederalOrTribalReport) {
 					e = offenseSegment.getErrorTemplate();
-					e.setNIBRSErrorCode(NIBRSErrorCode._250);
+					e.setNIBRSErrorCode(NIBRSErrorCode._250); 
 					e.setDataElementIdentifier("6");
 					e.setValue(offenseCode);
 				}

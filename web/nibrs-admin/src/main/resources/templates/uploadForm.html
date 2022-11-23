@@ -91,56 +91,93 @@
 			          <li>
 			          Structure Check Errors
 			            <ul>
-			              <li>930: Invalid ORI – ORI marked for historical reference</li>
+			              <li>056: DUPLICATE INCIDENT- PREVIOUSLY ADDED</li>
+			              <li>060: PROCESSING DATE PRECEDES MONTH AND YEAR OF SUBMISSION</li>
+			              <li>088: GROUP A AND GROUP B CANNOT HAVE SAME IDENTIFIER</li>
 			              <li>931: Invalid ORI – ORI marked for historical reference</li>
 			              <li>932: Invalid ORI – ORI information is duplicated</li>
 			              <li>933: Invalid ORI – ORI not found in reference data</li>
 			              <li>934: Invalid ORI – ORI is covered by another agency</li>
+			              <li>935: NIBRS CERTIFICATION DATE DOES NOT EXIST</li>
+			              <li>937: PRE-NIBRS INCIDENT RECEIVED</li>
+			              <li>938: MULTIPLE INCIDENTS ON FILE</li>
+			              <li>940: EXCEPTIONAL CLEARANCE ALREADY ON FILE</li>
+			              <li>941: WEB SERVICE SUBMISSION ALREADY IN PROCESS</li>
 			              <li>952: Invalid ORI – ORI is not in UCR file</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Administrative Segment Errors – Level 1
 			            <ul>
+			              <li>116: MUST BE LEFT JUSTIFIED BLANK DETECTED IN FIRST POSITION</li>
 			              <li>118: Date cannot be on or after the inactive date of the ORI</li>
+			              <li>151: REPORT INDICATOR MUST BE BLANK OR R</li>
 			              <li>173: Incident date cannot be before date ORI went IBR</li>
+			              <li>175: CANNOT CALCULATE BASE DATE FROM INCIDENT DATE</li>
+			              <li>197: MISSING INCIDENT DATE FOR DELETE</li>
+			              <li>198: MISSING INCIDENT DATE FOR DELETE - INCIDENT NUMBER MATCHES GROUP A INCIDENT REPORTS WITH INCIDENT DATE OUTSIDE TWO YEAR WINDOW</li>
+			              <li>199: MISSING INCIDENT DATE FOR DELETE - INCIDENT NUMBER MATCHES MULTIPLE GROUP A INCIDENT REPORTS</li>
+			              
 			            </ul>
 			          </li>
 			          <li>
 			            Offense Segment Errors – Level 2 
 			            <ul>
-			              <li>All errors are validated</li>
+			              <li>202: CONTAINS NONNUMERIC ENTRY</li>
+			              <li>215: CANNOT CONTAIN EMBEDDED BLANKS BETWEEN FIRST AND LAST NON BLANK CHARACTERS</li>
+			              <li>216: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
+			              <li>217: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Property Segment Errors – Level 3
 			            <ul>
-			              <li>All errors are validated</li>
+			              <li>302: CONTAINS NONNUMERIC ENTRY</li>
+			              <li>315: CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS</li>
+			              <li>316: MUST BE LEFT-JUSTIFIED. BLANK DETECTED IN FIRST POSITION</li>
+			              <li>317: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Victim Segment Errors – Level 4
 			            <ul>
-			              <li>All errors are validated</li>
+			              <li>408: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
+			              <li>415: CANNOT CONTAIN EMBEDDED BLANKS BETWEEN FIRST AND LAST NON BLANK CHARACTERS</li>
+			              <li>416: MUST BE LEFT- JUSTIFIED–BLANK DETECTED IN FIRST POSITION</li>
+			              <li>417: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
+			              <li>490: INCIDENT DATE/HOUR MUST CONTAIN A VALID ENTRY WITHEN VICTIM IS L=LAW ENFORCEMENT OFFICER</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Offender Segment Errors – Level 5
 			            <ul>
-			              <li>All errors are validated</li>
+                    <li>502: CONTAINS NONNUMERIC ENTRY</li>
+                    <li>508: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
+                    <li>515: CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS</li>
+                    <li>516: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
+                    <li>517: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Arrest Segment Errors – Level 6
 			            <ul>
+			              <li>602: CONTAINS NONNUMERIC ENTRY</li>
+			              <li>608: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
+			              <li>616: MUST BE LEFT-JUSTIFIED— BLANK DETECTED IN FIRST POSITION</li>
 			              <li>618: Arrest date cannot on or after the inactive date of the ORI</li>
+			              <li>664: ARRESTEE AGE MUST BE NUMERIC DIGITS</li>
 			            </ul>
 			          </li>
 			        </ul>
 			        
 			        <p><strong>GROUP B ARREST REPORTS</strong></p>
 			        <ul>
+			          <li>708: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
+			          <li>716: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
 			          <li>718: Arrest date cannot be on or after the inactive date of the ORI</li>
+			          <li>720: GROUP B ADD CANNOT PREDATE NIBRS START DATE</li>
+			          <li>751: ARRESTEE SEQUENCE NUMBER ALREADY EXISTS</li>
+			          <li>757: ARRESTEE AGE MUST BE NUMERIC DIGITS</li>
 			          <li>759: Duplicate Group B arrest report segment on file</li>
 			          <li>798: Missing arrest date for delete, duplicate match</li>
 			          <li>799: Missing arrest date for delete, multiple matches</li>
@@ -150,8 +187,13 @@
 			        <ul>
 			          <li>028: Cannot add zero report – Group A incident report on file for this month</li>
 			          <li>029: Cannot add zero report – Group B Arrest report on file for this month</li>
+			          <li>090: ZERO REPORTING MONTH IS NOT 01-12</li>
+			          <li>091: ZERO-REPORTING YEAR IS INVALID</li>
+			          <li>092: ZERO REPORTING INCIDENT NUMBER MUST BE ALL ZEROS</li>
 			          <li>093: Zero report month/year is prior to agency conversion to NIBRS</li>
-			          <li>096: Zero report month/year cannot be on or after date agency is placed on covered-by status</li>
+			          <li>094: ZERO REPORT MONTH/YEAR EXCEEDED MONTH/YEAR OF SUBMISSION</li>
+			          <li>095: PRE-NIBRS SEGMENTS CANNOT BE DELETED IN THIS WAY</li>
+			          <li>096: ZERO REPORT MONTH &amp; ZERO REPORT YEAR CANNOT BE ON OR AFTER DATE AGENCY IS PLACED ON COVERED-BY STATUS</li>
 			        </ul>
             </div>
           </div>
