@@ -22,19 +22,20 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.search.nibrs.model.AbstractReport;
 
-public class PersistReportTask{
+public class ReportProcessProgress{
 
 	private Integer totalCount;
 	private Integer processedCount = 0;
 	private List<String> failedToProcess = new ArrayList<>(); 
 	private boolean aborted = false;
 	private boolean started = false; 
+	private String outputFolder;
 	
-	public PersistReportTask() {
+	public ReportProcessProgress() {
 		super();
 	}
 
-	public PersistReportTask(List<AbstractReport> reportsToProcess) {
+	public ReportProcessProgress(List<AbstractReport> reportsToProcess) {
 		this();
 		this.totalCount = reportsToProcess.size();
 	}
@@ -99,5 +100,13 @@ public class PersistReportTask{
 
 	public void setStarted(boolean started) {
 		this.started = started;
+	}
+
+	public String getOutputFolder() {
+		return outputFolder;
+	}
+
+	public void setOutputFolder(String outputFolder) {
+		this.outputFolder = outputFolder;
 	}
 }

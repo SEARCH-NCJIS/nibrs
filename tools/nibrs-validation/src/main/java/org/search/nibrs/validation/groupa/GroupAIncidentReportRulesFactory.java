@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -750,10 +751,16 @@ public class GroupAIncidentReportRulesFactory {
 			@Override
 			public NIBRSError apply(GroupAIncidentReport subject) {
 				NIBRSError ret = null;
-				if ((subject.getOffenseForOffenseCode(OffenseCode._100.code) == null &&
-						subject.getOffenseForOffenseCode(OffenseCode._35B.code) == null && 
-						subject.getOffenseForOffenseCode(OffenseCode._35A.code) == null &&
-						!subject.includesGamblingOffense() && !subject.includesPropertyCrime()) && !subject.getProperties().isEmpty()) {
+				
+				boolean isPropertySegmentAllowable = subject.getOffenses()
+						.stream().map(OffenseSegment::getUcrOffenseCode)
+						.anyMatch(code-> OffenseCode.isCrimeRequirePropertySegement(code)
+								|| OffenseCode.isCommerceViolations(code)
+								|| Objects.equals(code, OffenseCode._521.code)
+								|| Objects.equals(code, OffenseCode._522.code)
+								|| Objects.equals(code, OffenseCode._526.code)); 
+				
+				if ( !isPropertySegmentAllowable && !subject.getProperties().isEmpty()) {
 					ret = subject.getErrorTemplate();
 					ret.setValue(null);
 					ret.setDataElementIdentifier("L 3");
@@ -1039,6 +1046,10 @@ public class GroupAIncidentReportRulesFactory {
 							.findFirst()
 							.get();
 					
+					Integer recoveredVehiclePartsValue =  Optional.ofNullable(recoveredPropertyValueMap.get(PropertyDescriptionCode._38.code))
+							.orElse(0).intValue(); 
+					Integer stolenVehiclePartsValue =  Optional.ofNullable(stolenPropertyValueMap.get(PropertyDescriptionCode._38.code))
+							.orElse(0).intValue(); 
 					
 					if (stolenPropertyValueMap != null && recoveredPropertyValueMap != null) {
 						for (Map.Entry<String, Integer> entry : stolenPropertyValueMap.entrySet()) {
@@ -1048,12 +1059,11 @@ public class GroupAIncidentReportRulesFactory {
 												&& recoveredPropertyValueMap.get(entry.getKey()) > entry.getValue())
 										|| (PropertyDescriptionCode.isMotorVehicleCode(entry.getKey())
 												&& recoveredPropertyValueMap.get(entry.getKey()) != null
-												&& recoveredPropertyValueMap.get(PropertyDescriptionCode._38.code) != null 
-												&& (recoveredPropertyValueMap.get(PropertyDescriptionCode._38.code) + recoveredPropertyValueMap.get(entry.getKey())) > entry.getValue())
+												&& (recoveredVehiclePartsValue + recoveredPropertyValueMap.get(entry.getKey())) 
+													> (entry.getValue() + stolenVehiclePartsValue))
 										|| (PropertyDescriptionCode.isMotorVehicleCode(entry.getKey())
 												&& recoveredPropertyValueMap.get(entry.getKey()) == null
-												&& recoveredPropertyValueMap.get(PropertyDescriptionCode._38.code) != null 
-												&& recoveredPropertyValueMap.get(PropertyDescriptionCode._38.code) > entry.getValue()))
+												&& recoveredVehiclePartsValue > entry.getValue()))
 									){
 								ret = subject.getErrorTemplate();
 								ret.setValue(entry.getKey());

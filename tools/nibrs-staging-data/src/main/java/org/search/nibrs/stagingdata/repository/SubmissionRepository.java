@@ -17,7 +17,7 @@ package org.search.nibrs.stagingdata.repository;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.search.nibrs.stagingdata.model.Submission;
 import org.springframework.data.jpa.repository.EntityGraph;

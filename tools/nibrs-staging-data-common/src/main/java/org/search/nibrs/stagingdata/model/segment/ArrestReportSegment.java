@@ -17,6 +17,7 @@ package org.search.nibrs.stagingdata.model.segment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -129,7 +130,7 @@ public class ArrestReportSegment {
 	private UcrOffenseCodeType ucrOffenseCodeType;
 	
 	@OneToMany(mappedBy = "arrestReportSegment", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<ArrestReportSegmentWasArmedWith> arrestReportSegmentWasArmedWiths;
+	private Set<ArrestReportSegmentWasArmedWith> arrestReportSegmentWasArmedWiths = new HashSet<ArrestReportSegmentWasArmedWith>();
 
 	@OneToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "submissionId", nullable = true)

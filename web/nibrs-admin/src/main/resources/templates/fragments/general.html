@@ -36,10 +36,10 @@
 <body>
     <header th:fragment="header">
         <div class="banner mt-5 pt-1" th:fragment="banner" id="banner">
-          <div class="text-white pl-3 align-middle pb-1">
-            <img th:src="@{${brandImagePath}}" height="72px" /> 
-            <span class="initials align-bottom" aria-hidden="true">NIBRS</span>
-            <span class="fullname align-middle">Services Toolset</span>
+          <div class="text-white pl-3 align-bottom pb-1">
+            <img th:src="@{${brandImagePath}}" height="72px" class="align-bottom"/> 
+            <span class="initials" aria-hidden="true">NIBRS</span>
+            <span class="fullname">Services Toolset</span>
           </div>
         </div>
 	      <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top fh-fixedHeader">
@@ -69,9 +69,15 @@
 	            <li class="nav-item" th:if="${allowSubmitToFbi && !agencyMapping.empty}">
 	              <a class="nav-link" href="#" id="submitToFbi">Submit to FBI</a>
 	            </li>
+              <li class="nav-item" th:if="${flatFileToXmlFileConversion}">
+                <a class="nav-link uploadFlatFileToConvert" href="#" id="uploadFlatFileToConvert">Flat File to XML</a>
+              </li>
 	            <li th:each="instance : ${externalLinksMapping}" class="nav-item">
 							   <a class="nav-link external-link" th:href="${instance.value}" th:text="${instance.key}" target="_blank"></a>
 							</li>
+              <li class="nav-item" th:if="${authUser.emailAddress=='nibrs@search.org'}">
+                <a class="nav-link dashboard external-link" href="https://app.powerbi.com/groups/me/reports/443c5f60-17bf-4057-8922-4b6e0b045566/ReportSectionfcf39247cc57080e165b" id="dashboard" target="_blank">NIBRS Dashboard</a>
+              </li>
 							<li class="nav-item dropdown" th:if="${aboutLinksMapping!=null && !aboutLinksMapping.empty}">
 							   <a class="nav-link dropdown-toggle" href="#" id="dropdownAbout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
                  <div class="dropdown-menu" aria-labelledby="dropdownAbout">
@@ -90,9 +96,9 @@
 			          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 			            <a class="dropdown-item disabled"><span class="small font-italic pr-2 text-secondary">Signed in as <strong th:text="${#authentication.getPrincipal().getUsername()}"></strong></span></a>
 			            <div class="dropdown-divider"></div>
-			            <a class="dropdown-item" href="https://nibrs.search.org/home"><span class="small font-italic pr-2">User Profile</span></a>
+			            <a class="dropdown-item unloadConfirmation" href="https://nibrs.search.org/home"><span class="small font-italic pr-2">User Profile</span></a>
 			            <div class="dropdown-divider"></div>
-			            <a class="dropdown-item" th:href="@{/logout}"><span class="small font-italic pr-2">Sign Out</span> <i class="fas fa-sign-out-alt"></i></a>
+			            <a class="dropdown-item unloadConfirmation" th:href="@{/logout}"><span class="small font-italic pr-2">Sign Out</span> <i class="fas fa-sign-out-alt"></i></a>
 			          </div>
               </li>
             </ul>
@@ -108,36 +114,38 @@
 	    </footer>
     
     <div th:fragment="javascripts">
-   	    <!-- Optional JavaScript -->
+   	  <!-- Optional JavaScript -->
 	    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		  <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-		  <script th:src="@{/webjars/popper.js/1.14.4/dist/umd/popper.min.js}"></script>
-      <script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-		  <script type="text/javascript" th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.min.js}"></script>
-	    <script type="text/javascript" th:src="@{/webjars/datatables/1.10.19/js/dataTables.bootstrap4.min.js}"></script>
-	    <script type="text/javascript" th:src="@{/webjars/datatables-fixedheader/3.1.6/js/dataTables.fixedHeader.js}"></script>
-	    <script type="text/javascript" th:src="@{/webjars/datatables-responsive/2.2.3/js/dataTables.responsive.js}"></script>
-	    <script type="text/javascript" th:src="@{/webjars/font-awesome/5.2.0/js/all.js}"></script>
-	    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js" type="text/javascript"></script>
-			<!-- <script type="text/javascript" th:src="@{/webjars/jquery-maskedinput/1.4.0/jquery.maskedinput.js}"></script> --> 
-			<script type="text/javascript" th:src="@{/js/plugins/jquery.mask.min.js}"></script> 
-			<script type="text/javascript" th:src="@{/js/plugins/bootpopup.js}"></script> 
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script> 
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script> 
-			<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script> 
-			<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script> 
-			<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
-			<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
-			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
-	    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script> 
+	    <th:block th:fragment="baseJavascripts">
+			  <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+			  <script th:src="@{/webjars/popper.js/1.14.4/dist/umd/popper.min.js}"></script>
+	      <script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+			  <script type="text/javascript" th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.min.js}"></script>
+		    <script type="text/javascript" th:src="@{/webjars/datatables/1.10.19/js/dataTables.bootstrap4.min.js}"></script>
+		    <script type="text/javascript" th:src="@{/webjars/datatables-fixedheader/3.1.6/js/dataTables.fixedHeader.js}"></script>
+		    <script type="text/javascript" th:src="@{/webjars/datatables-responsive/2.2.3/js/dataTables.responsive.js}"></script>
+		    <script type="text/javascript" th:src="@{/webjars/font-awesome/5.2.0/js/all.js}"></script>
+		    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js" type="text/javascript"></script>
+				<!-- <script type="text/javascript" th:src="@{/webjars/jquery-maskedinput/1.4.0/jquery.maskedinput.js}"></script> --> 
+				<script type="text/javascript" th:src="@{/js/plugins/jquery.mask.min.js}"></script> 
+				<script type="text/javascript" th:src="@{/js/plugins/bootpopup.js}"></script> 
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script> 
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script> 
+				<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script> 
+				<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script> 
+				<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script> 
+				<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script> 
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+		    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+	    </th:block> 
 			<script th:inline="javascript">
 				/*<![CDATA[*/
-					var context = [[@{/}]];
-					var securityEnabled = [[${securityEnabled}]]; 
-					var inactivityTimeout = [[${inactivityTimeout}]]; 
-					var inactivityTimeoutInSeconds = [[${inactivityTimeoutInSeconds}]]; 
+					var context = /*[[@{/}]]*/ '';
+					var securityEnabled = /*[[${securityEnabled}]]*/ true; 
+					var inactivityTimeout = /*[[${inactivityTimeout}]]*/ true; 
+					var inactivityTimeoutInSeconds = /*[[${inactivityTimeoutInSeconds}]]*/ 1800; 
 				/*]]>*/
 				var idleTime;
 				var table;
@@ -180,6 +188,15 @@
 						$(this).parent().toggleClass('show');
 						
 						xhr = $.get(context + 'files/upload', function(data) {
+						   $('#portalContent').html(data); 
+						 }).fail(ojbc.displayFailMessage);
+						return false; 
+	        });
+			    	  
+					$('body').on('click', 'a.uploadFlatFileToConvert', function() {   
+						$(this).parent().toggleClass('show');
+						
+						xhr = $.get(context + 'files/uploadToConvertForm', function(data) {
 						   $('#portalContent').html(data); 
 						 }).fail(ojbc.displayFailMessage);
 						return false; 

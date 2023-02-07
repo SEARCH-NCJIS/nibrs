@@ -17,6 +17,9 @@ package org.search.nibrs.validation.groupa;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -796,6 +799,24 @@ public class GroupAIncidentReportRulesFactoryTest {
 		report.addProperty(stolenSegment);
 		offenseSegment.setUcrOffenseCode(OffenseCode._100.code);
 		NIBRSError e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._35B.code);
+		e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._26H.code);
+		e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._58A.code);
+		e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._521.code);
+		e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._522.code);
+		e = rule.apply(report);
+		assertNull(e);
+		offenseSegment.setUcrOffenseCode(OffenseCode._526.code);
+		e = rule.apply(report);
 		assertNull(e);
 		offenseSegment.setUcrOffenseCode(OffenseCode._13A.code);
 		e = rule.apply(report);

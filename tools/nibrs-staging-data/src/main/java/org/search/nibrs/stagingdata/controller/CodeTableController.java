@@ -171,7 +171,7 @@ public class CodeTableController {
 	
 	@GetMapping("/offenseCodes")
 	public Map<Integer, String> offenseCodes(){
-		Map<Integer, String> offenseCodeMap = StreamSupport.stream(ucrOffenseCodeTypeRepository.findAll(new Sort(Sort.Direction.ASC,"stateDescription")).spliterator(), false)
+		Map<Integer, String> offenseCodeMap = StreamSupport.stream(ucrOffenseCodeTypeRepository.findAll(Sort.by(Sort.Direction.ASC,"stateDescription")).spliterator(), false)
 				.filter(offenseCode-> !unknownOrBlank.contains(offenseCode.getNibrsDescription().toUpperCase()))
 				.collect(Collectors.toMap(UcrOffenseCodeType::getUcrOffenseCodeTypeId, UcrOffenseCodeType::getStateDescription, (u, v) -> u,
 					      LinkedHashMap::new));
@@ -180,7 +180,7 @@ public class CodeTableController {
 	
 	@GetMapping("/nibrsErrorCodes")
 	public Map<Integer, String> nibrsErrorCodes(){
-		Map<Integer, String> nibrsErrorCodeMap = StreamSupport.stream(nibrsErrorCodeTypeRepository.findAll(new Sort(Sort.Direction.ASC,"code")).spliterator(), false)
+		Map<Integer, String> nibrsErrorCodeMap = StreamSupport.stream(nibrsErrorCodeTypeRepository.findAll(Sort.by(Sort.Direction.ASC,"code")).spliterator(), false)
 				.filter(nibrsErrorCode-> !unknownOrBlank.contains(nibrsErrorCode.getMessage().toUpperCase()))
 				.collect(Collectors.toMap(NibrsErrorCodeType::getNibrsErrorCodeTypeId, NibrsErrorCodeType::getCode, (u, v) -> u,
 						LinkedHashMap::new));

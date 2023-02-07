@@ -1023,22 +1023,31 @@ loadDimensionalFromObjectLists <- function(
     if (attr(ddf, 'type') == 'CT') {
       # note: "create index if not exists" only works on MariaDB...
       writeLines(paste0('Creating PK for code table ', tableName))
-      dbExecute(dimensionalConn, paste0('create unique index if not exists ', tableName, '_pk on ', tableName, ' (', tableName, 'ID)'))
+	  createIndexIfNotExists(dimensionalConn, tableName, paste0(tableName,'_pk'), paste0(tableName, 'ID'))
     } else {
       ddf %>% head(0) %>% select_if(~!(is.double(.x) | is.Date(.x))) %>% colnames() %>% head(63) %>% walk(function(cnm) {
         # head(63) because MariaDB only supports creating indexes for 64 columns
         writeLines(paste0('Creating index for FK ', cnm))
-        dbExecute(dimensionalConn, paste0('create index if not exists idx_', cnm, ' on ', tableName, ' (', cnm, ')'))
+		createIndexIfNotExists(dimensionalConn, tableName, paste0('idx_', cnm), cnm)
       })
     }
   })
 
-  dbExecute(dimensionalConn, paste0('create index if not exists idx_AgencyTypeID on Agency (AgencyTypeID)'))
+  createIndexIfNotExists(dimensionalConn, 'Agency', 'idx_AgencyTypeID', 'AgencyTypeID')
 
   ret
 
 }
 
+createIndexIfNotExists<- function(dimensionalConn, tableName, indexName, columnName){
+	isIndexExists = dbGetQuery(dimensionalConn, paste0("select count(*) > 0 from information_schema.statistics where table_name = '",  tableName, "' and index_name='", indexName, "' and table_schema = database()"))
+	writeLines(paste0('isIndexExists: ', isIndexExists == 1))
+	if (isIndexExists != 1){
+		createIndexStatement = paste0('create index ', indexName, ' on ', tableName, '(', columnName, ');')
+		writeLines(createIndexStatement)
+		dbExecute(dimensionalConn, createIndexStatement)
+	}
+}
 #' @import dplyr
 #' @import tibble
 #' @import stringr

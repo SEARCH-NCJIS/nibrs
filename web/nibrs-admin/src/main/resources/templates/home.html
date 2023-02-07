@@ -39,5 +39,39 @@
 		<footer th:replace="fragments/general.html :: footer"></footer>	
 		<!-- /.container -->
 		<th:block th:include="fragments/general.html :: javascripts"></th:block>
+		<script th:inline="javascript">
+        var ua = window.navigator.userAgent;
+        var isIE = /MSIE|Trident/.test(ua);
+        var isSafari = ua.indexOf("Safari") > -1;
+        var unloadConfirmation = true; 
+        
+        window.addEventListener('beforeunload', (event) =>{
+        	var dest = event.href; 
+        	console.log("dest href: "); 
+        	console.log(dest);
+          if (unloadConfirmation){
+            event.preventDefault();
+            // Chrome requires returnValue to be set.
+            event.returnValue = '';
+          }
+          else {
+            unloadConfirmation = true; 
+          }
+        });
+        window.onpageshow = function(event) {
+            if (isSafari && event.persisted && unloadConfirmation) {
+              window.dispatchEvent(new Event('beforeunload'));
+            }
+            else{
+            	unloadConfirmation = true;
+            }
+        };
+        
+        $(function() {
+            $('body').on('click', 'a:not([href="#"]):not(.unloadConfirmation)', function() {
+            	unloadConfirmation = false; 
+            });
+        });
+		</script>
 	</body>
 </html>

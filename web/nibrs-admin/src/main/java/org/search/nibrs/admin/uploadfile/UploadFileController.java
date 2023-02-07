@@ -30,6 +30,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,6 +43,8 @@ import org.search.nibrs.common.NIBRSError;
 import org.search.nibrs.common.NIBRSJsonError;
 import org.search.nibrs.importer.ReportListener;
 import org.search.nibrs.model.AbstractReport;
+import org.search.nibrs.model.GroupAIncidentReport;
+import org.search.nibrs.model.GroupBArrestReport;
 import org.search.nibrs.util.NibrsFileUtils;
 import org.search.nibrs.validate.common.SubmissionFileValidator;
 import org.search.nibrs.validate.common.ValidationResults;
@@ -59,7 +62,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@SessionAttributes({"showUserInfoDropdown", "validationResults", "persistReportTask", "authUser", "privateSummaryReportSite"})
+@SessionAttributes({"showUserInfoDropdown", "validationResults", "persistReportTask", "authUser", "privateSummaryReportSite", "validationToConvertResults","reportConversionProgress"})
 @RequestMapping("/files")
 public class UploadFileController {
 	private final Log log = LogFactory.getLog(this.getClass());
@@ -69,7 +72,10 @@ public class UploadFileController {
 	@Resource
 	RestService restService;
 
-	@Autowired
+    @Autowired
+    private DownloadService downloadService;
+
+    @Autowired
 	SubmissionValidator submissionValidator;
 	
 	@Autowired
@@ -80,13 +86,25 @@ public class UploadFileController {
 
 	@GetMapping("/upload")
 	public String getFileUploadForm(HttpServletRequest request, Map<String, Object> model) throws IOException {
-		PersistReportTask persistReportTask = (PersistReportTask) model.get("persistReportTask");
+		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		
 		if (persistReportTask == null || persistReportTask.isAborted() || persistReportTask.isComplete() || !persistReportTask.isStarted()) {
 			return "uploadForm::uploadForm";
 		}
 		else {
 	        return "validationReport :: #content";
+		}
+	}
+	
+	@GetMapping("/uploadToConvertForm")
+	public String getFileUploadToConvertForm(HttpServletRequest request, Map<String, Object> model) throws IOException {
+		ReportProcessProgress reportConversionProgress = (ReportProcessProgress) model.get("reportConversionProgress");
+		
+		if (reportConversionProgress == null || reportConversionProgress.isAborted() || reportConversionProgress.isComplete() || !reportConversionProgress.isStarted()) {
+			return "uploadToConvertForm::uploadForm";
+		}
+		else {
+			return "validationToConvertReport :: #content";
 		}
 	}
 	
@@ -101,12 +119,28 @@ public class UploadFileController {
 		model.addAttribute("validationResults", validationResults);
 		
 		List<AbstractReport> validReports = validationResults.getReportsWithoutErrors(); 
-		PersistReportTask persistReportTask = new PersistReportTask(validReports);
+		ReportProcessProgress persistReportTask = new ReportProcessProgress(validReports);
 		model.addAttribute("persistReportTask", persistReportTask);
 
         return "validationReport :: #content";
     }
 
+    @PostMapping("/uploadToConvert")
+    public String handleFileUploadToConvert(@RequestParam("file") MultipartFile[] multipartFiles,
+    		RedirectAttributes redirectAttributes, Model model) throws IOException, ParserConfigurationException {
+    	
+    	log.info("processing file: " + multipartFiles.length);
+    	
+    	ValidationResults validationToConvertResults = getNibrsErrors(multipartFiles); 
+    	model.addAttribute("validationToConvertResults", validationToConvertResults);
+    	
+    	List<AbstractReport> validReports = validationToConvertResults.getReportsWithoutErrors(); 
+    	ReportProcessProgress reportConversionProgress = new ReportProcessProgress(validReports);
+    	model.addAttribute("reportConversionProgress", reportConversionProgress);
+    	
+    	return "validationToConvertReport :: #content";
+    }
+    
     @PostMapping("/json")
     public @ResponseBody List<NIBRSJsonError> getNibrsErrorInJson(@RequestParam("file") MultipartFile[] multipartFiles,
     		RedirectAttributes redirectAttributes, Model model) throws IOException, ParserConfigurationException {
@@ -267,18 +301,37 @@ public class UploadFileController {
 		List<AbstractReport> validReports = validationResults.getReportsWithoutErrors(); 
 		logCountsOfReports(validReports);
 		
-		PersistReportTask persistReportTask = (PersistReportTask) model.get("persistReportTask");
+		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		
 		AuthUser authUser = null; 
 		if (!appProperties.getPrivateSummaryReportSite()) {
 			authUser = (AuthUser) model.get("authUser"); 
 		}
-		restService.persistValidReportsAsync(persistReportTask, validReports, authUser);
+		restService.persistValidReportsAsync(persistReportTask, validationResults, authUser);
 		
 		log.info("called the aync method"); 
 		return "Server processing the valid reports.";
 	}
 
+	@PostMapping("/validIncidentsConversionAsync")
+	public @ResponseBody String convertIncidentReportsAsync(Map<String, Object> model) {
+		
+		ValidationResults validationToConvertResults = (ValidationResults) model.get("validationToConvertResults");
+		List<AbstractReport> validReports = validationToConvertResults.getReportsWithoutErrors(); 
+		logCountsOfReports(validReports);
+		
+		ReportProcessProgress reportConversionProgress = (ReportProcessProgress) model.get("reportConversionProgress");
+		
+		AuthUser authUser = null; 
+		if (!appProperties.getPrivateSummaryReportSite()) {
+			authUser = (AuthUser) model.get("authUser"); 
+		}
+		restService.convertValidReportsAsync(reportConversionProgress, validationToConvertResults, authUser);
+		
+		log.info("called the conversion aync method"); 
+		return "Server processing the valid reports.";
+	}
+	
 	@PostMapping("/preCertificationErrors")
 	public @ResponseBody String persistPreCertificationErrors(Map<String, Object> model) {
 		
@@ -290,10 +343,17 @@ public class UploadFileController {
 	}
 	
 	@GetMapping("/uploadStatus")
-	public @ResponseBody PersistReportTask getUploadStatus(Map<String, Object> model) {
+	public @ResponseBody ReportProcessProgress getUploadStatus(Map<String, Object> model) {
 		
-		PersistReportTask persistReportTask = (PersistReportTask) model.get("persistReportTask");
+		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		return persistReportTask;
+	}
+	
+	@GetMapping("/conversionStatus")
+	public @ResponseBody ReportProcessProgress getConversionStatus(Map<String, Object> model) {
+		
+		ReportProcessProgress reportConversionProgress = (ReportProcessProgress) model.get("reportConversionProgress");
+		return reportConversionProgress;
 	}
 	
 	private void logCountsOfReports(List<AbstractReport> abstractReports) {
@@ -306,6 +366,7 @@ public class UploadFileController {
 		validationResults.increaseTotalReportCount();
 		if (validationResults.getErrorList().isEmpty()){
 			validationResults.getReportsWithoutErrors().add(report);
+			allocateTheReport(validationResults, report);
 		}
 		else{
 			boolean isReportWithoutError = true; 
@@ -327,9 +388,27 @@ public class UploadFileController {
 			
 			if (isReportWithoutError) {
 				validationResults.getReportsWithoutErrors().add(report);
+				allocateTheReport(validationResults, report);
 			}
 		}
 	}
+
+
+	private void allocateTheReport(ValidationResults validationResults, AbstractReport report) {
+		if (report instanceof GroupAIncidentReport) {
+			validationResults.getGroupAIncidentReports().add((GroupAIncidentReport) report);
+		}
+		else if(report instanceof GroupBArrestReport) {
+			validationResults.getGroupBArrestReports().add((GroupBArrestReport) report);
+		}
+	}
+	
+    @GetMapping("/downloadZipFile")
+    public void downloadZipFile(HttpServletResponse response, Map<String, Object> model) {
+    	ReportProcessProgress reportConversionProgress = (ReportProcessProgress) model.get("reportConversionProgress");
+    	
+        downloadService.downloadZipFolder(response, reportConversionProgress.getOutputFolder());
+    }
 	
 }
 

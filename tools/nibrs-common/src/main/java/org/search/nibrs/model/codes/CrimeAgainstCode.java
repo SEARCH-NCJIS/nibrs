@@ -13,14 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.search.nibrs.stagingdata.repository;
+package org.search.nibrs.model.codes;
 
-import java.util.Map;
-
-import org.springframework.transaction.annotation.Transactional;
-
-@Transactional
-public interface AgencyRepositoryCustom{
-	Map<String, String> findAllStatesByOwnerId(Integer ownerId);
-	Map<String, Integer> findAllAgenciesByStateAndOwnerId(Integer ownerId, String stateCode);
+public enum CrimeAgainstCode {
+	Society, Property, Person, NotACrime, PersonPropertyOrSociety;
 }

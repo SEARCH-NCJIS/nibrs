@@ -150,6 +150,7 @@ public class SamlServiceImpl implements SamlService{
         try {
             Map<SamlAttribute, String> customAttributes = new HashMap<SamlAttribute, String>();
 //            customAttributes.put(SamlAttribute.FederationId, "");
+//            customAttributes.put(SamlAttribute.FederationId, "HIJIS:IDP:HCJDC:USER:demouser");
             customAttributes.put(SamlAttribute.FederationId, "HIJIS:IDP:HCJDC:USER:demouser");
 //            customAttributes.put(SamlAttribute.FederationId, "HIJIS:IDP:HCJDC:USER:demouser2");
             customAttributes.put(SamlAttribute.EmployerORI, "OK072015A");

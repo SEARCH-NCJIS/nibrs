@@ -16,6 +16,7 @@
 package org.search.nibrs.stagingdata.model.segment;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -80,28 +81,28 @@ public class OffenseSegment implements Serializable{
 	private MethodOfEntryType methodOfEntryType;
 	
 	@OneToMany(mappedBy = "offenseSegment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<TypeOfWeaponForceInvolved> typeOfWeaponForceInvolveds;
+	private Set<TypeOfWeaponForceInvolved> typeOfWeaponForceInvolveds = new HashSet<>();
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "offenderSuspectedOfUsing", 
 	joinColumns = @JoinColumn(name = "offenseSegmentId", referencedColumnName = "offenseSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "offenderSuspectedOfUsingTypeId", referencedColumnName = "offenderSuspectedOfUsingTypeId"))
-	private Set<OffenderSuspectedOfUsingType> offenderSuspectedOfUsingTypes;     
+	private Set<OffenderSuspectedOfUsingType> offenderSuspectedOfUsingTypes = new HashSet<>();     
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "typeCriminalActivity", 
 	joinColumns = @JoinColumn(name = "offenseSegmentId", referencedColumnName = "offenseSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "typeOfCriminalActivityTypeId", referencedColumnName = "typeOfCriminalActivityTypeId"))
-	private Set<TypeOfCriminalActivityType> typeOfCriminalActivityTypes;  
+	private Set<TypeOfCriminalActivityType> typeOfCriminalActivityTypes = new HashSet<>();  
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "biasMotivation", 
 	joinColumns = @JoinColumn(name = "offenseSegmentId", referencedColumnName = "offenseSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "biasMotivationTypeId", referencedColumnName = "biasMotivationTypeId"))
-	private Set<BiasMotivationType> biasMotivationTypes;  
+	private Set<BiasMotivationType> biasMotivationTypes = new HashSet<>();  
 	
 	@ManyToMany(mappedBy = "offenseSegments", fetch=FetchType.EAGER)
-	private Set<VictimSegment> victimSegments;
+	private Set<VictimSegment> victimSegments = new HashSet<>();
 	
 	public OffenseSegment() {
 		super();

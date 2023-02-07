@@ -101,7 +101,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
             executeSQL(paste0("truncate ", tableName))
           }
 
-          write_delim(x=x %>% mutate_if(is.logical, as.integer), path=f, na="\\N", delim="|", col_names=FALSE)
+          write_delim(x=x %>% mutate_if(is.logical, as.integer), file=f, na="\\N", delim="|", col_names=FALSE)
           cn <- colnames(x)
           dateCols <- as.vector(sapply(x, function(col) {inherits(col, "Date")}))
           cne <- cn
@@ -142,7 +142,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
 
           x <- mutate_if(x, function(col) is.numeric(col), function(v) ifelse(is.na(v), NA, trimws(format(v, scientific=FALSE))))
 
-          write_delim(x=x, path=f, na="", delim="|", col_names=FALSE)
+          write_delim(x=x, file=f, na="", delim="|", col_names=FALSE)
 
           sql <- paste0("BULK INSERT ", tableName, " FROM '" , f, "' WITH ( KEEPIDENTITY, FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ) ")
           executeSQL(sql)

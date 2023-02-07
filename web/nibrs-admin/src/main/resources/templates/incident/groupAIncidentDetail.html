@@ -20,577 +20,577 @@
 	<head>
 		<title>Group A Incident Detail</title>
 		<th:block th:include="fragments/general.html :: headerfiles"></th:block>
-		<link rel="stylesheet" type="text/css" th:href="@{/webjars/datatables/1.10.19/css/dataTables.bootstrap4.min.css}" />
-		<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.2.0/css/all.css}" />
-		<link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 	    <!-- Begin page content -->
-	  <div th:fragment="detail">
-	    <div class="card">
-	  		<div class="card-header font-weight-bold">REPORT INFO</div>
-	  		<div class="card-body">
-	  			<table class="table table-bordered">
-	    			<thead>
-      				<tr>
-				        <th>Action Type</th>
-				        <th>Submission Year</th>
-				        <th>Submission Month</th>
-						  </tr>
-	    			</thead>
-	    			<tbody>
-						<tr>
-						  <td th:text="${administrativeSegment.segmentActionType.stateDescription}">segmentActionType</td>
-						  <td th:text="${administrativeSegment.yearOfTape}">Year of Tape</td>
-						  <td th:text="${administrativeSegment.monthOfTape}">Month of Tape</td>
-						</tr>
-					</tbody>
-				</table>	
-	  		</div> 
-	    </div>
-	    <div class="card">
-	  		<div class="card-header font-weight-bold">AGENCY</div>
-	  		<div class="card-body">
-	  			<table class="table table-bordered">
-	    			<thead>
-	     				<tr>
-				        <th>STATE</th>
-				        <th>ORI </th>
-				        <th>NAME</th>
-				        <th>CITY INDICATOR</th>
-	  					</tr>
-	    			</thead>
-	    			<tbody>
+	  <main class="container">
+		  <div th:fragment="detail">
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">REPORT INFO</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<thead>
+	      				<tr>
+					        <th>Action Type</th>
+					        <th>Submission Year</th>
+					        <th>Submission Month</th>
+							  </tr>
+		    			</thead>
+		    			<tbody>
 							<tr>
-							  <td th:text="${administrativeSegment.stateCode}">State</td>
-							  <td th:text="${administrativeSegment.ori}">ORI</td>
-							  <td th:text="${administrativeSegment.agency.agencyName}">Name</td>
-							  <td th:text="${administrativeSegment.cityIndicator?:''}">CITY Indicator</td>
+							  <td th:text="${administrativeSegment.segmentActionType.stateDescription}">segmentActionType</td>
+							  <td th:text="${administrativeSegment.yearOfTape}">Year of Tape</td>
+							  <td th:text="${administrativeSegment.monthOfTape}">Month of Tape</td>
 							</tr>
-					  </tbody>
-	        </table>	
-	  		</div> 
-	    </div>
-	    <div class="card">
-	  		<div class="card-header font-weight-bold">Incident</div>
-	  		<div class="card-body">
-	  			<table class="table table-bordered">
-	    			<tbody>
-						<tr>
-							<th>INCIDENT NUMBER</th>  
-						  	<td th:text="${administrativeSegment.incidentNumber}">incidentNumber</td>
-						  	<th>CARGO THEFT INDICATOR</th>
-						  	<td th:text="${administrativeSegment.cargoTheftIndicatorType.stateCode}">cargoTheftIndicatorType</td>
-					  	</tr>
-					  	<tr>
-					        <th>INCIDENT DATE </th>
-						  	<td th:text="${administrativeSegment.incidentDate}">incidentDate</td>
-					        <th>INCIDENT HOUR</th>
-						  	<td th:text="${administrativeSegment.incidentHour?:''}">incidentHour</td>
-						</tr>
-					  	<tr>
-					        <th>CLEARED EXCEPTIONALLY TYPE</th>
-						  	<td th:text="${administrativeSegment.clearedExceptionallyType.stateDescription}">clearedExceptionallyType</td>
-					        <th>EXCEPTIONAL CLEARANCE DATE</th>
-						  	<td th:text="${administrativeSegment.exceptionalClearanceDate?:''}">exceptionalClearanceDate</td>
-						</tr>
-					</tbody>
-				</table>	
-	  		</div> 
-	    </div>
-	    <div class="card" th:if="${!administrativeSegment.offenseSegments.empty}">
-	  		<div class="card-header font-weight-bold">OFFENSES</div>
-	  		<div class="card-body">
-	  			<div id="accordion">
-					  <div class="card" th:each="offenseSegment : ${administrativeSegment.offenseSegments}">
-					    <div class="card-header" id="headingOne">
-					      <h5 class="mb-0">
-					        <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#offense' + offenseSegment.offenseSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
-					           th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}">
-					          offenseSegment - 1
-					        </button>
-					      </h5>
-					    </div>
-					
-					    <div th:id="${'offense' + offenseSegment.offenseSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-					      <div class="card-body">
-					        <table class="table table-bordered">
-					          <tbody>
-					            <tr>
-					              <th>OFFENSE CODE</th>
-					              <td th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
-					            </tr>
-					            <tr th:if="${offenseSegment.offenseAttemptedCompleted != null}">
-					              <th>ATTEMPTED/COMPLETED</th>
-					              <td th:text="${offenseSegment.offenseAttemptedCompleted?:''}">offenseAttemptedCompleted</td>
-					            </tr>
-					            <tr th:if="${offenseSegment.locationType != null}">
-                        <th>LOCATION TYPE</th>
-					              <td th:text="${offenseSegment.locationType.stateDescription}">locationType</td>
-					            </tr>
-					            <tr th:if="${offenseSegment.numberOfPremisesEntered != null}">
-					              <th>PREMISES ENTERED</th>
-                        <td th:text="${offenseSegment.numberOfPremisesEntered?:''}">numberOfPremisesEntered</td>
-					            </tr>
-					            <tr th:if="${offenseSegment.methodOfEntryType != null and offenseSegment.methodOfEntryType.stateCode != ' '}">
-					              <th>METHOD OF ENTRY</th>
-					              <td th:text="${offenseSegment.methodOfEntryType.stateDescription}">methodOfEntryType</td>
-					            </tr>
-					            <tr th:if=${!offenseSegment.typeOfWeaponForceInvolveds.empty}>
-				                <th>WEAPON/FORCE INVOLVED</th>
-						            <td>
-						              <p th:each="typeOfWeaponForceInvolved : ${offenseSegment.typeOfWeaponForceInvolveds}">
-						                <span th:text="${typeOfWeaponForceInvolved.typeOfWeaponForceInvolvedType.stateDescription}"></span>
-						                <span th:if="${typeOfWeaponForceInvolved.automaticWeaponIndicator != ''}"> - </span>
-						                <span th:text="${typeOfWeaponForceInvolved.automaticWeaponIndicator}"></span>
-						              </p>
-						            </td>
-					            </tr>
-					            <tr th:if=${!offenseSegment.offenderSuspectedOfUsingTypes.empty}>
-				                <th>SUSPECTED OF USING</th>
-						            <td>
-						              <p th:each="offenderSuspectedOfUsingType : ${offenseSegment.offenderSuspectedOfUsingTypes}" 
-						                th:text="${offenderSuspectedOfUsingType.stateDescription}">
-						              </p>
-						            </td>
-					            </tr>
-					            <tr th:if=${!offenseSegment.typeOfCriminalActivityTypes.empty}>
-				                <th>CRIMINAL ACTIVITY TYPES</th>
-						            <td>
-						              <p th:each="typeOfCriminalActivityType : ${offenseSegment.typeOfCriminalActivityTypes}" 
-						                th:text="${typeOfCriminalActivityType.stateDescription}">
-						              </p>
-						            </td>
-				              </tr>
-					            <tr th:if=${!offenseSegment.biasMotivationTypes.empty}>
-				                <th>BIAS MOTIVATION TYPES</th>
-												<td>
-												  <p th:each="biasMotivationType : ${offenseSegment.biasMotivationTypes}" 
-												    th:text="${biasMotivationType.stateDescription}">
-												  </p>
-												</td>
-                      </tr>
-				            </tbody>
-					        </table>  
-				        </div>
-				      </div>
-				    </div>
-		      </div>
-	 		  </div> 
-      </div>
-		
-	    <div class="card" th:if="${!administrativeSegment.propertySegments.empty}">
-	      <div class="card-header font-weight-bold">PROPERTY SEGMENTS</div>
-	      <div class="card-body">
-	        <div id="accordion">
-	          <div class="card" th:each="propertySegment : ${administrativeSegment.propertySegments}">
-							<div class="card-header" id="headingOne">
-							  <h5 class="mb-0">
-							    <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#propertySegment' + propertySegment.propertySegmentId}" aria-expanded="true" aria-controls="collapseOne" 
-							       th:text="${propertySegment.typePropertyLossEtcType.stateDescription}">
-							      PROPERTY - 1
-							    </button>
-							  </h5>
-							</div>
-			   
-							<div th:id="${'propertySegment' + propertySegment.propertySegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-								<div class="card-body">
-									<table class="table table-bordered" th:if="${propertySegment.numberOfStolenMotorVehicles != null or propertySegment.numberOfRecoveredMotorVehicles != null}">
-									  <tbody>
-									    <tr th:if="${propertySegment.numberOfStolenMotorVehicles != null}">
-									     <th>STOLEN MOTOR VEHICLES</th>
-									     <td th:text="${propertySegment.numberOfStolenMotorVehicles}">numberOfStolenMotorVehicles</td>
-									    </tr>
-									    <tr th:if="${propertySegment.numberOfRecoveredMotorVehicles != null}">
-									     <th>RECOVERED MOTOR VEHICLES</th>
-									     <td th:text="${propertySegment.numberOfRecoveredMotorVehicles}">numberOfRecoveredMotorVehicles</td>
-									    </tr>
-									  </tbody>
-									</table>  
-									
-									<table class="table table-bordered" th:if="${!propertySegment.propertyTypes.empty}">
-									  <thead>
-									    <tr>
-										    <th>PROPERTY DESCRIPTION</th>
-										    <th>VALUE OF PROPERTY</th>
-										    <th>RECOVERED DATE</th>
-									    </tr>
-									  </thead>
-									  <tbody>
-									    <tr th:each="propertyType : ${propertySegment.propertyTypes}">
-									     <td th:text="${propertyType.propertyDescriptionType.stateDescription}">propertyDescriptionType</td>
-									     <td th:text="${propertyType.valueOfProperty?:''}">valueOfProperty</td>
-									     <td th:text="${propertyType.recoveredDate?:''}">recoveredDate</td>
-									    </tr>
-									  </tbody>
-									</table>  
-									
-									<table class="table table-bordered" th:if="${!propertySegment.suspectedDrugTypes.empty}">
-									  <thead>
-									    <tr>
-										    <th>SUSPECTED DRUG TYPE</th>
-										    <th>DRUG MEASUREMENT TYPE</th>
-										    <th>ESTIMATED DRUG QUANTITY</th>
-									    </tr>
-									  </thead>
-									  <tbody>
-									    <tr th:each="suspectedDrugType : ${propertySegment.suspectedDrugTypes}">
-									     <td th:text="${suspectedDrugType.suspectedDrugTypeType.stateDescription}">suspectedDrugTypeType</td>
-									     <td th:text="${suspectedDrugType.typeDrugMeasurementType.stateDescription}">valueOfProperty</td>
-									     <td th:text="${suspectedDrugType.estimatedDrugQuantity?:''}">estimatedDrugQuantity</td>
-									    </tr>
-									  </tbody>
-									</table>  
-								</div>
-			       </div>
-			     </div>
-			   </div>
-			 </div>
-			</div>
-	      
-      <div class="card" th:if="${!administrativeSegment.arresteeSegments.empty}">
-        <div class="card-header font-weight-bold">ARRESTEE SEGMENTS</div>
-        <div class="card-body">
-          <div id="accordion">
-            <div class="card" th:each="arresteeSegment : ${administrativeSegment.arresteeSegments}">
-              <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#arresteeSegment' + arresteeSegment.arresteeSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
-                     th:text="${'ARRESTEE-' + #numbers.formatInteger(arresteeSegment.arresteeSequenceNumber, 2)}">
-                    arrestee - 1
-                  </button>
-                </h5>
-              </div>
-         
-              <div th:id="${'arresteeSegment' + arresteeSegment.arresteeSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                  <table class="table table-bordered">
-                    <tbody>
-                      <tr th:if="${arresteeSegment.arrestTransactionNumber != null}">
-												<th>ARREST TRANSACTION NUMBER</th>
-												<td th:text="${arresteeSegment.arrestTransactionNumber}">arrestTransactionNumber</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.arrestDate != null}">
-												<th>ARREST DATE</th>
-												<td th:text="${arresteeSegment.arrestDate}">arrestDate</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.ucrOffenseCodeType != null}">
-												<th>OFFENSE CODE</th>
-												<td th:text="${arresteeSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.typeOfArrestType != null}">
-												<th>ARREST TYPE</th>
-												<td th:text="${arresteeSegment.typeOfArrestType.stateDescription}">typeOfArrestType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.nonNumericAge != null}">
-												<th>NON NUMERIC AGE</th>
-												<td th:text="${arresteeSegment.nonNumericAge}">nonNumericAge</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.sexOfPersonType != null and arresteeSegment.sexOfPersonType.stateCode != ' ' }">
-												<th>SEX</th>
-												<td th:text="${arresteeSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.raceOfPersonType != null and arresteeSegment.raceOfPersonType.stateCode != ' '}">
-												<th>RACE</th>
-												<td th:text="${arresteeSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.ethnicityOfPersonType != null and arresteeSegment.ethnicityOfPersonType.stateCode != ' '}">
-												<th>ETHNICITY</th>
-												<td th:text="${arresteeSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.residentStatusOfPersonType != null and arresteeSegment.residentStatusOfPersonType.stateCode != ' '}">
-												<th>RESIDENT STATUS</th>
-												<td th:text="${arresteeSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.ageOfArresteeMin != null}">
-												<th>MIN AGE</th>
-												<td th:text="${arresteeSegment.ageOfArresteeMin}">ageOfArresteeMin</td>
-                      </tr>
-                      <tr th:if="${arresteeSegment.ageOfArresteeMax != null}">
-												<th>MAX AGE</th>
-												<td th:text="${arresteeSegment.ageOfArresteeMax}">ageOfArresteeMax</td>
-                      </tr>
-						          <tr th:if="${arresteeSegment.averageAge != null}">
-						            <th>AVERAGE AGE</th>
-						            <td th:text="${arresteeSegment.averageAge}">averageAge</td>
-                      </tr>
-                      <tr>
-						            <th>AGE UNKNOWN</th>
-						            <td th:text="${arresteeSegment.ageUnknown}">ageUnknown</td>
+						</tbody>
+					</table>	
+		  		</div> 
+		    </div>
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">AGENCY</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<thead>
+		     				<tr>
+					        <th>STATE</th>
+					        <th>ORI </th>
+					        <th>NAME</th>
+					        <th>CITY INDICATOR</th>
+		  					</tr>
+		    			</thead>
+		    			<tbody>
+								<tr>
+								  <td th:text="${administrativeSegment.stateCode}">State</td>
+								  <td th:text="${administrativeSegment.ori}">ORI</td>
+								  <td th:text="${administrativeSegment.agency.agencyName}">Name</td>
+								  <td th:text="${administrativeSegment.cityIndicator?:''}">CITY Indicator</td>
+								</tr>
+						  </tbody>
+		        </table>	
+		  		</div> 
+		    </div>
+		    <div class="card">
+		  		<div class="card-header font-weight-bold">Incident</div>
+		  		<div class="card-body">
+		  			<table class="table table-bordered">
+		    			<tbody>
+							<tr>
+								<th>INCIDENT NUMBER</th>  
+							  	<td th:text="${administrativeSegment.incidentNumber}">incidentNumber</td>
+							  	<th>CARGO THEFT INDICATOR</th>
+							  	<td th:text="${administrativeSegment.cargoTheftIndicatorType.stateCode}">cargoTheftIndicatorType</td>
+						  	</tr>
+						  	<tr>
+						        <th>INCIDENT DATE </th>
+							  	<td th:text="${administrativeSegment.incidentDate}">incidentDate</td>
+						        <th>INCIDENT HOUR</th>
+							  	<td th:text="${administrativeSegment.incidentHour?:''}">incidentHour</td>
+							</tr>
+						  	<tr>
+						        <th>CLEARED EXCEPTIONALLY TYPE</th>
+							  	<td th:text="${administrativeSegment.clearedExceptionallyType.stateDescription}">clearedExceptionallyType</td>
+						        <th>EXCEPTIONAL CLEARANCE DATE</th>
+							  	<td th:text="${administrativeSegment.exceptionalClearanceDate?:''}">exceptionalClearanceDate</td>
+							</tr>
+						</tbody>
+					</table>	
+		  		</div> 
+		    </div>
+		    <div class="card" th:if="${!administrativeSegment.offenseSegments.empty}">
+		  		<div class="card-header font-weight-bold">OFFENSES</div>
+		  		<div class="card-body">
+		  			<div id="accordion">
+						  <div class="card" th:each="offenseSegment : ${administrativeSegment.offenseSegments}">
+						    <div class="card-header" id="headingOne">
+						      <h5 class="mb-0">
+						        <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#offense' + offenseSegment.offenseSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
+						           th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}">
+						          offenseSegment - 1
+						        </button>
+						      </h5>
+						    </div>
+						
+						    <div th:id="${'offense' + offenseSegment.offenseSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+						      <div class="card-body">
+						        <table class="table table-bordered">
+						          <tbody>
+						            <tr>
+						              <th>OFFENSE CODE</th>
+						              <td th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
 						            </tr>
-						          <tr>
-                      <tr>
-						            <th>JUVENILE</th>
-						            <td th:text="${arresteeSegment.juvenile}">juvenile</td>
-					            </tr>
-						          <tr th:if="${arresteeSegment.dispositionOfArresteeUnder18Type != null}">
-						            <th>DISPOSITION UNDER 18</th>
-						            <td th:text="${arresteeSegment.dispositionOfArresteeUnder18Type.stateCode}">dispositionOfArresteeUnder18Type</td>
-                      </tr>
-                      <tr th:if="${!arresteeSegment.arresteeSegmentWasArmedWiths.empty}">
-						            <th>ARMED WITH</th>
-						            <td>
-						              <p th:each="armedWith : ${arresteeSegment.arresteeSegmentWasArmedWiths}">
-						                <span th:text="${armedWith.arresteeWasArmedWithType.stateDescription}"></span>
-						                <span th:if="${armedWith.automaticWeaponIndicator != ''}"> - </span>
-						                <span th:text="${armedWith.automaticWeaponIndicator}"></span>
-						              </p>
-						           </td>
-						          </tr>
-                    </tbody>
-                  </table>  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>                  
-	  	</div>
-      <div class="card" th:if="${!administrativeSegment.offenderSegments.empty}">
-        <div class="card-header font-weight-bold">OFFENDER SEGMENTS</div>
-        <div class="card-body">
-          <div id="accordion">
-            <div class="card" th:each="offenderSegment : ${administrativeSegment.offenderSegments}">
-              <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#offenderSegment' + offenderSegment.offenderSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
-                     th:text="${'OFFENDER-' + #numbers.formatInteger(offenderSegment.offenderSequenceNumber, 2)}">
-                    offender - 1
-                  </button>
-                </h5>
-              </div>
-         
-              <div th:id="${'offenderSegment' + offenderSegment.offenderSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                  <table class="table table-bordered" th:if="${offenderSegment.offenderSequenceNumber != '0'}">
-                    <tbody>
-                      <tr>
-												<th>OFFENDER SEQUENCE NUMBER</th>
-												<td th:text="${#numbers.formatInteger(offenderSegment.offenderSequenceNumber, 2)}">offenderSequenceNumber</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.ageOfOffenderMin != null}">
-												<th>MIN AGE</th>
-												<td th:text="${offenderSegment.ageOfOffenderMin}">ageOfOffenderMin</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.ageOfOffenderMax != null}">
-												<th>MAX AGE</th>
-												<td th:text="${offenderSegment.ageOfOffenderMax}">ageOfOffenderMax</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.nonNumericAge != null}">
-												<th>NON NUMERIC AGE</th>
-												<td th:text="${offenderSegment.nonNumericAge}">nonNumericAge</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.sexOfPersonType != null and offenderSegment.sexOfPersonType.stateCode != ' ' }">
-												<th>SEX</th>
-												<td th:text="${offenderSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.raceOfPersonType != null and offenderSegment.raceOfPersonType.stateCode != ' '}">
-												<th>RACE</th>
-												<td th:text="${offenderSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
-                      </tr>
-                      <tr th:if="${offenderSegment.ethnicityOfPersonType != null and offenderSegment.ethnicityOfPersonType.stateCode != ' '}">
-												<th>ETHNICITY</th>
-												<td th:text="${offenderSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
-                      </tr>
-                      <tr th:if="${!offenderSegment.victimOffenderAssociations.empty}">
-												<th>VICTIM OFFENDER ASSOCIATIONS</th>
-												<td>
-                          <p th:each="victimOffenderAssociation : ${offenderSegment.victimOffenderAssociations}">
-                            <span th:text="${victimOffenderAssociation.victimOffenderRelationshipType.stateDescription}"></span>
-                            <span> - </span>
-                            <a th:text="${'VICTIM-' + #numbers.formatInteger(victimOffenderAssociation.victimSegment.victimSequenceNumber, 2)}" th:href="${'#victimSegment' + victimOffenderAssociation.victimSegment.victimSegmentId}"></a>
-                          </p>
-												</td>
-                      </tr>
-                    </tbody>
-                  </table>  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>                  
-	  	</div>
-	  	
-      <div class="card" th:if="${!administrativeSegment.victimSegments.empty}">
-        <div class="card-header font-weight-bold">VICTIM SEGMENTS</div>
-        <div class="card-body">
-          <div id="accordion">
-            <div class="card" th:each="victimSegment : ${administrativeSegment.victimSegments}">
-              <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#victimSegment' + victimSegment.victimSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
-                     th:text="${'VICITM-' + #numbers.formatInteger(victimSegment.victimSequenceNumber, 2)}">
-                    offender - 1
-                  </button>
-                </h5>
-              </div>
-         
-              <div th:id="${'victimSegment' + victimSegment.victimSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                  <table class="table table-bordered" th:if="${victimSegment.victimSequenceNumber != '0'}">
-                    <tbody>
-                      <tr>
-												<th>VICTIM SEQUENCE NUMBER</th>
-												<td th:text="${#numbers.formatInteger(victimSegment.victimSequenceNumber, 2)}">victimSequenceNumber</td>
-                      </tr>
-                      <tr th:if="${victimSegment.typeOfVictimType != null}">
-												<th>VICTIM TYPE</th>
-												<td th:text="${victimSegment.typeOfVictimType.stateDescription}">typeOfVictimType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.officerActivityCircumstanceType != null and victimSegment.officerActivityCircumstanceType.stateCode != ' '}">
-												<th>OFFICER ACTIVITY CIRCUMSTANCE TYPE</th>
-												<td th:text="${victimSegment.officerActivityCircumstanceType.stateDescription}">officerActivityCircumstanceType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.officerAssignmentTypeType != null and victimSegment.officerAssignmentTypeType.stateCode != ' '}">
-												<th>OFFICER ASSIGNMENT TYPE</th>
-												<td th:text="${victimSegment.officerAssignmentTypeType.stateDescription}">officerAssignmentTypeType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.ageOfVictimMin != null}">
-												<th>MIN AGE</th>
-												<td th:text="${victimSegment.ageOfVictimMin}">ageOfVictimMin</td>
-                      </tr>
-                      <tr th:if="${victimSegment.ageOfVictimMax != null}">
-												<th>MAX AGE</th>
-												<td th:text="${victimSegment.ageOfVictimMax}">ageOfVictimMax</td>
-                      </tr>
-                      <tr th:if="${victimSegment.nonNumericAge != null}">
-												<th>NON NUMERIC AGE</th>
-												<td th:text="${victimSegment.nonNumericAge}">nonNumericAge</td>
-                      </tr>
-                      <tr th:if="${victimSegment.sexOfPersonType != null and victimSegment.sexOfPersonType.stateCode != ' ' }">
-												<th>SEX</th>
-												<td th:text="${victimSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.raceOfPersonType != null and victimSegment.raceOfPersonType.stateCode != ' '}">
-												<th>RACE</th>
-												<td th:text="${victimSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.ethnicityOfPersonType != null and victimSegment.ethnicityOfPersonType.stateCode != ' '}">
-												<th>ETHNICITY</th>
-												<td th:text="${victimSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.residentStatusOfPersonType != null and victimSegment.residentStatusOfPersonType.stateCode != ' '}">
-                        <th>RESIDENT STATUS</th>
-                        <td th:text="${victimSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
-                      </tr>
-                      <tr th:if="${victimSegment.officerOtherJurisdictionOri != null}">
-												<th>OFFICER OTHER JURISDICTION ORI</th>
-												<td th:text="${victimSegment.officerOtherJurisdictionOri}">officerOtherJurisdictionOri</td>
-                      </tr>
-                      <tr th:if="${victimSegment.additionalJustifiableHomicideCircumstancesType != null and victimSegment.additionalJustifiableHomicideCircumstancesType.stateCode != ' '}">
-                        <th>ADDITIONAL JUSTIFIABLE HOMICIDE CIRCUMSTANCES</th>
-                        <td th:text="${victimSegment.additionalJustifiableHomicideCircumstancesType.stateDescription}">additionalJustifiableHomicideCircumstancesType</td>
-                      </tr>
-                      <tr th:if="${!victimSegment.typeInjuryTypes.empty}">
-                        <th>INJURY TYPES</th>
-                        <td>
-                          <p th:each="typeInjuryType : ${victimSegment.typeInjuryTypes}"
-                              th:text="${typeInjuryType.stateDescription}">typeInjuryType</p>
-                        </td>
-                      </tr>
-                      <tr th:if="${!victimSegment.offenseSegments.empty}">
-                        <th>OFFENSES</th>
-                        <td>
-                          <a th:each="offenseSegment : ${victimSegment.offenseSegments}"
-                              th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}"
-                              th:href="${'#offense' + offenseSegment.offenseSegmentId}">OFFENSE</a>
-                        </td>
-                      </tr>
-                      <tr th:if="${!victimSegment.aggravatedAssaultHomicideCircumstancesTypes.empty}">
-                        <th>AGGRAVATED ASSAULT HOMICIDE CIRCUMSTANCES</th>
-                        <td>
-                          <p th:each="aggravatedAssaultHomicideCircumstancesType : ${victimSegment.aggravatedAssaultHomicideCircumstancesTypes}"
-                              th:text="${aggravatedAssaultHomicideCircumstancesType.stateDescription}">aggravatedAssaultHomicideCircumstancesType</p>
-                        </td>
-                      </tr>
-                      <tr th:if="${!victimSegment.victimOffenderAssociations.empty}">
-												<th>VICTIM OFFENDER ASSOCIATIONS</th>
-												<td>
-                          <p th:each="victimOffenderAssociation : ${victimSegment.victimOffenderAssociations}">
-                            <span th:text="${victimOffenderAssociation.victimOffenderRelationshipType.stateDescription}"></span>
-                            <span> - </span>
-                            <a th:text="${'OFFENDER-' + #numbers.formatInteger(victimOffenderAssociation.offenderSegment.offenderSequenceNumber, 2)}" 
-                               th:href="${'#offenderSegment' + victimOffenderAssociation.offenderSegment.offenderSegmentId}"></a>
-                          </p>
-												</td>
-                      </tr>
-                    </tbody>
-                  </table>  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>                  
-	  	</div>
-	  	<div class="card" th:if="${allowSubmitToFbi}">
-        <div class="card-header font-weight-bold">FBI SUBMISSION</div>
-        <div class="card-body">
-          <table class="table table-bordered">
-            <tbody>
-	            <tr>
-	              <th>STATUS</th>  
-                <td th:text="${administrativeSegment.fbiStatus}">FBI submission Status</td>
-              </tr>
-              <tr th:if="${administrativeSegment.submission != null}">
-                <th>SUBMISSION TIMESTAMP</th>
-                <td th:text="${administrativeSegment.submission.submissionTimestamp}">submissionTimestamp</td>
-	            </tr>
-              <tr th:if="${administrativeSegment.submission != null}">
-                <th>REQUEST FILE PATH</th>
-                <td th:text="${administrativeSegment.submission.requestFilePath}">requestFilePath</td>
-	            </tr>
-              <tr th:if="${administrativeSegment.submission != null}">
-	              <th>RESPONSE TIMESTAMP</th>
-	              <td th:text="${administrativeSegment.submission.responseTimestamp}">responseTimestamp</td>
-	            </tr>
-              <tr th:if="${administrativeSegment.submission != null}">
-                <th>RESPONSE FILE PATH</th>
-                <td th:text="${administrativeSegment.submission.responseFilePath}">responseFilePath</td>
-              </tr>
-              <tr th:if="${administrativeSegment.submission != null and administrativeSegment.submission.faultCode != null}">
-                <th>FAULT CODE</th>
-                <td th:text="${administrativeSegment.submission.faultCode}">faultCode</td>
-              </tr>
-              <tr th:if="${administrativeSegment.submission != null and administrativeSegment.submission.faultDescription != null}">
-                <th>FAULT DESCRIPTION</th>
-                <td th:text="${administrativeSegment.submission.faultDescription}">faultDescription</td>
-              </tr>
-              <tr th:if="${administrativeSegment.submission != null and !administrativeSegment.submission.violations.empty}">
-                <td colspan="2">
-	                <div class="card">
-	                  <div class="card-header font-weight-bold">VIOLATIONS</div>
-	 					        <div class="card-body">
-					            <table class="table table-bordered">
-					              <thead>
-						              <tr>
-						                <th>Violation Code</th>
-						                <th>Violation Description</th>
-						                <th>Violation Level</th>
-						              </tr>
-					              </thead>
-						            <tbody>
-						              <th:block th:each="violation: ${administrativeSegment.submission.violations}">
-						                <tr>
-						                  <td th:text="${violation.violationCode}"/>
-						                  <td th:text="${violation.violationDescription}"/>
-						                  <td th:text="${violation.violationLevel}"/>
-						                </tr>
-						              </th:block>
-						            </tbody>
-					            </table>
-				            </div>
-			            </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>  
+						            <tr th:if="${offenseSegment.offenseAttemptedCompleted != null}">
+						              <th>ATTEMPTED/COMPLETED</th>
+						              <td th:text="${offenseSegment.offenseAttemptedCompleted?:''}">offenseAttemptedCompleted</td>
+						            </tr>
+						            <tr th:if="${offenseSegment.locationType != null}">
+	                        <th>LOCATION TYPE</th>
+						              <td th:text="${offenseSegment.locationType.stateDescription}">locationType</td>
+						            </tr>
+						            <tr th:if="${offenseSegment.numberOfPremisesEntered != null}">
+						              <th>PREMISES ENTERED</th>
+	                        <td th:text="${offenseSegment.numberOfPremisesEntered?:''}">numberOfPremisesEntered</td>
+						            </tr>
+						            <tr th:if="${offenseSegment.methodOfEntryType != null and offenseSegment.methodOfEntryType.stateCode != ' '}">
+						              <th>METHOD OF ENTRY</th>
+						              <td th:text="${offenseSegment.methodOfEntryType.stateDescription}">methodOfEntryType</td>
+						            </tr>
+						            <tr th:if=${!offenseSegment.typeOfWeaponForceInvolveds.empty}>
+					                <th>WEAPON/FORCE INVOLVED</th>
+							            <td>
+							              <p th:each="typeOfWeaponForceInvolved : ${offenseSegment.typeOfWeaponForceInvolveds}">
+							                <span th:text="${typeOfWeaponForceInvolved.typeOfWeaponForceInvolvedType.stateDescription}"></span>
+							                <span th:if="${typeOfWeaponForceInvolved.automaticWeaponIndicator != ''}"> - </span>
+							                <span th:text="${typeOfWeaponForceInvolved.automaticWeaponIndicator}"></span>
+							              </p>
+							            </td>
+						            </tr>
+						            <tr th:if=${!offenseSegment.offenderSuspectedOfUsingTypes.empty}>
+					                <th>SUSPECTED OF USING</th>
+							            <td>
+							              <p th:each="offenderSuspectedOfUsingType : ${offenseSegment.offenderSuspectedOfUsingTypes}" 
+							                th:text="${offenderSuspectedOfUsingType.stateDescription}">
+							              </p>
+							            </td>
+						            </tr>
+						            <tr th:if=${!offenseSegment.typeOfCriminalActivityTypes.empty}>
+					                <th>CRIMINAL ACTIVITY TYPES</th>
+							            <td>
+							              <p th:each="typeOfCriminalActivityType : ${offenseSegment.typeOfCriminalActivityTypes}" 
+							                th:text="${typeOfCriminalActivityType.stateDescription}">
+							              </p>
+							            </td>
+					              </tr>
+						            <tr th:if=${!offenseSegment.biasMotivationTypes.empty}>
+					                <th>BIAS MOTIVATION TYPES</th>
+													<td>
+													  <p th:each="biasMotivationType : ${offenseSegment.biasMotivationTypes}" 
+													    th:text="${biasMotivationType.stateDescription}">
+													  </p>
+													</td>
+	                      </tr>
+					            </tbody>
+						        </table>  
+					        </div>
+					      </div>
+					    </div>
+			      </div>
+		 		  </div> 
 	      </div>
-      </div>
-	        	
-	    <script th:inline="javascript">
-	    	$(function(){
-	    		
-	    	});
-	    </script>
-    </div>
+			
+		    <div class="card" th:if="${!administrativeSegment.propertySegments.empty}">
+		      <div class="card-header font-weight-bold">PROPERTY SEGMENTS</div>
+		      <div class="card-body">
+		        <div id="accordion">
+		          <div class="card" th:each="propertySegment : ${administrativeSegment.propertySegments}">
+								<div class="card-header" id="headingOne">
+								  <h5 class="mb-0">
+								    <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#propertySegment' + propertySegment.propertySegmentId}" aria-expanded="true" aria-controls="collapseOne" 
+								       th:text="${propertySegment.typePropertyLossEtcType.stateDescription}">
+								      PROPERTY - 1
+								    </button>
+								  </h5>
+								</div>
+				   
+								<div th:id="${'propertySegment' + propertySegment.propertySegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+									<div class="card-body">
+										<table class="table table-bordered" th:if="${propertySegment.numberOfStolenMotorVehicles != null or propertySegment.numberOfRecoveredMotorVehicles != null}">
+										  <tbody>
+										    <tr th:if="${propertySegment.numberOfStolenMotorVehicles != null}">
+										     <th>STOLEN MOTOR VEHICLES</th>
+										     <td th:text="${propertySegment.numberOfStolenMotorVehicles}">numberOfStolenMotorVehicles</td>
+										    </tr>
+										    <tr th:if="${propertySegment.numberOfRecoveredMotorVehicles != null}">
+										     <th>RECOVERED MOTOR VEHICLES</th>
+										     <td th:text="${propertySegment.numberOfRecoveredMotorVehicles}">numberOfRecoveredMotorVehicles</td>
+										    </tr>
+										  </tbody>
+										</table>  
+										
+										<table class="table table-bordered" th:if="${!propertySegment.propertyTypes.empty}">
+										  <thead>
+										    <tr>
+											    <th>PROPERTY DESCRIPTION</th>
+											    <th>VALUE OF PROPERTY</th>
+											    <th>RECOVERED DATE</th>
+										    </tr>
+										  </thead>
+										  <tbody>
+										    <tr th:each="propertyType : ${propertySegment.propertyTypes}">
+										     <td th:text="${propertyType.propertyDescriptionType.stateDescription}">propertyDescriptionType</td>
+										     <td th:text="${propertyType.valueOfProperty?:''}">valueOfProperty</td>
+										     <td th:text="${propertyType.recoveredDate?:''}">recoveredDate</td>
+										    </tr>
+										  </tbody>
+										</table>  
+										
+										<table class="table table-bordered" th:if="${!propertySegment.suspectedDrugTypes.empty}">
+										  <thead>
+										    <tr>
+											    <th>SUSPECTED DRUG TYPE</th>
+											    <th>DRUG MEASUREMENT TYPE</th>
+											    <th>ESTIMATED DRUG QUANTITY</th>
+										    </tr>
+										  </thead>
+										  <tbody>
+										    <tr th:each="suspectedDrugType : ${propertySegment.suspectedDrugTypes}">
+										     <td th:text="${suspectedDrugType.suspectedDrugTypeType.stateDescription}">suspectedDrugTypeType</td>
+										     <td th:text="${suspectedDrugType.typeDrugMeasurementType.stateDescription}">valueOfProperty</td>
+										     <td th:text="${suspectedDrugType.estimatedDrugQuantity?:''}">estimatedDrugQuantity</td>
+										    </tr>
+										  </tbody>
+										</table>  
+									</div>
+				       </div>
+				     </div>
+				   </div>
+				 </div>
+				</div>
+		      
+	      <div class="card" th:if="${!administrativeSegment.arresteeSegments.empty}">
+	        <div class="card-header font-weight-bold">ARRESTEE SEGMENTS</div>
+	        <div class="card-body">
+	          <div id="accordion">
+	            <div class="card" th:each="arresteeSegment : ${administrativeSegment.arresteeSegments}">
+	              <div class="card-header" id="headingOne">
+	                <h5 class="mb-0">
+	                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#arresteeSegment' + arresteeSegment.arresteeSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
+	                     th:text="${'ARRESTEE-' + #numbers.formatInteger(arresteeSegment.arresteeSequenceNumber, 2)}">
+	                    arrestee - 1
+	                  </button>
+	                </h5>
+	              </div>
+	         
+	              <div th:id="${'arresteeSegment' + arresteeSegment.arresteeSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	                <div class="card-body">
+	                  <table class="table table-bordered">
+	                    <tbody>
+	                      <tr th:if="${arresteeSegment.arrestTransactionNumber != null}">
+													<th>ARREST TRANSACTION NUMBER</th>
+													<td th:text="${arresteeSegment.arrestTransactionNumber}">arrestTransactionNumber</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.arrestDate != null}">
+													<th>ARREST DATE</th>
+													<td th:text="${arresteeSegment.arrestDate}">arrestDate</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.ucrOffenseCodeType != null}">
+													<th>OFFENSE CODE</th>
+													<td th:text="${arresteeSegment.ucrOffenseCodeType.stateDescription}">ucrOffenseCodeType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.typeOfArrestType != null}">
+													<th>ARREST TYPE</th>
+													<td th:text="${arresteeSegment.typeOfArrestType.stateDescription}">typeOfArrestType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.nonNumericAge != null}">
+													<th>NON NUMERIC AGE</th>
+													<td th:text="${arresteeSegment.nonNumericAge}">nonNumericAge</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.sexOfPersonType != null and arresteeSegment.sexOfPersonType.stateCode != ' ' }">
+													<th>SEX</th>
+													<td th:text="${arresteeSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.raceOfPersonType != null and arresteeSegment.raceOfPersonType.stateCode != ' '}">
+													<th>RACE</th>
+													<td th:text="${arresteeSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.ethnicityOfPersonType != null and arresteeSegment.ethnicityOfPersonType.stateCode != ' '}">
+													<th>ETHNICITY</th>
+													<td th:text="${arresteeSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.residentStatusOfPersonType != null and arresteeSegment.residentStatusOfPersonType.stateCode != ' '}">
+													<th>RESIDENT STATUS</th>
+													<td th:text="${arresteeSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.ageOfArresteeMin != null}">
+													<th>MIN AGE</th>
+													<td th:text="${arresteeSegment.ageOfArresteeMin}">ageOfArresteeMin</td>
+	                      </tr>
+	                      <tr th:if="${arresteeSegment.ageOfArresteeMax != null}">
+													<th>MAX AGE</th>
+													<td th:text="${arresteeSegment.ageOfArresteeMax}">ageOfArresteeMax</td>
+	                      </tr>
+							          <tr th:if="${arresteeSegment.averageAge != null}">
+							            <th>AVERAGE AGE</th>
+							            <td th:text="${arresteeSegment.averageAge}">averageAge</td>
+	                      </tr>
+	                      <tr>
+							            <th>AGE UNKNOWN</th>
+							            <td th:text="${arresteeSegment.ageUnknown}">ageUnknown</td>
+							            </tr>
+							          <tr>
+	                      <tr>
+							            <th>JUVENILE</th>
+							            <td th:text="${arresteeSegment.juvenile}">juvenile</td>
+						            </tr>
+							          <tr th:if="${arresteeSegment.dispositionOfArresteeUnder18Type != null}">
+							            <th>DISPOSITION UNDER 18</th>
+							            <td th:text="${arresteeSegment.dispositionOfArresteeUnder18Type.stateCode}">dispositionOfArresteeUnder18Type</td>
+	                      </tr>
+	                      <tr th:if="${!arresteeSegment.arresteeSegmentWasArmedWiths.empty}">
+							            <th>ARMED WITH</th>
+							            <td>
+							              <p th:each="armedWith : ${arresteeSegment.arresteeSegmentWasArmedWiths}">
+							                <span th:text="${armedWith.arresteeWasArmedWithType.stateDescription}"></span>
+							                <span th:if="${armedWith.automaticWeaponIndicator != ''}"> - </span>
+							                <span th:text="${armedWith.automaticWeaponIndicator}"></span>
+							              </p>
+							           </td>
+							          </tr>
+	                    </tbody>
+	                  </table>  
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>                  
+		  	</div>
+	      <div class="card" th:if="${!administrativeSegment.offenderSegments.empty}">
+	        <div class="card-header font-weight-bold">OFFENDER SEGMENTS</div>
+	        <div class="card-body">
+	          <div id="accordion">
+	            <div class="card" th:each="offenderSegment : ${administrativeSegment.offenderSegments}">
+	              <div class="card-header" id="headingOne">
+	                <h5 class="mb-0">
+	                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#offenderSegment' + offenderSegment.offenderSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
+	                     th:text="${'OFFENDER-' + #numbers.formatInteger(offenderSegment.offenderSequenceNumber, 2)}">
+	                    offender - 1
+	                  </button>
+	                </h5>
+	              </div>
+	         
+	              <div th:id="${'offenderSegment' + offenderSegment.offenderSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	                <div class="card-body">
+	                  <table class="table table-bordered" th:if="${offenderSegment.offenderSequenceNumber != '0'}">
+	                    <tbody>
+	                      <tr>
+													<th>OFFENDER SEQUENCE NUMBER</th>
+													<td th:text="${#numbers.formatInteger(offenderSegment.offenderSequenceNumber, 2)}">offenderSequenceNumber</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.ageOfOffenderMin != null}">
+													<th>MIN AGE</th>
+													<td th:text="${offenderSegment.ageOfOffenderMin}">ageOfOffenderMin</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.ageOfOffenderMax != null}">
+													<th>MAX AGE</th>
+													<td th:text="${offenderSegment.ageOfOffenderMax}">ageOfOffenderMax</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.nonNumericAge != null}">
+													<th>NON NUMERIC AGE</th>
+													<td th:text="${offenderSegment.nonNumericAge}">nonNumericAge</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.sexOfPersonType != null and offenderSegment.sexOfPersonType.stateCode != ' ' }">
+													<th>SEX</th>
+													<td th:text="${offenderSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.raceOfPersonType != null and offenderSegment.raceOfPersonType.stateCode != ' '}">
+													<th>RACE</th>
+													<td th:text="${offenderSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${offenderSegment.ethnicityOfPersonType != null and offenderSegment.ethnicityOfPersonType.stateCode != ' '}">
+													<th>ETHNICITY</th>
+													<td th:text="${offenderSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${!offenderSegment.victimOffenderAssociations.empty}">
+													<th>VICTIM OFFENDER ASSOCIATIONS</th>
+													<td>
+	                          <p th:each="victimOffenderAssociation : ${offenderSegment.victimOffenderAssociations}">
+	                            <span th:text="${victimOffenderAssociation.victimOffenderRelationshipType.stateDescription}"></span>
+	                            <span> - </span>
+	                            <a th:text="${'VICTIM-' + #numbers.formatInteger(victimOffenderAssociation.victimSegment.victimSequenceNumber, 2)}" th:href="${'#victimSegment' + victimOffenderAssociation.victimSegment.victimSegmentId}"></a>
+	                          </p>
+													</td>
+	                      </tr>
+	                    </tbody>
+	                  </table>  
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>                  
+		  	</div>
+		  	
+	      <div class="card" th:if="${!administrativeSegment.victimSegments.empty}">
+	        <div class="card-header font-weight-bold">VICTIM SEGMENTS</div>
+	        <div class="card-body">
+	          <div id="accordion">
+	            <div class="card" th:each="victimSegment : ${administrativeSegment.victimSegments}">
+	              <div class="card-header" id="headingOne">
+	                <h5 class="mb-0">
+	                  <button class="btn btn-link" data-toggle="collapse" th:data-target="${'#victimSegment' + victimSegment.victimSegmentId}" aria-expanded="true" aria-controls="collapseOne" 
+	                     th:text="${'VICITM-' + #numbers.formatInteger(victimSegment.victimSequenceNumber, 2)}">
+	                    offender - 1
+	                  </button>
+	                </h5>
+	              </div>
+	         
+	              <div th:id="${'victimSegment' + victimSegment.victimSegmentId}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	                <div class="card-body">
+	                  <table class="table table-bordered" th:if="${victimSegment.victimSequenceNumber != '0'}">
+	                    <tbody>
+	                      <tr>
+													<th>VICTIM SEQUENCE NUMBER</th>
+													<td th:text="${#numbers.formatInteger(victimSegment.victimSequenceNumber, 2)}">victimSequenceNumber</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.typeOfVictimType != null}">
+													<th>VICTIM TYPE</th>
+													<td th:text="${victimSegment.typeOfVictimType.stateDescription}">typeOfVictimType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.officerActivityCircumstanceType != null and victimSegment.officerActivityCircumstanceType.stateCode != ' '}">
+													<th>OFFICER ACTIVITY CIRCUMSTANCE TYPE</th>
+													<td th:text="${victimSegment.officerActivityCircumstanceType.stateDescription}">officerActivityCircumstanceType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.officerAssignmentTypeType != null and victimSegment.officerAssignmentTypeType.stateCode != ' '}">
+													<th>OFFICER ASSIGNMENT TYPE</th>
+													<td th:text="${victimSegment.officerAssignmentTypeType.stateDescription}">officerAssignmentTypeType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.ageOfVictimMin != null}">
+													<th>MIN AGE</th>
+													<td th:text="${victimSegment.ageOfVictimMin}">ageOfVictimMin</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.ageOfVictimMax != null}">
+													<th>MAX AGE</th>
+													<td th:text="${victimSegment.ageOfVictimMax}">ageOfVictimMax</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.nonNumericAge != null}">
+													<th>NON NUMERIC AGE</th>
+													<td th:text="${victimSegment.nonNumericAge}">nonNumericAge</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.sexOfPersonType != null and victimSegment.sexOfPersonType.stateCode != ' ' }">
+													<th>SEX</th>
+													<td th:text="${victimSegment.sexOfPersonType.stateDescription}">sexOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.raceOfPersonType != null and victimSegment.raceOfPersonType.stateCode != ' '}">
+													<th>RACE</th>
+													<td th:text="${victimSegment.raceOfPersonType.stateDescription}">raceOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.ethnicityOfPersonType != null and victimSegment.ethnicityOfPersonType.stateCode != ' '}">
+													<th>ETHNICITY</th>
+													<td th:text="${victimSegment.ethnicityOfPersonType.stateDescription}">ethnicityOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.residentStatusOfPersonType != null and victimSegment.residentStatusOfPersonType.stateCode != ' '}">
+	                        <th>RESIDENT STATUS</th>
+	                        <td th:text="${victimSegment.residentStatusOfPersonType.stateDescription}">residentStatusOfPersonType</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.officerOtherJurisdictionOri != null}">
+													<th>OFFICER OTHER JURISDICTION ORI</th>
+													<td th:text="${victimSegment.officerOtherJurisdictionOri}">officerOtherJurisdictionOri</td>
+	                      </tr>
+	                      <tr th:if="${victimSegment.additionalJustifiableHomicideCircumstancesType != null and victimSegment.additionalJustifiableHomicideCircumstancesType.stateCode != ' '}">
+	                        <th>ADDITIONAL JUSTIFIABLE HOMICIDE CIRCUMSTANCES</th>
+	                        <td th:text="${victimSegment.additionalJustifiableHomicideCircumstancesType.stateDescription}">additionalJustifiableHomicideCircumstancesType</td>
+	                      </tr>
+	                      <tr th:if="${!victimSegment.typeInjuryTypes.empty}">
+	                        <th>INJURY TYPES</th>
+	                        <td>
+	                          <p th:each="typeInjuryType : ${victimSegment.typeInjuryTypes}"
+	                              th:text="${typeInjuryType.stateDescription}">typeInjuryType</p>
+	                        </td>
+	                      </tr>
+	                      <tr th:if="${!victimSegment.offenseSegments.empty}">
+	                        <th>OFFENSES</th>
+	                        <td>
+	                          <a th:each="offenseSegment : ${victimSegment.offenseSegments}"
+	                              th:text="${offenseSegment.ucrOffenseCodeType.stateCode + '-' + offenseSegment.ucrOffenseCodeType.stateDescription}"
+	                              th:href="${'#offense' + offenseSegment.offenseSegmentId}">OFFENSE</a>
+	                        </td>
+	                      </tr>
+	                      <tr th:if="${!victimSegment.aggravatedAssaultHomicideCircumstancesTypes.empty}">
+	                        <th>AGGRAVATED ASSAULT HOMICIDE CIRCUMSTANCES</th>
+	                        <td>
+	                          <p th:each="aggravatedAssaultHomicideCircumstancesType : ${victimSegment.aggravatedAssaultHomicideCircumstancesTypes}"
+	                              th:text="${aggravatedAssaultHomicideCircumstancesType.stateDescription}">aggravatedAssaultHomicideCircumstancesType</p>
+	                        </td>
+	                      </tr>
+	                      <tr th:if="${!victimSegment.victimOffenderAssociations.empty}">
+													<th>VICTIM OFFENDER ASSOCIATIONS</th>
+													<td>
+	                          <p th:each="victimOffenderAssociation : ${victimSegment.victimOffenderAssociations}">
+	                            <span th:text="${victimOffenderAssociation.victimOffenderRelationshipType.stateDescription}"></span>
+	                            <span> - </span>
+	                            <a th:text="${'OFFENDER-' + #numbers.formatInteger(victimOffenderAssociation.offenderSegment.offenderSequenceNumber, 2)}" 
+	                               th:href="${'#offenderSegment' + victimOffenderAssociation.offenderSegment.offenderSegmentId}"></a>
+	                          </p>
+													</td>
+	                      </tr>
+	                    </tbody>
+	                  </table>  
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>                  
+		  	</div>
+		  	<div class="card" th:if="${allowSubmitToFbi}">
+	        <div class="card-header font-weight-bold">FBI SUBMISSION</div>
+	        <div class="card-body">
+	          <table class="table table-bordered">
+	            <tbody>
+		            <tr>
+		              <th>STATUS</th>  
+	                <td th:text="${administrativeSegment.fbiStatus}">FBI submission Status</td>
+	              </tr>
+	              <tr th:if="${administrativeSegment.submission != null}">
+	                <th>SUBMISSION TIMESTAMP</th>
+	                <td th:text="${administrativeSegment.submission.submissionTimestamp}">submissionTimestamp</td>
+		            </tr>
+	              <tr th:if="${administrativeSegment.submission != null}">
+	                <th>REQUEST FILE PATH</th>
+	                <td th:text="${administrativeSegment.submission.requestFilePath}">requestFilePath</td>
+		            </tr>
+	              <tr th:if="${administrativeSegment.submission != null}">
+		              <th>RESPONSE TIMESTAMP</th>
+		              <td th:text="${administrativeSegment.submission.responseTimestamp}">responseTimestamp</td>
+		            </tr>
+	              <tr th:if="${administrativeSegment.submission != null}">
+	                <th>RESPONSE FILE PATH</th>
+	                <td th:text="${administrativeSegment.submission.responseFilePath}">responseFilePath</td>
+	              </tr>
+	              <tr th:if="${administrativeSegment.submission != null and administrativeSegment.submission.faultCode != null}">
+	                <th>FAULT CODE</th>
+	                <td th:text="${administrativeSegment.submission.faultCode}">faultCode</td>
+	              </tr>
+	              <tr th:if="${administrativeSegment.submission != null and administrativeSegment.submission.faultDescription != null}">
+	                <th>FAULT DESCRIPTION</th>
+	                <td th:text="${administrativeSegment.submission.faultDescription}">faultDescription</td>
+	              </tr>
+	              <tr th:if="${administrativeSegment.submission != null and !administrativeSegment.submission.violations.empty}">
+	                <td colspan="2">
+		                <div class="card">
+		                  <div class="card-header font-weight-bold">VIOLATIONS</div>
+		 					        <div class="card-body">
+						            <table class="table table-bordered">
+						              <thead>
+							              <tr>
+							                <th>Violation Code</th>
+							                <th>Violation Description</th>
+							                <th>Violation Level</th>
+							              </tr>
+						              </thead>
+							            <tbody>
+							              <th:block th:each="violation: ${administrativeSegment.submission.violations}">
+							                <tr>
+							                  <td th:text="${violation.violationCode}"/>
+							                  <td th:text="${violation.violationDescription}"/>
+							                  <td th:text="${violation.violationLevel}"/>
+							                </tr>
+							              </th:block>
+							            </tbody>
+						            </table>
+					            </div>
+				            </div>
+	                </td>
+	              </tr>
+	            </tbody>
+	          </table>  
+		      </div>
+	      </div>
+		        	
+		    <script th:inline="javascript">
+		    	$(function(){
+		    		
+		    	});
+		    </script>
+	    </div>
+	    <th:block th:include="fragments/general.html :: baseJavascripts"></th:block>
+	  </main>
 	</body>
 </html>

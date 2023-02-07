@@ -28,35 +28,32 @@
 		 	<nav aria-label="breadcrumb">
 	       <ol class="breadcrumb">
 	           <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-	           <li class="breadcrumb-item active" aria-current="page">Upload to Validate</li>
+	           <li class="breadcrumb-item active" aria-current="page">Upload Flat File to Convert</li>
 	       </ol>
 		 	</nav>
  	 		<div class="p-1">
- 	 		  <div><h6><strong>NIBRS Pre-Certification Tool (PCT)</strong></h6> </div>
+ 	 		  <div><h6><strong>Upload Flat File to Convert</strong></h6> </div>
  	 		  <ul>
- 	 		    <li>Speeds up NIBRS certification process</li>
- 	 		    <li>Allows agencies to test records before submission to State UCR Program or FBI. State UCR programs may use it to test their NIBRS submission before FBI certification</li>
+ 	 		    <li>This tool will only convert up to 5,000 reports. If you need to convert more than this, please do this in batches.</li>
  	 		    <li>Only performs standard NIBRS edit and validation checks (no state-specific validation)</li>
  	 		    <li>Applies the 2019.1 data edit and validation rules</li>
- 	 		    <li>Generates an error list in the FBI error reporting format. Error list can be downloaded so records may be corrected</li>
- 	 		    <li>Supports flat file or XML formats licensed under the open source <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, version 2.0 </a>.  The source code is available <a href="https://goo.gl/9my95o" target="_blank">here</a>.</li>
  	 		  </ul>
 			</div>
 	 		<div>
 				<div id="errorMsg"></div>
         <div align="center">
-            <h6><strong>Choose or drag and drop your file to get started</strong></h6>
+            <h6><strong>Choose or drag and drop your flat file to get started</strong></h6>
             <p class="m-3">
               You may validate multiple NIBRS files at once: <br>
-              legacy flat file with multiple records, XML file with a single record, and a compressed(zip) file with multiple XML files. 
+              legacy flat file with multiple records, and a compressed(zip) file with multiple files. 
             </p>
         </div>
 				
-				<form method="POST" enctype="multipart/form-data" th:action="@{/files/upload}" class="box m-5">
+				<form method="POST" enctype="multipart/form-data" th:action="@{/files/uploadToConvert}" class="box m-5">
 				  	<div id="uploads"></div>
 				 	<div class="dropzone" id="dropzone">
 						<div id="loadingFileAjaxPane" ></div>
-				 		<input type="file" name="file" id="file" class="inputfile" form="fileform" accept="application/zip, text/plain, application/octet-stream, text/xml, application/xml"/>  
+				 		<input type="file" name="file" id="file" class="inputfile" form="fileform" accept="application/zip, text/plain, application/octet-stream"/>  
 				 		<span><label for="file" class="inputfileLabel"><Strong>Choose</Strong></label><strong> or drag and drop file here.</strong> </span>
 			 		</div>		
 				</form>
@@ -91,93 +88,56 @@
 			          <li>
 			          Structure Check Errors
 			            <ul>
-			              <li>056: DUPLICATE INCIDENT- PREVIOUSLY ADDED</li>
-			              <li>060: PROCESSING DATE PRECEDES MONTH AND YEAR OF SUBMISSION</li>
-			              <li>088: GROUP A AND GROUP B CANNOT HAVE SAME IDENTIFIER</li>
+			              <li>930: Invalid ORI – ORI marked for historical reference</li>
 			              <li>931: Invalid ORI – ORI marked for historical reference</li>
 			              <li>932: Invalid ORI – ORI information is duplicated</li>
 			              <li>933: Invalid ORI – ORI not found in reference data</li>
 			              <li>934: Invalid ORI – ORI is covered by another agency</li>
-			              <li>935: NIBRS CERTIFICATION DATE DOES NOT EXIST</li>
-			              <li>937: PRE-NIBRS INCIDENT RECEIVED</li>
-			              <li>938: MULTIPLE INCIDENTS ON FILE</li>
-			              <li>940: EXCEPTIONAL CLEARANCE ALREADY ON FILE</li>
-			              <li>941: WEB SERVICE SUBMISSION ALREADY IN PROCESS</li>
 			              <li>952: Invalid ORI – ORI is not in UCR file</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Administrative Segment Errors – Level 1
 			            <ul>
-			              <li>116: MUST BE LEFT JUSTIFIED BLANK DETECTED IN FIRST POSITION</li>
 			              <li>118: Date cannot be on or after the inactive date of the ORI</li>
-			              <li>151: REPORT INDICATOR MUST BE BLANK OR R</li>
 			              <li>173: Incident date cannot be before date ORI went IBR</li>
-			              <li>175: CANNOT CALCULATE BASE DATE FROM INCIDENT DATE</li>
-			              <li>197: MISSING INCIDENT DATE FOR DELETE</li>
-			              <li>198: MISSING INCIDENT DATE FOR DELETE - INCIDENT NUMBER MATCHES GROUP A INCIDENT REPORTS WITH INCIDENT DATE OUTSIDE TWO YEAR WINDOW</li>
-			              <li>199: MISSING INCIDENT DATE FOR DELETE - INCIDENT NUMBER MATCHES MULTIPLE GROUP A INCIDENT REPORTS</li>
-			              
 			            </ul>
 			          </li>
 			          <li>
 			            Offense Segment Errors – Level 2 
 			            <ul>
-			              <li>202: CONTAINS NONNUMERIC ENTRY</li>
-			              <li>215: CANNOT CONTAIN EMBEDDED BLANKS BETWEEN FIRST AND LAST NON BLANK CHARACTERS</li>
-			              <li>216: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
-			              <li>217: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
+			              <li>All errors are validated</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Property Segment Errors – Level 3
 			            <ul>
-			              <li>302: CONTAINS NONNUMERIC ENTRY</li>
-			              <li>315: CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS</li>
-			              <li>316: MUST BE LEFT-JUSTIFIED. BLANK DETECTED IN FIRST POSITION</li>
-			              <li>317: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
+			              <li>All errors are validated</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Victim Segment Errors – Level 4
 			            <ul>
-			              <li>408: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
-			              <li>415: CANNOT CONTAIN EMBEDDED BLANKS BETWEEN FIRST AND LAST NON BLANK CHARACTERS</li>
-			              <li>416: MUST BE LEFT- JUSTIFIED–BLANK DETECTED IN FIRST POSITION</li>
-			              <li>417: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
-			              <li>490: INCIDENT DATE/HOUR MUST CONTAIN A VALID ENTRY WITHEN VICTIM IS L=LAW ENFORCEMENT OFFICER</li>
+			              <li>All errors are validated</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Offender Segment Errors – Level 5
 			            <ul>
-                    <li>502: CONTAINS NONNUMERIC ENTRY</li>
-                    <li>508: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
-                    <li>515: CANNOT HAVE EMBEDDED BLANKS BETWEEN FIRST AND LAST NON-BLANK CHARACTERS</li>
-                    <li>516: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
-                    <li>517: CANNOT HAVE CHARACTERS OTHER THAN A–Z, 0–9, AND/OR HYPHEN, AND/OR BLANKS</li>
+			              <li>All errors are validated</li>
 			            </ul>
 			          </li>
 			          <li>
 			            Arrest Segment Errors – Level 6
 			            <ul>
-			              <li>602: CONTAINS NONNUMERIC ENTRY</li>
-			              <li>608: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
-			              <li>616: MUST BE LEFT-JUSTIFIED— BLANK DETECTED IN FIRST POSITION</li>
 			              <li>618: Arrest date cannot on or after the inactive date of the ORI</li>
-			              <li>664: ARRESTEE AGE MUST BE NUMERIC DIGITS</li>
 			            </ul>
 			          </li>
 			        </ul>
 			        
 			        <p><strong>GROUP B ARREST REPORTS</strong></p>
 			        <ul>
-			          <li>708: EXACT AGE MUST BE IN FIRST TWO POSITIONS</li>
-			          <li>716: MUST BE LEFT-JUSTIFIED– BLANK DETECTED IN FIRST POSITION</li>
 			          <li>718: Arrest date cannot be on or after the inactive date of the ORI</li>
-			          <li>720: GROUP B ADD CANNOT PREDATE NIBRS START DATE</li>
-			          <li>751: ARRESTEE SEQUENCE NUMBER ALREADY EXISTS</li>
-			          <li>757: ARRESTEE AGE MUST BE NUMERIC DIGITS</li>
 			          <li>759: Duplicate Group B arrest report segment on file</li>
 			          <li>798: Missing arrest date for delete, duplicate match</li>
 			          <li>799: Missing arrest date for delete, multiple matches</li>
@@ -187,13 +147,8 @@
 			        <ul>
 			          <li>028: Cannot add zero report – Group A incident report on file for this month</li>
 			          <li>029: Cannot add zero report – Group B Arrest report on file for this month</li>
-			          <li>090: ZERO REPORTING MONTH IS NOT 01-12</li>
-			          <li>091: ZERO-REPORTING YEAR IS INVALID</li>
-			          <li>092: ZERO REPORTING INCIDENT NUMBER MUST BE ALL ZEROS</li>
 			          <li>093: Zero report month/year is prior to agency conversion to NIBRS</li>
-			          <li>094: ZERO REPORT MONTH/YEAR EXCEEDED MONTH/YEAR OF SUBMISSION</li>
-			          <li>095: PRE-NIBRS SEGMENTS CANNOT BE DELETED IN THIS WAY</li>
-			          <li>096: ZERO REPORT MONTH &amp; ZERO REPORT YEAR CANNOT BE ON OR AFTER DATE AGENCY IS PLACED ON COVERED-BY STATUS</li>
+			          <li>096: Zero report month/year cannot be on or after date agency is placed on covered-by status</li>
 			        </ul>
             </div>
           </div>

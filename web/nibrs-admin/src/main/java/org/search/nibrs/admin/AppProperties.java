@@ -27,6 +27,7 @@ public class AppProperties {
 
 	private Boolean allowSubmitToFbi = true;
 	private Boolean privateSummaryReportSite=false; 
+	private String xmlDocumentDownloadRootFolder = "/tmp/nibrs/xmlDownload";
 	
 	private Boolean securityEnabled = false;
 	private Boolean allowAccessWithoutSamlToken = false;
@@ -35,6 +36,8 @@ public class AppProperties {
 	private Boolean demoLawEnforcementEmployerIndicator = true;
 	private Integer ajpPort = 9090; 
 	private Boolean ajpEnabled = true; 
+	private Boolean flatFileToXmlFileConversion = false; 
+	private Integer flatFileToXmlFileConversionUpperLimit = 5000; 
 	
 	private String externalTemplatesFolder;
 	private String brandImagePath="/images/search-logo-scales-transparent.png";
@@ -169,6 +172,30 @@ public class AppProperties {
 
 	public Map<String, String> getAboutLinksMapping() {
 		return aboutLinksMapping;
+	}
+
+	public String getXmlDocumentDownloadRootFolder() {
+		return xmlDocumentDownloadRootFolder;
+	}
+
+	public void setXmlDocumentDownloadRootFolder(String xmlDocumentDownloadRootFolder) {
+		this.xmlDocumentDownloadRootFolder = xmlDocumentDownloadRootFolder;
+	}
+
+	public Boolean getFlatFileToXmlFileConversion() {
+		return flatFileToXmlFileConversion;
+	}
+
+	public void setFlatFileToXmlFileConversion(Boolean flatFileToXmlFileConversion) {
+		this.flatFileToXmlFileConversion = flatFileToXmlFileConversion;
+	}
+
+	public Integer getFlatFileToXmlFileConversionUpperLimit() {
+		return flatFileToXmlFileConversionUpperLimit;
+	}
+
+	public void setFlatFileToXmlFileConversionUpperLimit(Integer flatFileToXmlFileConversionUpperLimit) {
+		this.flatFileToXmlFileConversionUpperLimit = flatFileToXmlFileConversionUpperLimit;
 	}
 
 }

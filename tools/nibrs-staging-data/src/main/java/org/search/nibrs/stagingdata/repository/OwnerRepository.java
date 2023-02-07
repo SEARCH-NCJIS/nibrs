@@ -15,7 +15,7 @@
  */
 package org.search.nibrs.stagingdata.repository;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.search.nibrs.stagingdata.model.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;

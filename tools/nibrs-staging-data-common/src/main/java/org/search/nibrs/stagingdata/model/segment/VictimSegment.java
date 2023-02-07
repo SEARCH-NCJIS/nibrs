@@ -16,6 +16,7 @@
 package org.search.nibrs.stagingdata.model.segment;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -114,23 +115,23 @@ public class VictimSegment implements Serializable{
 	@JoinTable(name = "typeInjury", 
 	joinColumns = @JoinColumn(name = "victimSegmentId", referencedColumnName = "victimSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "typeInjuryTypeId", referencedColumnName = "typeInjuryTypeId"))
-	private Set<TypeInjuryType> typeInjuryTypes;     
+	private Set<TypeInjuryType> typeInjuryTypes = new HashSet<TypeInjuryType>();     
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "victimOffenseAssociation", 
 	joinColumns = @JoinColumn(name = "victimSegmentId", referencedColumnName = "victimSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "offenseSegmentId", referencedColumnName = "offenseSegmentId"))
-	private Set<OffenseSegment> offenseSegments;     
+	private Set<OffenseSegment> offenseSegments = new HashSet<OffenseSegment>();     
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "aggravatedAssaultHomicideCircumstances", 
 	joinColumns = @JoinColumn(name = "victimSegmentId", referencedColumnName = "victimSegmentId"), 
 	inverseJoinColumns = @JoinColumn(name = "aggravatedAssaultHomicideCircumstancesTypeId", 
 				referencedColumnName = "aggravatedAssaultHomicideCircumstancesTypeId"))
-	private Set<AggravatedAssaultHomicideCircumstancesType> aggravatedAssaultHomicideCircumstancesTypes;     
+	private Set<AggravatedAssaultHomicideCircumstancesType> aggravatedAssaultHomicideCircumstancesTypes = new HashSet<AggravatedAssaultHomicideCircumstancesType>();     
 	
 	@OneToMany(mappedBy = "victimSegment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<VictimOffenderAssociation> VictimOffenderAssociations;
+	private Set<VictimOffenderAssociation> VictimOffenderAssociations = new HashSet<VictimOffenderAssociation>();
 	
 	public String toString(){
 		ReflectionToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);

@@ -30,7 +30,7 @@
 		  <script th:inline="javascript">
         /*<![CDATA[*/
           var context = /*[[@{/}]]*/ '';
-          var persistReportTask = /*[[${persistReportTask}]]*/ null; 
+          var reportConversionProgress = /*[[${reportConversionProgress}]]*/ null; 
           var privateSummaryReportSite = /*[[${privateSummaryReportSite}]]*/ false; 
         /*]]>*/
 
@@ -78,35 +78,31 @@
           table.buttons().container()
             .appendTo( '#errorReport_length' ).addClass("mr-5");
           
-          if (persistReportTask && !persistReportTask.aborted && !persistReportTask.complete && persistReportTask.started){
-              $('#loadIncidentsAync').attr('disabled', true);
+          if (reportConversionProgress && !reportConversionProgress.aborted && !reportConversionProgress.complete && reportConversionProgress.started){
+              $('#convertToXmlAync').attr('disabled', true);
               $('#progress').css('width', '0px').addClass('progress-bar-animated active');
               $('#progressDiv').removeClass('d-none');
           }
           
-          $('#loadIncidentsAync').click (function(){
+          $('#convertToXmlAync').click (function(){
             var requestData = {}; 
             if (typeof _csrf_param_name !== 'undefined'){
             	  requestData[_csrf_param_name] = _csrf_token;
             }
-          	var data = table.rows().data();
-          	if (data.length > 0 && privateSummaryReportSite){
-          		  xhr =  $.post(context + "files/preCertificationErrors", requestData, function(data, status){  
-          			  $('div#alert').append('<div>' + data + '</div>');
-          		  }).fail(ojbc.displayFailMessage);
-          	}
-          	
-           	xhr = $.post(context + "files/validIncidentsAsync", requestData, function(data, status){
-              $('#loadIncidentsAync').attr('disabled', true);
+           	xhr = $.post(context + "files/validIncidentsConversionAsync", requestData, function(data, status){
+              $('#convertToXmlAync').attr('disabled', true);
               $('#progress').css('width', '0px').addClass('progress-bar-animated active');
               $('#progressDiv').removeClass('d-none');
               var timerId = setInterval(function() {
 
                   // increment progress bar
-                xhr = $.get(context + 'files/uploadStatus', function(data, status) {
+                xhr = $.get(context + 'files/conversionStatus', function(data, status) {
               	  /* console.log("data.failedToProcess: " + data.failedToProcess); */
                   if (status == 'success'){
-                    $('#progress').css('width', data.progress + '%').attr('aria-valuenow', data.progress);
+                    if (data.progress>=100 && data.totalCount > data.failedToProcess.length){
+                    	  $('#downloadFile').removeClass('d-none');
+                    }
+                 	  $('#progress').css('width', data.progress + '%').attr('aria-valuenow', data.progress);
                     $('#progress').html('' + data.processedCount + ' out of ' + data.totalCount + ' are processed ');
                   }
                   if (status != 'success' || data.progress >= 100 || data.aborted) {
@@ -119,18 +115,19 @@
                  	  }
                     else if (data.progress>=100){
                   	  contentArray.push("All " + data.totalCount + ' reports are processed' );
-	                    if ($("#summaryReportInputForm").hasClass("no-data") && data.totalCount > data.failedToProcess.length){
-	                    	$("#summaryReportInputForm").removeClass("no-data");
-	                    	$("#incidents").removeClass("no-data");
-	                    	$("#incidentDeleteForm").removeClass("no-data");
-	                    }
+                  	  
+                  	  console.log(data.totalCount);
+                  	  console.log(data.failedToProcess.length); 
+                  	  if (data.totalCount > data.failedToProcess.length){
+                  		  $('#downloadFile').removeClass('d-none');
+                  	  }
                     }
                     else {
-                  	  contentArray.push('The process is aborted due to error.' );
+                  	  contentArray.push('The conversion process is aborted due to error.' );
                     }
                     
                     if (data.failedToProcess.length > 0){
-                  	  contentArray.push('<br>' + data.failedToProcess.length + ' incidents failed to persist due to error: ');
+                  	  contentArray.push('<br>' + data.failedToProcess.length + ' incidents failed to convert due to error: ');
                   	  contentArray.push('<ul>');
                   	  for (i=0; i<data.failedToProcess.length; i++ ) {
                   		  contentArray.push('<li>' + data.failedToProcess[i] + '</li>');
@@ -143,7 +140,7 @@
                         title: "", 
                         showclose: false,
                         content: contentArray,
-                        complete:function() { clearInterval(timerId); }
+                        complete:function() { clearInterval(timerId);}
                     });
                   }
                 });
@@ -157,25 +154,28 @@
  			<nav aria-label="breadcrumb">
          <ol class="breadcrumb">
            <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-           <li class="breadcrumb-item"><a href="#" class="uploadToValidate">Upload to Validate</a></li>
+           <li class="breadcrumb-item"><a href="#" class="uploadFlatFileToConvert">Upload Flat File to Convert</a></li>
            <li class="breadcrumb-item active" aria-current="page">Validation Results</li>
          </ol>
       </nav>
  			
  			<div class="mt-3" id="info" >
- 			  <div class="alert alert-secondary" role="alert" th:if="${validationResults.countOfValidReport} > 0" id="alert">
-			    <span th:text="${validationResults.countOfValidReport} + ' of the ' + ${validationResults.totalReportCount} + 
-			       ' records have been validated. In order to produce Summary Reports, you must save these records before proceeding.'"></span>
-	        <button type="button" class="btn btn-primary btn-sm ml-2" id="loadIncidentsAync">Save</button>
+ 			  <div class="alert alert-secondary" role="alert" th:if="${validationToConvertResults.countOfValidReport} > 0" id="alert">
+			    <span th:text="${validationToConvertResults.countOfValidReport} + ' of the ' + ${validationToConvertResults.totalReportCount} + 
+			       ' records have been validated.'"></span>
+	        <button type="button" class="btn btn-primary btn-sm ml-2" id="convertToXmlAync" th:if="${validationToConvertResults.countOfValidReport} <= ${flatFileToXmlFileConversionUpperLimit}">Convert Valid Reports to XML</button>
+	        <a th:href="@{/files/downloadZipFile}" class="btn btn-primary btn-sm ml-2 d-none" id="downloadFile">Click Here to Download</a>
         </div>
+        <div class="alert alert-warning" th:if="${validationToConvertResults.countOfValidReport} > ${flatFileToXmlFileConversionUpperLimit}" 
+             th:text="'The valid report count exceeds the conversion limit ' + ${flatFileToXmlFileConversionUpperLimit} + ', please reduce the file size and try again.'"></div>
         <div class="progress mt-2  d-none" id="progressDiv">
           <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0.25" aria-valuemin="0" aria-valuemax="100" id="progress" style="width:0%"></div>
         </div>
-        <div class="alert alert-danger" role="alert" th:if="${validationResults.totalReportCount} == 0">
-          No NIBRS report found in the submission.  Please confirm that the correct submission file is uploaded.  For XML submission,  please make sure it is schema valid against the NIBRS 2019.1 schema
+        <div class="alert alert-danger" role="alert" th:if="${validationToConvertResults.totalReportCount} == 0">
+          No NIBRS report found in the submission.  Please confirm that the correct submission file is uploaded. 
         </div>
       </div>
-			<p class="hint" th:unless="${#lists.isEmpty(validationResults.filteredErrorList)}">Click on any column header to sort on the column. Hold down the shift key and click on any other column header to sort on secondary columns.</p>
+			<p class="hint" th:unless="${validationToConvertResults.totalReportCount} == 0">Click on any column header to sort on the column. Hold down the shift key and click on any other column header to sort on secondary columns.</p>
 			<!-- The styling of width and border-spacing is important to make the responsive feature working properly. -->
 			<table id="errorReport" class="table table-striped table-bordered dt-responsive display responsive" style="width: 100%; border-spacing: 0;">
 				<thead>
@@ -196,7 +196,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<th:block th:each="nibrsError: ${validationResults.filteredErrorList}">
+					<th:block th:each="nibrsError: ${validationToConvertResults.filteredErrorList}">
 						<tr>
 							<td th:text="${nibrsError.dateOfTape}"/>
 							<td th:text="${nibrsError.context.sourceLocation}"/>

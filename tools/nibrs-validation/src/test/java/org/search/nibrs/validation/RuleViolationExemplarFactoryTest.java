@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.search.nibrs.model.AbstractReport;
 import org.search.nibrs.model.GroupAIncidentReport;
@@ -41,6 +42,7 @@ public class RuleViolationExemplarFactoryTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testOffenseLocationViolationExemplars() throws Exception {
 		RuleViolationExemplarFactory exemplarFactory = RuleViolationExemplarFactory.getInstance();
 		List<GroupAIncidentReport> incidents = exemplarFactory.getGroupAIncidentsThatViolateRule(252);

@@ -55,7 +55,7 @@ public class StagingDataRestClient {
 		
 		ReturnAForm returnAForm =
 				webClient.post().uri("/returnAForm")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(ReturnAForm.class)
 				.block();
@@ -73,7 +73,7 @@ public class StagingDataRestClient {
 		
 		AsrReports asrReports =
 				webClient.post().uri("/asrReports")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(AsrReports.class)
 				.block();
@@ -91,7 +91,7 @@ public class StagingDataRestClient {
 		
 		ArsonReport arsonReport = 
 				webClient.post().uri("/arsonReport")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(ArsonReport.class)
 				.block();
@@ -107,7 +107,7 @@ public class StagingDataRestClient {
 		
 		HumanTraffickingForm humanTraffickingForm = 
 				webClient.post().uri("/humanTraffickingReport")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(HumanTraffickingForm.class)
 				.block();
@@ -124,7 +124,7 @@ public class StagingDataRestClient {
 		
 		SupplementaryHomicideReport supplementaryHomicideReport = 
 				webClient.post().uri("/shrReports")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(SupplementaryHomicideReport.class)
 				.block();
@@ -140,7 +140,7 @@ public class StagingDataRestClient {
 		
 		CargoTheftReport cargoTheftReport = 
 				webClient.post().uri("/cargoTheftReport")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(CargoTheftReport.class)
 				.block();
@@ -153,7 +153,7 @@ public class StagingDataRestClient {
 		
 		ReturnARecordCardReport returnARecordCardReport =
 				webClient.post().uri("/returnARecordCard")
-				.body(BodyInserters.fromObject(summaryReportRequest))
+				.body(BodyInserters.fromValue(summaryReportRequest))
 				.retrieve()
 				.bodyToMono(ReturnARecordCardReport.class)
 				.block();

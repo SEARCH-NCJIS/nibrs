@@ -17,8 +17,8 @@ package org.search.nibrs.stagingdata.repository;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

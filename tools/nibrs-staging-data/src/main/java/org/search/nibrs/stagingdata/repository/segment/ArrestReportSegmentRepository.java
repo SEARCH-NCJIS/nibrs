@@ -19,7 +19,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.search.nibrs.stagingdata.model.segment.ArrestReportSegment;
 import org.springframework.data.jpa.repository.EntityGraph;

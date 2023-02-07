@@ -15,20 +15,23 @@
  */
 package org.search.nibrs.admin.services.rest;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.search.nibrs.admin.AppProperties;
 import org.search.nibrs.admin.security.AuthUser;
-import org.search.nibrs.admin.uploadfile.PersistReportTask;
+import org.search.nibrs.admin.uploadfile.ReportProcessProgress;
 import org.search.nibrs.common.NIBRSError;
-import org.search.nibrs.model.AbstractReport;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.GroupBArrestReport;
 import org.search.nibrs.stagingdata.model.Owner;
@@ -41,6 +44,8 @@ import org.search.nibrs.stagingdata.model.search.PrecertErrorSearchRequest;
 import org.search.nibrs.stagingdata.model.search.SearchResult;
 import org.search.nibrs.stagingdata.model.segment.AdministrativeSegment;
 import org.search.nibrs.stagingdata.model.segment.ArrestReportSegment;
+import org.search.nibrs.util.CustomPair;
+import org.search.nibrs.validate.common.ValidationResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
@@ -57,6 +62,11 @@ public class RestService{
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	private final WebClient webClient;
+	
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmssSSS");
+
+	@Resource
+	AppProperties appProperties;
 
 	@Autowired
 	public RestService(WebClient.Builder webClientBuilder, AppProperties appProperties) {
@@ -116,7 +126,7 @@ public class RestService{
 	
 	public IncidentSearchResult getIncidents(IncidentSearchRequest incidentSearchRequest){
 		return this.webClient.post().uri("/reports/search")
-				.body(BodyInserters.fromObject(incidentSearchRequest))
+				.body(BodyInserters.fromValue(incidentSearchRequest))
 				.retrieve()
 				.bodyToMono(new ParameterizedTypeReference<IncidentSearchResult>() {})
 				.block();
@@ -124,7 +134,7 @@ public class RestService{
 	
 	public Owner getSavedUser(Owner webUser){
 		return this.webClient.post().uri("/codeTables/user")
-				.body(BodyInserters.fromObject(webUser))
+				.body(BodyInserters.fromValue(webUser))
 				.retrieve()
 				.bodyToMono(new ParameterizedTypeReference<Owner>() {})
 				.block();
@@ -144,17 +154,16 @@ public class RestService{
 				.block();
 	}
 	
-	public void persistGroupBReport(List<GroupBArrestReport> groupBArrestReports, PersistReportTask persistReportTask) {
+	public void persistGroupBReport(List<GroupBArrestReport> groupBArrestReports, ReportProcessProgress persistReportTask) {
 		try{
 			webClient.post().uri("/arrestReports")
-			.body(BodyInserters.fromObject(groupBArrestReports))
+			.body(BodyInserters.fromValue(groupBArrestReports))
 			.retrieve()
 			.bodyToMono(String.class)
 			.block();
 			
 			persistReportTask.increaseProcessedCount(groupBArrestReports.size());
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
-			groupBArrestReports.clear();
 		}
 		catch(ResourceAccessException rae){
 			List<String> identifiers = groupBArrestReports.stream()
@@ -176,22 +185,20 @@ public class RestService{
 			log.warn("Failed to persist incident " + identifiers);
 			log.error(e);
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
-			groupBArrestReports.clear();
 		}
 	}
 	
-	public void persistGroupAReport(List<GroupAIncidentReport> groupAIncidentReports, PersistReportTask persistReportTask) {
+	public void persistGroupAReport(List<GroupAIncidentReport> groupAIncidentReports, ReportProcessProgress persistReportTask) {
 		
 		try {
 			log.info("About to post for group A incident report " + groupAIncidentReports.size());
 			webClient.post().uri("/groupAIncidentReports")
-				.body(BodyInserters.fromObject(groupAIncidentReports))
+				.body(BodyInserters.fromValue(groupAIncidentReports))
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
 			persistReportTask.increaseProcessedCount(groupAIncidentReports.size());
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
-			groupAIncidentReports.clear();
 		}
 		catch(ResourceAccessException rae){
 			List<String> identifiers = groupAIncidentReports.stream()
@@ -214,7 +221,6 @@ public class RestService{
 			log.warn("Failed to persist incident " + identifiers);
 			log.error(e);
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
-			groupAIncidentReports.clear();
 		}
 	}
 	
@@ -226,7 +232,7 @@ public class RestService{
 		String response = ""; 
 		try { 
 			response = webClient.post().uri("/submissions/trigger")
-				.body(BodyInserters.fromObject(submissionTrigger))
+				.body(BodyInserters.fromValue(submissionTrigger))
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
@@ -247,13 +253,13 @@ public class RestService{
 		try { 
 			deleteGroupAIncidentsResponse = webClient.method(HttpMethod.DELETE)
 					.uri("/groupAIncidentReports")
-					.body(BodyInserters.fromObject(incidentDeleteRequest))
+					.body(BodyInserters.fromValue(incidentDeleteRequest))
 					.retrieve()
 					.bodyToMono(String.class)
 					.block();
 			deleteGroupBArrestsResponse = webClient.method(HttpMethod.DELETE)
 					.uri("/arrestReports")
-					.body(BodyInserters.fromObject(incidentDeleteRequest))
+					.body(BodyInserters.fromValue(incidentDeleteRequest))
 					.retrieve()
 					.bodyToMono(String.class)
 					.block();
@@ -269,46 +275,25 @@ public class RestService{
 	}
 	
 	@Async
-	public void persistValidReportsAsync(PersistReportTask persistReportTask, List<AbstractReport> validReports, AuthUser authUser) {
+	public void persistValidReportsAsync(ReportProcessProgress persistReportTask, ValidationResults validationResults, AuthUser authUser) {
 		log.info("Execute method asynchronously. "
 			      + Thread.currentThread().getName());
 		persistReportTask.setStarted(true);
-		int groupAReportCount = 0;
-		List<GroupAIncidentReport> groupAIncidentReports = new ArrayList<>();
-		int groupBReportCount = 0; 
-		List<GroupBArrestReport> groupBArrestReports = new ArrayList<>();
-		for(AbstractReport abstractReport: validReports){
+		for(List<GroupAIncidentReport> groupAIncidentReports: ListUtils.partition(validationResults.getGroupAIncidentReports(), 30)){
 			if (authUser != null) {
-				abstractReport.setOwnerId(authUser.getUserId());
+				groupAIncidentReports.forEach(report-> report.setOwnerId(authUser.getUserId()));
 			}
-			
-			if (abstractReport instanceof GroupAIncidentReport) {
-				groupAIncidentReports.add((GroupAIncidentReport) abstractReport);
-				groupAReportCount ++;
-			}
-			else if(abstractReport instanceof GroupBArrestReport) {
-				groupBArrestReports.add((GroupBArrestReport) abstractReport);
-				groupBReportCount ++;
-			}
-			
-			if (groupAReportCount == 30) {
-				groupAReportCount = 0;
-				this.persistGroupAReport(groupAIncidentReports, persistReportTask);
-			}
-			if (groupBReportCount == 30) {
-				groupBReportCount = 0;
-				this.persistGroupBReport(groupBArrestReports, persistReportTask);
-			}
-		}
-		
-		if (groupAReportCount > 0) {
-			groupAReportCount = 0;
 			this.persistGroupAReport(groupAIncidentReports, persistReportTask);
 		}
-		if (groupBReportCount > 0) {
-			groupBReportCount = 0;
+		
+		List<List<GroupBArrestReport>> groupBArrestReportsSublists = ListUtils.partition(validationResults.getGroupBArrestReports(), 30); 
+		for(List<GroupBArrestReport> groupBArrestReports: groupBArrestReportsSublists){
+			if (authUser != null) {
+				groupBArrestReports.forEach(report-> report.setOwnerId(authUser.getUserId()));
+			}
 			this.persistGroupBReport(groupBArrestReports, persistReportTask);
 		}
+		
 	}
 	
 	public String persistPreCertificationErrors(List<NIBRSError> nibrsErrors, AuthUser authUser) {
@@ -324,7 +309,7 @@ public class RestService{
 		}
 		
 		Integer savedCount = webClient.post().uri("/preCertificationErrors")
-			.body(BodyInserters.fromObject(preCertificationErrors))
+			.body(BodyInserters.fromValue(preCertificationErrors))
 			.retrieve()
 			.bodyToMono(Integer.class)
 			.block();
@@ -335,7 +320,7 @@ public class RestService{
 
 	public SearchResult<PreCertificationError> getPrecertErrors(PrecertErrorSearchRequest precertErrorSearchRequest) {
 		return this.webClient.post().uri("/preCertificationErrors/search")
-				.body(BodyInserters.fromObject(precertErrorSearchRequest))
+				.body(BodyInserters.fromValue(precertErrorSearchRequest))
 				.retrieve()
 				.bodyToMono(new ParameterizedTypeReference<SearchResult<PreCertificationError>>() {})
 				.block();
@@ -380,6 +365,122 @@ public class RestService{
 				.retrieve()
 				.bodyToMono( new ParameterizedTypeReference<List<Integer>>() {})
 				.block();
+	}
+
+	@Async
+	public void convertValidReportsAsync(ReportProcessProgress reportConversionProgress,
+			ValidationResults validationToConvertResults, AuthUser authUser) {
+		log.info("Execute conversion method asynchronously. "
+			      + Thread.currentThread().getName());
+		reportConversionProgress.setStarted(true);
+		
+		String outputFolder = getRootFolderPath(authUser);
+		reportConversionProgress.setOutputFolder(outputFolder);
+
+		for(List<GroupAIncidentReport> groupAIncidentReports: ListUtils.partition(validationToConvertResults.getGroupAIncidentReports(), 50)){
+			CustomPair<String, List<GroupAIncidentReport>> groupAIncidentsToConvert = 
+					new CustomPair<String, List<GroupAIncidentReport>>(outputFolder, groupAIncidentReports); 
+			this.convertGroupAReport(groupAIncidentsToConvert, reportConversionProgress);
+		}
+		
+		List<List<GroupBArrestReport>> groupBArrestReportsSublists = ListUtils.partition(validationToConvertResults.getGroupBArrestReports(), 50);
+		for(List<GroupBArrestReport> groupBArrestReports: groupBArrestReportsSublists){
+			CustomPair<String, List<GroupBArrestReport>> groupBArrestsToConvert = 
+					new CustomPair<String, List<GroupBArrestReport>>(outputFolder, groupBArrestReports); 
+			this.convertGroupBReport(groupBArrestsToConvert, reportConversionProgress);
+		}
+		
+		
+	}
+
+	private String getRootFolderPath(AuthUser authUser) {
+		StringBuilder sb = new StringBuilder(200);
+		sb.append(appProperties.getXmlDocumentDownloadRootFolder()); 
+		sb.append("/");
+		if (authUser != null) {
+			sb.append(authUser.getUsername()); 
+			sb.append("-");
+		}
+		sb.append(LocalDateTime.now().format(formatter));
+		
+		String outputFolder = sb.toString();
+		return outputFolder;
+	}
+
+	private void convertGroupBReport(CustomPair<String, List<GroupBArrestReport>> groupBArrestsToConvert,
+			ReportProcessProgress reportConversionProgress) {
+		
+		List<GroupBArrestReport> groupBArrestReports = groupBArrestsToConvert.getValue();
+		try{
+			webClient.post().uri("/arrestReportsToXml")
+			.body(BodyInserters.fromValue(groupBArrestsToConvert))
+			.retrieve()
+			.bodyToMono(String.class)
+			.block();
+			
+			reportConversionProgress.increaseProcessedCount(groupBArrestReports.size());
+			log.info("Progress: " + reportConversionProgress.getProcessedCount() + "/" + reportConversionProgress.getTotalCount());
+		}
+		catch(ResourceAccessException rae){
+			List<String> identifiers = groupBArrestReports.stream()
+					.map(GroupBArrestReport::getIdentifier)
+					.collect(Collectors.toList());
+			log.error("Failed to connect to the rest service to process the Group B Arrest Reports " + 
+					" with Identifiers " + identifiers);
+			reportConversionProgress.setAborted(true);
+			throw rae;
+		}
+		catch(Exception e){
+			reportConversionProgress.increaseProcessedCount(groupBArrestReports.size());
+			groupBArrestReports.stream()
+				.map(GroupBArrestReport::getUniqueReportDescription)
+				.forEach(item->reportConversionProgress.addFailedToProcess(item));
+			List<String> identifiers = groupBArrestReports.stream()
+					.map(GroupBArrestReport::getIdentifier)
+					.collect(Collectors.toList());
+			log.warn("Failed to persist incident " + identifiers);
+			log.error(e);
+			log.info("Progress: " + reportConversionProgress.getProcessedCount() + "/" + reportConversionProgress.getTotalCount());
+		}
+		
+	}
+
+	private void convertGroupAReport(CustomPair<String, List<GroupAIncidentReport>> groupAToConvertPair,
+			ReportProcessProgress reportConversionProgress) {
+		List<GroupAIncidentReport> groupAIncidentReports = groupAToConvertPair.getValue(); 
+		try {
+			log.info("About to post for group A incident report " + groupAIncidentReports.size());
+			webClient.post().uri("/groupAIncidentReportsToXml")
+				.body(BodyInserters.fromValue(groupAToConvertPair))
+				.retrieve()
+				.bodyToMono(String.class)
+				.block();
+			reportConversionProgress.increaseProcessedCount(groupAIncidentReports.size());
+			log.info("Progress: " + reportConversionProgress.getProcessedCount() + "/" + reportConversionProgress.getTotalCount());
+		}
+		catch(ResourceAccessException rae){
+			List<String> identifiers = groupAIncidentReports.stream()
+					.map(GroupAIncidentReport::getIncidentNumber)
+					.collect(Collectors.toList());
+			log.error("Failed to connect to the rest service to process the group A reports " + 
+					"  Identifiers " + identifiers);
+			reportConversionProgress.setAborted(true);
+			throw rae;
+		}
+		catch(Exception e){
+			reportConversionProgress.increaseProcessedCount(groupAIncidentReports.size());
+			
+			groupAIncidentReports.stream()
+				.map(GroupAIncidentReport::getUniqueReportDescription)
+				.forEach(item->reportConversionProgress.addFailedToProcess(item));
+			List<String> identifiers = groupAIncidentReports.stream()
+					.map(GroupAIncidentReport::getIncidentNumber)
+					.collect(Collectors.toList());
+			log.warn("Failed to persist incident " + identifiers);
+			log.error(e);
+			log.info("Progress: " + reportConversionProgress.getProcessedCount() + "/" + reportConversionProgress.getTotalCount());
+		}
+		
 	}
 	
 }

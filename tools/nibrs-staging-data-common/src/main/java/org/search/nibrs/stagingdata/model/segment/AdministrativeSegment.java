@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -84,19 +85,19 @@ public class AdministrativeSegment implements Comparable<AdministrativeSegment>,
 	private String ori;
 	
     @OneToMany(mappedBy = "administrativeSegment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private Set<OffenseSegment> offenseSegments;
+    private Set<OffenseSegment> offenseSegments = new HashSet<OffenseSegment>();
 	
     @OneToMany(mappedBy = "administrativeSegment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private Set<PropertySegment> propertySegments;
+    private Set<PropertySegment> propertySegments = new HashSet<PropertySegment>();
     
     @OneToMany(mappedBy = "administrativeSegment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private Set<ArresteeSegment> arresteeSegments;
+    private Set<ArresteeSegment> arresteeSegments = new HashSet<ArresteeSegment>();
     
     @OneToMany(mappedBy = "administrativeSegment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private Set<OffenderSegment> offenderSegments;
+    private Set<OffenderSegment> offenderSegments = new HashSet<OffenderSegment>();
     
     @OneToMany(mappedBy = "administrativeSegment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private Set<VictimSegment> victimSegments;
+    private Set<VictimSegment> victimSegments = new HashSet<VictimSegment>();
     
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="agencyId")
@@ -302,7 +303,7 @@ public class AdministrativeSegment implements Comparable<AdministrativeSegment>,
 
 	@Override
 	public String toString() {
-		return "AdministrativeSegment [administrativeSegmentId=" + administrativeSegmentId + ", segmentActionType="
+		return "AdministrativeSegment [administrativeSegmentId=" + administrativeSegmentId==null?"null":administrativeSegmentId + ", segmentActionType="
 				+ segmentActionType + ", stateCode =" + stateCode + ", monthOfTape=" + monthOfTape + ", "
 				+ "yearOfTape=" + yearOfTape + ", cityIndicator="
 				+ cityIndicator + ", ori=" + ori + ", offenseSegments=" + offenseSegments + ", propertySegments="

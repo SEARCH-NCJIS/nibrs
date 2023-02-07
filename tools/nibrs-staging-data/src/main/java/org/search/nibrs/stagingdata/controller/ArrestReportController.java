@@ -22,6 +22,7 @@ import org.search.nibrs.stagingdata.model.search.IncidentDeleteRequest;
 import org.search.nibrs.stagingdata.model.segment.ArrestReportSegment;
 import org.search.nibrs.stagingdata.service.ArrestReportService;
 import org.search.nibrs.stagingdata.util.BaselineIncidentFactory;
+import org.search.nibrs.util.CustomPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,11 @@ public class ArrestReportController {
 	@RequestMapping(value="/arrestReports", method=RequestMethod.POST)
 	public void saveArrestReports(@RequestBody List<GroupBArrestReport> groupBArrestReports){
 		arrestReportService.saveGroupBArrestReports(groupBArrestReports);
+	}
+	
+	@RequestMapping(value="/arrestReportsToXml", method=RequestMethod.POST)
+	public void convertArrestReports(@RequestBody CustomPair<String, List<GroupBArrestReport>> groupBArrestReportsPair){
+		arrestReportService.convertAndWriteGroupBArrestReports(groupBArrestReportsPair);
 	}
 	
 	@RequestMapping(value="/arrestReports/{identifier}", method=RequestMethod.DELETE)

@@ -163,6 +163,24 @@ public class IncidentController {
 		}
 	}
 
+	@GetMapping("/styled/{reportType}/{id}")
+	public String getReportStyledDetail(HttpServletRequest request, @PathVariable String id, 
+			@PathVariable String reportType, Map<String, Object> model) throws Throwable {
+		
+		if ("GroupA".equals(reportType)) { 
+			AdministrativeSegment administrativeSegment = restService.getAdministrativeSegment(id);
+			model.put("administrativeSegment", administrativeSegment);
+			log.debug("administrativeSegment: " + administrativeSegment);
+			return "incident/groupAIncidentDetail";
+		}
+		else {
+			ArrestReportSegment arrestReportSegment = restService.getArrestReportSegment(id);
+			model.put("arrestReportSegment", arrestReportSegment);
+			log.debug("ArrestReportSegment: " + arrestReportSegment);
+			return "incident/groupBArrestDetail";
+		}
+	}
+	
 	@GetMapping("/incidentDeleteForm")
 	public String getIncidentDeleteForm(Map<String, Object> model) throws IOException {
 		AuthUser authUser =(AuthUser) model.get("authUser");  

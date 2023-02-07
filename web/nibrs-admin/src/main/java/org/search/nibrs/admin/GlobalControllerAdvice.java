@@ -15,13 +15,10 @@
  */
 package org.search.nibrs.admin;
 
-import java.util.HashMap;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.search.nibrs.admin.security.AuthUser;
-import org.search.nibrs.admin.services.rest.RestService;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,9 +32,6 @@ public class GlobalControllerAdvice {
 	@Resource
     AppProperties appProperties;
     
-	@Resource
-	RestService restService;
-	
     @ModelAttribute
     public void setupModelAttributes(HttpServletRequest request, Model model, Authentication authentication) {
         model.addAttribute("inactivityTimeout", appProperties.getInactivityTimeout());
@@ -49,6 +43,8 @@ public class GlobalControllerAdvice {
         model.addAttribute("brandImagePath", appProperties.getBrandImagePath());
         model.addAttribute("externalLinksMapping", appProperties.getExternalLinksMapping());
         model.addAttribute("aboutLinksMapping", appProperties.getAboutLinksMapping());
+        model.addAttribute("flatFileToXmlFileConversion", appProperties.getFlatFileToXmlFileConversion());
+        model.addAttribute("flatFileToXmlFileConversionUpperLimit", appProperties.getFlatFileToXmlFileConversionUpperLimit());
         
         AuthUser authUser = null;
         if (authentication != null) {
@@ -57,16 +53,6 @@ public class GlobalControllerAdvice {
 	        model.addAttribute("ownerId", authUser.getUserId());
         }
         
-		if (appProperties.getPrivateSummaryReportSite()) {
-			model.addAttribute("agencyMapping", restService.getAgencies(null));
-		}
-		else if (authUser != null){
-			model.addAttribute("agencyMapping", restService.getAgencies(authUser.getUserId()));
-		}
-		else {
-			model.addAttribute("agencyMapping", new HashMap<Integer, String>());
-		}
-			
     }
     
 }

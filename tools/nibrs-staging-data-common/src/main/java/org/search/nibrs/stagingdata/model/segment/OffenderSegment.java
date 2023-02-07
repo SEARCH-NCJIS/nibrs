@@ -15,6 +15,7 @@
  */
 package org.search.nibrs.stagingdata.model.segment;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class OffenderSegment {
 	private EthnicityOfPersonType ethnicityOfPersonType;
 	
 	@OneToMany(mappedBy = "offenderSegment", fetch=FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true)
-	private Set<VictimOffenderAssociation> victimOffenderAssociations;
+	private Set<VictimOffenderAssociation> victimOffenderAssociations = new HashSet<VictimOffenderAssociation>();
 	
 	public String toString(){
 		ReflectionToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);

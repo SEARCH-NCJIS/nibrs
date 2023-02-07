@@ -16,11 +16,14 @@
 package org.search.nibrs.admin;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.search.nibrs.admin.security.AuthUser;
+import org.search.nibrs.admin.services.rest.RestService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -30,10 +33,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes({"showUserInfoDropdown"})
+@SessionAttributes({"showUserInfoDropdown", "agencyMapping"})
 public class PortalController {
 	@Resource
 	AppProperties appProperties;
+	
+	@Resource
+	RestService restService;
 
 	@GetMapping("/")
 	public String getSplashPage(Model model) throws IOException {
@@ -44,6 +50,18 @@ public class PortalController {
 	@GetMapping("/home")
 	public String getHomePage(Model model) throws IOException {
 		
+		AuthUser authUser = (AuthUser) model.getAttribute("authUser");
+        if (!model.containsAttribute("agencyMapping")){
+			if (appProperties.getPrivateSummaryReportSite()) {
+				model.addAttribute("agencyMapping", restService.getAgencies(null));
+			}
+			else if (authUser != null){
+				model.addAttribute("agencyMapping", restService.getAgencies(authUser.getUserId()));
+			}
+			else {
+				model.addAttribute("agencyMapping", new HashMap<Integer, String>());
+			}
+        }
 		return "home";
 	}
 	

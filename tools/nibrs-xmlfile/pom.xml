@@ -20,26 +20,30 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>nibrs-xmlfile</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	
 	<parent>
 	  <groupId>org.search.nibrs</groupId>
 	  <artifactId>nibrs-tools-aggregate</artifactId>
 	  <version>1.0.0</version>
 	</parent>
-  	<dependencyManagement>
+  <properties>
+    <owner>SEARCH-The National Consortium for Justice Information and Statistics</owner>
+    <nibrs-common-version>[1.0.0,)</nibrs-common-version>
+  </properties>
+  <dependencyManagement>
 		<dependencies>
       <dependency>
           <groupId>org.apache.logging.log4j</groupId>
           <artifactId>log4j-bom</artifactId>
-          <version>2.17.1</version>
+          <version>2.17.2</version>
           <type>pom</type>
           <scope>import</scope>
       </dependency>
  			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.0.5.RELEASE</version>
+				<version>2.6.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -59,7 +63,7 @@
 		<dependency>
 			<groupId>org.search.nibrs</groupId>
 			<artifactId>nibrs-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${nibrs-common-version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
@@ -95,7 +99,4 @@
 		</plugins>
 	</build>
 
-	<properties>
-		<owner>SEARCH-The National Consortium for Justice Information and Statistics</owner>
-	</properties>
 </project>

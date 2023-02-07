@@ -317,6 +317,7 @@ public class ReturnAFormService {
 						summaryReportRequest.getOwnerId(), new ArrayList(partIOffensesMap.keySet()));
 		int i; 
 		int batchSize = appProperties.getSummaryReportProcessingBatchSize();
+		log.info(administrativeSegmentIds.size() + " offense Clearances to process.");
 		for (i = 0; i+ batchSize < administrativeSegmentIds.size(); i+=batchSize ) {
 			log.info("processing offense Clearances " + i + " to " + String.valueOf(i+batchSize));
 			getRecordCardOffenseClearanceRows(returnARecordCardReport, administrativeSegmentIds.subList(i, i+batchSize));
@@ -424,6 +425,7 @@ public class ReturnAFormService {
 						summaryReportRequest.getOwnerId(), offenseCodes);
 		int i ; 
 		int batchSize = appProperties.getSummaryReportProcessingBatchSize();
+		log.info(administrativeSegmentIds.size() + " Reported offenses to process ");
 		for (i = 0; i+batchSize < administrativeSegmentIds.size(); i+=batchSize ) {
 			log.info("processing Reported offenses " + i + " to " + String.valueOf(i+batchSize));
 			getRecordCardReportedOffenseRows(returnARecordCardReport, administrativeSegmentIds.subList(i, i+batchSize));
@@ -653,6 +655,7 @@ public class ReturnAFormService {
 						summaryReportRequest.getOwnerId(), new ArrayList(partIOffensesMap.keySet()));
 		int i; 
 		int batchSize = appProperties.getSummaryReportProcessingBatchSize();
+		log.info(administrativeSegmentIds.size() + " offense Clearances to process.");
 		for (i = 0; i+ batchSize < administrativeSegmentIds.size(); i+=batchSize ) {
 			log.info("processing offense Clearances " + i + " to " + String.valueOf(i+batchSize));
 			getOffenseClearanceRows(returnAForm.getRows(), administrativeSegmentIds.subList(i, i+batchSize), ReturnARowName.class);
@@ -672,6 +675,7 @@ public class ReturnAFormService {
 						summaryReportRequest.getOwnerId(), new ArrayList(partIOffensesMap.keySet()));
 		int i ; 
 		int batchSize = appProperties.getSummaryReportProcessingBatchSize();
+		log.info(administrativeSegmentIds.size() + " Reported offenses to process. ");
 		for (i = 0; i+batchSize < administrativeSegmentIds.size(); i+=batchSize ) {
 			log.info("processing Reported offenses " + i + " to " + String.valueOf(i+batchSize));
 			getReportedOffenseRows(returnAForm, administrativeSegmentIds.subList(i, i+batchSize), summaryReportRequest);
@@ -779,11 +783,12 @@ public class ReturnAFormService {
 					.map(propertyType -> propertyType.getPropertyDescriptionType().getNibrsCode())
 					.filter(code -> PropertyDescriptionCode.isMotorVehicleCode(code))
 					.collect(Collectors.toList()); 
+			
+			int numberOfStolenMotorVehicles = Optional.ofNullable(property.getNumberOfStolenMotorVehicles()).orElse(0);
 			if ("A".equals(offense.getOffenseAttemptedCompleted())){
 				rows[Enum.valueOf(enumType, "AUTOS_THEFT").ordinal()].increaseReportedOffenses(motorVehicleCodes.size());
 			}
-			else if (property.getNumberOfStolenMotorVehicles() > 0){
-				int numberOfStolenMotorVehicles = Optional.ofNullable(property.getNumberOfStolenMotorVehicles()).orElse(0);
+			else if (numberOfStolenMotorVehicles > 0){
 				
 				if (motorVehicleCodes.contains(PropertyDescriptionCode._03.code)){
 					for (String code: motorVehicleCodes){
@@ -1152,7 +1157,7 @@ public class ReturnAFormService {
 					.stream()
 					.filter(propertySegment -> propertySegment.getTypePropertyLossEtcType().getNibrsCode().equals("7"))
 					.flatMap(i->i.getPropertyTypes().stream())
-					.filter(i->i.getValueOfProperty() > 0)
+					.filter(i->i.getValueOfProperty() != null &&  i.getValueOfProperty() > 0)
 					.collect(Collectors.toList());
 			
 			if (stolenPropertyTypes.size() > 0){

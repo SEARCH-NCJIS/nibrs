@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.search.nibrs.stagingdata.repository;
+package org.search.nibrs.admin;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-@Transactional
-public interface AgencyRepositoryCustom{
-	Map<String, String> findAllStatesByOwnerId(Integer ownerId);
-	Map<String, Integer> findAllAgenciesByStateAndOwnerId(Integer ownerId, String stateCode);
+//@Service
+public class CustomLogoutHandler implements LogoutHandler {
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, 
+      Authentication authentication) {
+    	request.removeAttribute("samlAssertion");
+    }
 }

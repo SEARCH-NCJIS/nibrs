@@ -15,6 +15,7 @@
  */
 package org.search.nibrs.stagingdata.model.segment;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -58,10 +59,10 @@ public class PropertySegment {
 	private TypePropertyLossEtcType typePropertyLossEtcType;
 	
 	@OneToMany(mappedBy = "propertySegment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<SuspectedDrugType> suspectedDrugTypes;
+	private Set<SuspectedDrugType> suspectedDrugTypes = new HashSet<SuspectedDrugType>();
 
 	@OneToMany(mappedBy = "propertySegment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<PropertyType> propertyTypes;
+	private Set<PropertyType> propertyTypes = new HashSet<PropertyType>();
 	
 	private Integer numberOfStolenMotorVehicles;
 	private Integer numberOfRecoveredMotorVehicles;

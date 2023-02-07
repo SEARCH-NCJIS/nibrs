@@ -16,10 +16,17 @@
 package org.search.nibrs.model.codes;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Code enum for Arrestee Was Armed With (data element 46)
@@ -45,12 +52,23 @@ public enum ArresteeWasArmedWithCode {
 	
 	private static final List<ArresteeWasArmedWithCode> FIREARMS = Arrays.asList(new ArresteeWasArmedWithCode[] {_11, _12, _13, _14, _15});
 	
-	public static final Set<String> codeSet() {
-		Set<String> codeSet = new HashSet<>();
-		for (ArresteeWasArmedWithCode code : values()) {
-			codeSet.add(code.code);
+	private static final Map<String,ArresteeWasArmedWithCode> ENUM_MAP;
+	
+	private static final Set<String> CODE_SET;
+	
+	static {
+		Map<String,ArresteeWasArmedWithCode> map = new HashMap<String, ArresteeWasArmedWithCode>();
+		for (ArresteeWasArmedWithCode instance : ArresteeWasArmedWithCode.values()) {
+		    map.put(instance.code.toLowerCase(),instance);
 		}
-		return codeSet;
+		ENUM_MAP = Collections.unmodifiableMap(map);
+		
+		CODE_SET = Arrays.stream(values()).map(item->item.code)
+				.collect(Collectors.toSet()); 
+	}
+
+	public static final Set<String> codeSet() {
+		return CODE_SET;
 	}
 
 	public static final Set<ArresteeWasArmedWithCode> asSet() {
@@ -58,14 +76,7 @@ public enum ArresteeWasArmedWithCode {
 	}
 	
 	public static final ArresteeWasArmedWithCode forCode(String code) {
-		ArresteeWasArmedWithCode ret = null;
-		for(ArresteeWasArmedWithCode c : asSet()) {
-			if (c.code.equals(code)) {
-				ret = c;
-				break;
-			}
-		}
-		return ret;
+		return ENUM_MAP.get(StringUtils.lowerCase(code));
 	}
 
 	public boolean isFirearm() {

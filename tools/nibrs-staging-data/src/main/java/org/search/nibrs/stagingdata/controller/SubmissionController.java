@@ -17,7 +17,7 @@ package org.search.nibrs.stagingdata.controller;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -79,7 +79,7 @@ public class SubmissionController {
 	}
 	
 	@PostMapping("/submissions/trigger")
-	public @ResponseBody String generateSubmissionFiles(@RequestBody SubmissionTrigger submissionTrigger){
+	public @ResponseBody String generateSubmissionFiles(@RequestBody SubmissionTrigger submissionTrigger) throws Exception{
 
 		xmlReportGenerator.processSubmissionTrigger(submissionTrigger);
 		long countOfReportsToGenerate = xmlReportGenerator.countTheIncidents(submissionTrigger);
@@ -105,7 +105,7 @@ public class SubmissionController {
 	}
 	
 	@PostMapping("/submissions/trigger/groupa/{id}")
-	public @ResponseBody String generateSubmissionFile(@PathVariable("id") Integer administrativeSegmentId){
+	public @ResponseBody String generateSubmissionFile(@PathVariable("id") Integer administrativeSegmentId) throws Exception{
 		
 		xmlReportGenerator.processGroupASubmission(administrativeSegmentId);
 		

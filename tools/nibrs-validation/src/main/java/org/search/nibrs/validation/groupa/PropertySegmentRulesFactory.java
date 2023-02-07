@@ -662,6 +662,8 @@ public class PropertySegmentRulesFactory {
 							allNull(subject.getDateRecovered()) &&
 							(subject.getNumberOfRecoveredMotorVehicles().getValue() == null) &&
 							(subject.getNumberOfStolenMotorVehicles().getValue() == null) &&
+							allNull(subject.getEstimatedDrugQuantity()) &&
+							allNull(subject.getTypeDrugMeasurement()) &&
 							notAllNull(subject.getSuspectedDrugType())
 						)) {
 					value = loss;

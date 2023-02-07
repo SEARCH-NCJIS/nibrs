@@ -16,9 +16,9 @@
 package org.search.nibrs.admin;
 
 import org.apache.catalina.connector.Connector;
+import org.apache.coyote.ajp.AbstractAjpProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,7 +28,7 @@ public class ServerSetup {
     AppProperties appProperties; 
     
     @Bean
-    public ServletWebServerFactory servletContainer() {
+    public TomcatServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() ;
         
         if (appProperties.getAjpEnabled()) {
@@ -37,6 +37,9 @@ public class ServerSetup {
             ajpConnector.setSecure(false);
             ajpConnector.setScheme("http");
             ajpConnector.setAllowTrace(false);
+            final AbstractAjpProtocol<?> protocol = (AbstractAjpProtocol<?>) ajpConnector.getProtocolHandler();
+            ajpConnector.setSecure(false);
+            protocol.setSecretRequired(false);            
             tomcat.addAdditionalTomcatConnectors(ajpConnector);
         }
      

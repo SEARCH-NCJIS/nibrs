@@ -17,7 +17,7 @@ package org.search.nibrs.stagingdata.repository;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,7 +58,7 @@ public class PreCertificationErrroRepositoryTest {
 		nibrsError1.setYearOfTape("2016");
 		nibrsError1.setIncidentIdentifier("15019757");
 		nibrsError1.setSourceLocation("29");
-		nibrsError1.setAgency(agencyRepository.getOne(1));
+		nibrsError1.setAgency(agencyRepository.getById(1));
 		nibrsError1.setSegmentActionType(segmentActionTypeRepository.findFirstByStateCode("I"));
 		nibrsError1.setDataElement("34");		
 		nibrsError1.setNibrsErrorCodeType(nibrsErrorCodeTypeRepository.findFirstByCode("085"));	
@@ -80,7 +80,7 @@ public class PreCertificationErrroRepositoryTest {
 		nibrsError2.setYearOfTape("2016");
 		nibrsError2.setIncidentIdentifier("15037043");
 		nibrsError2.setSourceLocation("101");
-		nibrsError2.setAgency(agencyRepository.getOne(1));
+		nibrsError2.setAgency(agencyRepository.getById(1));
 		nibrsError2.setSegmentActionType(segmentActionTypeRepository.findFirstByStateCode("I"));
 		nibrsError2.setDataElement("24");		
 		nibrsError2.setNibrsErrorCodeType(nibrsErrorCodeTypeRepository.findFirstByCode("466"));	

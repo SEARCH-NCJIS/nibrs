@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -83,7 +83,9 @@ import org.search.nibrs.stagingdata.repository.UcrOffenseCodeTypeRepository;
 import org.search.nibrs.stagingdata.repository.VictimOffenderRelationshipTypeRepository;
 import org.search.nibrs.stagingdata.repository.segment.ArrestReportSegmentRepository;
 import org.search.nibrs.stagingdata.repository.segment.ArrestReportSegmentRepositoryCustom;
+import org.search.nibrs.stagingdata.service.xml.XmlReportGenerator;
 import org.search.nibrs.stagingdata.util.DateUtils;
+import org.search.nibrs.util.CustomPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,7 +97,7 @@ import org.springframework.stereotype.Service;
 public class ArrestReportService {
 	private static final String BAD_DELETE_REQUEST = "The report action type should be 'D' and the arrest transaction number is required ";
 
-	private static final String BAD_SAVE_REQUEST = "The Group B Report is not persisted because it misses the arrestee info. ";
+	private static final String BAD_SAVE_REQUEST = "The Group B Report is not persisted or converted because it misses the arrestee info. ";
 
 	private static final Log log = LogFactory.getLog(ArrestReportService.class);
 
@@ -163,6 +165,8 @@ public class ArrestReportService {
 	ArrestReportSegmentRepositoryCustom arrestReportSegmentRepositoryCustom;
 	@Autowired
 	public CodeTableService codeTableService; 
+	@Autowired
+	public XmlReportGenerator xmlReportGenerator; 
 	
 	@Transactional
 	public ArrestReportSegment saveArrestReportSegment(ArrestReportSegment arrestReportSegment){
@@ -235,6 +239,13 @@ public class ArrestReportService {
 	
 	public Iterable<ArrestReportSegment> saveGroupBArrestReports(List<GroupBArrestReport> groupBArrestReports){
 		
+		List<ArrestReportSegment> arrestReportSegments = getArrestReportSegments(true, groupBArrestReports);
+		log.info("Persisting " + arrestReportSegments.size() + " Group B Arrest Reports." ); 
+		
+		return arrestReportSegmentRepository.saveAll(arrestReportSegments);
+	}
+
+	private List<ArrestReportSegment> getArrestReportSegments(Boolean isToPersist, List<GroupBArrestReport> groupBArrestReports) {
 		List<ArrestReportSegment> arrestReportSegments = new ArrayList<>(); 
 		
 		for(GroupBArrestReport groupBArrestReport : groupBArrestReports){
@@ -256,7 +267,7 @@ public class ArrestReportService {
 			arrestReportSegment.setAgency(agencyRepository.findFirstByAgencyOri(groupBArrestReport.getOri()));
 			arrestReportSegment.setOri(groupBArrestReport.getOri());
 			
-			if (groupBArrestReport.getYearOfTape() != null && groupBArrestReport.getMonthOfTape() != null) {
+			if (groupBArrestReport.getYearOfTape() != null && groupBArrestReport.getMonthOfTape() != null && isToPersist) {
 				boolean havingNewerSubmission = arrestReportSegmentRepository.existsByArrestTransactionNumberAndOriAndSubmissionDateAndOwnerId
 						(arrestReportSegment.getArrestTransactionNumber(), arrestReportSegment.getOri(), 
 								DateUtils.getStartDate(groupBArrestReport.getYearOfTape(), 
@@ -358,8 +369,7 @@ public class ArrestReportService {
 			
 			arrestReportSegments.add(arrestReportSegment);
 		}
-		
-		return arrestReportSegmentRepository.saveAll(arrestReportSegments);
+		return arrestReportSegments;
 	}
 
 	private void processArrestReportSegmentArmedWiths(ArrestReportSegment arrestReportSegment, ArresteeSegment arrestee) {
@@ -400,5 +410,15 @@ public class ArrestReportService {
 	@Transactional
 	public int deleteIncidentDeleteRequest(IncidentDeleteRequest incidentDeleteRequest) {
 		return arrestReportSegmentRepositoryCustom.deleteByIncidentDeleteRequest(incidentDeleteRequest);
+	}
+
+	public void convertAndWriteGroupBArrestReports(CustomPair<String, List<GroupBArrestReport>> groupBArrestReportsPair) {
+		List<ArrestReportSegment> arrestReportSegments = 
+				getArrestReportSegments(false, groupBArrestReportsPair.getValue());
+		for (ArrestReportSegment arrestReportSegment: arrestReportSegments) {
+			arrestReportSegment.setArrestReportSegmentId(222222); 
+			xmlReportGenerator.writeArrestReportSegmentToXml(arrestReportSegment, groupBArrestReportsPair.getKey());
+		}
+		
 	}
 }

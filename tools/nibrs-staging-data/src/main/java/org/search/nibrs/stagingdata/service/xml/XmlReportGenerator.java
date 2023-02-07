@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +111,7 @@ public class XmlReportGenerator {
 	public AgencyRepository agencyRepository; 
 	@Autowired
 	private AppProperties appProperties;
+	
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmssSSS");
 
 	public long countTheIncidents(SubmissionTrigger submissionTrigger) {
@@ -129,7 +131,7 @@ public class XmlReportGenerator {
 	}
 
 	@Async
-	public void processSubmissionTrigger(SubmissionTrigger submissionTrigger){
+	public void processSubmissionTrigger(SubmissionTrigger submissionTrigger) throws Exception{
 		
 	    File directorty = new File(appProperties.getNibrsNiemDocumentFolder()); 
 	    if (!directorty.exists()){
@@ -141,7 +143,7 @@ public class XmlReportGenerator {
 	}
 	
 	@Async
-	public void processGroupASubmission(Integer administrativeSegmentId){
+	public void processGroupASubmission(Integer administrativeSegmentId) throws Exception{
 		
 		File directorty = new File(appProperties.getNibrsNiemDocumentFolder()); 
 		if (!directorty.exists()){
@@ -151,7 +153,7 @@ public class XmlReportGenerator {
 		writeGroupAIncidentReport(administrativeSegmentId);
 	}
 	
-	private void writeGroupAIncidentReports(SubmissionTrigger submissionTrigger) {
+	private void writeGroupAIncidentReports(SubmissionTrigger submissionTrigger) throws Exception {
 		
 		List<Integer> ids = administrativeSegmentRepository.findIdsByOriListAndSubmissionDateRange(
 				submissionTrigger.getOris(), submissionTrigger.getStartDate(), submissionTrigger.getEndDate(), submissionTrigger.getAgencyIds());
@@ -161,19 +163,25 @@ public class XmlReportGenerator {
 		}
 	}
 
-	private void writeGroupAIncidentReport(Integer administrativeSegmentId) {
+	private void writeGroupAIncidentReport(Integer administrativeSegmentId) throws Exception {
 		log.info("Generating group A report for pkId " + administrativeSegmentId);
 		AdministrativeSegment administrativeSegment = administrativeSegmentRepository.findByAdministrativeSegmentId(administrativeSegmentId);
 		
+		writeAdministrativeSegmentToXml(administrativeSegment, appProperties.getNibrsNiemDocumentFolder());
+	}
+
+	public void writeAdministrativeSegmentToXml(AdministrativeSegment administrativeSegment, String rootFolder) {
 		try {
 			Document document = this.createGroupAIncidentReport(administrativeSegment);
 			
-			String fileName = appProperties.getNibrsNiemDocumentFolder() + "/GroupAIncident" + administrativeSegment.getIncidentNumber() + "-" + LocalDateTime.now().format(formatter) + ".xml";
+			String fileName = rootFolder + "/GroupAIncident" + administrativeSegment.getIncidentNumber() + "-" + LocalDateTime.now().format(formatter) + ".xml";
+			log.info("Writing the XML report for GroupA Incident:\n " + administrativeSegment.getIncidentNumber() + " to " + fileName);
 			FileUtils.writeStringToFile(new File(fileName), XmlUtils.nodeToString(document), "UTF-8");
 		}
 		catch (Exception e) {
 			log.error("Failed to generate and write the report for GroupA Incident:\n " + administrativeSegment);
 			log.error(e.getMessage());
+			throw new RuntimeException(e); 
 		}
 	}
 	
@@ -187,17 +195,22 @@ public class XmlReportGenerator {
 			
 			ArrestReportSegment arrestReportSegment = arrestReportSegmentRepository.findByArrestReportSegmentId(arrestReportSegmentId);
 			
-			try {
-				Document document = createGroupBArrestReport(arrestReportSegment);
-				
-				String fileName = appProperties.getNibrsNiemDocumentFolder() + "/GroupBArrestReport" + arrestReportSegment.getArrestTransactionNumber() + "-" + LocalDateTime.now().format(formatter) + ".xml";
-				
-				FileUtils.writeStringToFile(new File(fileName), XmlUtils.nodeToString(document), "UTF-8");			
-			}
-			catch (Exception e) {
-				log.error("Failed to generate and write the report for Group B Arrest Report:\n " + arrestReportSegment);
-				log.error(e.getMessage());
-			}
+			writeArrestReportSegmentToXml(arrestReportSegment, appProperties.getNibrsNiemDocumentFolder());
+		}
+	}
+
+	public void writeArrestReportSegmentToXml(ArrestReportSegment arrestReportSegment, String rootFolder) {
+		try {
+			Document document = createGroupBArrestReport(arrestReportSegment);
+			
+			String fileName = rootFolder + "/GroupBArrestReport" + arrestReportSegment.getArrestTransactionNumber() + "-" + LocalDateTime.now().format(formatter) + ".xml";
+			
+			FileUtils.writeStringToFile(new File(fileName), XmlUtils.nodeToString(document), "UTF-8");			
+		}
+		catch (Exception e) {
+			log.error("Failed to generate and write the report for Group B Arrest Report:\n " + arrestReportSegment);
+			log.error(e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -454,13 +467,13 @@ public class XmlReportGenerator {
 		
 		List<PropertySegment> properties = administrativeSegment.getPropertySegments()
 				.stream()
-				.sorted((h1, h2) -> h1.getPropertySegmentId().compareTo(h2.getPropertySegmentId()))
+				.sorted(Comparator.comparing(PropertySegment::getPropertySegmentId, Comparator.nullsFirst(Comparator.naturalOrder())))
 				.collect(Collectors.toList()); 
 		for (PropertySegment property : properties) {
 			if (("NONE".equalsIgnoreCase(property.getTypePropertyLossEtcType().getNibrsDescription()) 
 					&& (property.getSuspectedDrugTypes() == null || property.getSuspectedDrugTypes().size() == 0))|| 
 					"UNKNOWN".equalsIgnoreCase(property.getTypePropertyLossEtcType().getNibrsDescription())){
-			
+				
 				Element itemElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Item");
 				Element itemStatus = XmlUtils.appendChildElement(itemElement, Namespace.NC, "ItemStatus");
 				XmlUtils.appendElementAndValue(itemStatus, Namespace.CJIS, "ItemStatusCode", 
@@ -470,7 +483,7 @@ public class XmlReportGenerator {
 			
 			List<PropertyType> sortedPropertyTypes = property.getPropertyTypes()
 					.stream()
-					.sorted((h1, h2) -> h1.getPropertyTypeId().compareTo(h2.getPropertyTypeId()))
+					.sorted(Comparator.comparing(PropertyType::getPropertyTypeId, Comparator.nullsFirst(Comparator.naturalOrder())))
 					.collect(Collectors.toList()); 
 			
 			for (PropertyType propertyType : sortedPropertyTypes) {
@@ -479,7 +492,7 @@ public class XmlReportGenerator {
 					Element itemElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Item");
 					
 					addItemStatus(property, itemElement);
-						
+					
 					addItemValueAndAmount(propertyType, itemElement);
 					
 					XmlUtils.appendElementAndValue(itemElement, Namespace.J, "ItemCategoryNIBRSPropertyCategoryCode", nibrsCode);
@@ -531,12 +544,12 @@ public class XmlReportGenerator {
 		}
 		List<PropertySegment> properties = administrativeSegment.getPropertySegments()
 				.stream()
-				.sorted((h1, h2) -> h1.getPropertySegmentId().compareTo(h2.getPropertySegmentId()))
+				.sorted(Comparator.comparing(PropertySegment::getPropertySegmentId, Comparator.nullsFirst(Comparator.naturalOrder())))
 				.collect(Collectors.toList()); 
 		for (PropertySegment property : properties) {
 			List<PropertyType> sortedPropertyTypes = property.getPropertyTypes()
 					.stream()
-					.sorted((h1, h2) -> h1.getPropertyTypeId().compareTo(h2.getPropertyTypeId()))
+					.sorted(Comparator.comparing(PropertyType::getPropertyTypeId, Comparator.nullsFirst(Comparator.naturalOrder())))
 					.collect(Collectors.toList()); 
 			if ("NONE".equalsIgnoreCase(property.getTypePropertyLossEtcType().getNibrsDescription()) 
 					&& property.getSuspectedDrugTypes() != null && property.getSuspectedDrugTypes().size()>0){
