@@ -461,6 +461,7 @@ public class AsrFormService {
 				asrRows[Enum.valueOf(asrRowEnum, "DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL").ordinal()].getEthnicityGroups()[ethnicity.ordinal()] ++;
 				break;
 			case "PROSTITUTION":
+			case "PURCHASING_PROSTITUTION":
 			case "ASSISTING_PROMOTING_PROSTITUTION": 
 				asrRows[Enum.valueOf(asrRowEnum, "PROSTITUTION_AND_COMMERCIALIZED_VICE").ordinal()].getEthnicityGroups()[ethnicity.ordinal()] ++;
 				break;
@@ -497,6 +498,7 @@ public class AsrFormService {
 				asrRows[Enum.valueOf(asrRowEnumClass, "DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL").ordinal()].getRaceGroups()[race.ordinal()]++;
 				break;
 			case "PROSTITUTION":
+			case "PURCHASING_PROSTITUTION":
 			case "ASSISTING_PROMOTING_PROSTITUTION": 
 				asrRows[Enum.valueOf(asrRowEnumClass, "PROSTITUTION_AND_COMMERCIALIZED_VICE").ordinal()].getRaceGroups()[race.ordinal()]++;
 				break;
@@ -538,6 +540,7 @@ public class AsrFormService {
 				asrRows[Enum.valueOf(asrRowEnumClass, "DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL").ordinal()].getStateRaceGroups()[stateRaceCodeIndex]++;
 				break;
 			case "PROSTITUTION":
+			case "PURCHASING_PROSTITUTION":
 			case "ASSISTING_PROMOTING_PROSTITUTION": 
 				asrRows[Enum.valueOf(asrRowEnumClass, "PROSTITUTION_AND_COMMERCIALIZED_VICE").ordinal()].getStateRaceGroups()[stateRaceCodeIndex]++;
 				break;
@@ -583,8 +586,10 @@ public class AsrFormService {
 					asrAdultRows[AsrAdultRowName.DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL.ordinal()].getMaleAgeGroups()[AdultAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case PROSTITUTION:
+				case PURCHASING_PROSTITUTION:
 				case ASSISTING_PROMOTING_PROSTITUTION: 
 					asrAdultRows[AsrAdultRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getMaleAgeGroups()[ageGroup.ordinal()] ++;
+					asrAdultRows[AsrAdultRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getMaleAgeGroups()[AdultAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case GAMBLING_TOTAL: 
 					asrAdultRows[AsrAdultRowName.GAMBLING_ALL_OTHER.ordinal()].getMaleAgeGroups()[ageGroup.ordinal()] ++;
@@ -622,8 +627,10 @@ public class AsrFormService {
 					asrAdultRows[AsrAdultRowName.DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL.ordinal()].getFemaleAgeGroups()[AdultAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case PROSTITUTION:
+				case PURCHASING_PROSTITUTION:
 				case ASSISTING_PROMOTING_PROSTITUTION: 
 					asrAdultRows[AsrAdultRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getFemaleAgeGroups()[ageGroup.ordinal()] ++;
+					asrAdultRows[AsrAdultRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getFemaleAgeGroups()[AdultAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case GAMBLING_TOTAL: 
 					asrAdultRows[AsrAdultRowName.GAMBLING_ALL_OTHER.ordinal()].getFemaleAgeGroups()[ageGroup.ordinal()] ++;
@@ -670,8 +677,10 @@ public class AsrFormService {
 					asrJuvenilRows[AsrJuvenileRowName.DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL.ordinal()].getMaleAgeGroups()[JuvenileAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case PROSTITUTION:
+				case PURCHASING_PROSTITUTION:
 				case ASSISTING_PROMOTING_PROSTITUTION: 
 					asrJuvenilRows[AsrJuvenileRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getMaleAgeGroups()[ageGroup.ordinal()] ++;
+					asrJuvenilRows[AsrJuvenileRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getMaleAgeGroups()[JuvenileAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case GAMBLING_TOTAL: 
 					asrJuvenilRows[AsrJuvenileRowName.GAMBLING_ALL_OTHER.ordinal()].getMaleAgeGroups()[ageGroup.ordinal()] ++;
@@ -709,8 +718,10 @@ public class AsrFormService {
 					asrJuvenilRows[AsrJuvenileRowName.DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL.ordinal()].getFemaleAgeGroups()[JuvenileAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case PROSTITUTION:
+				case PURCHASING_PROSTITUTION:
 				case ASSISTING_PROMOTING_PROSTITUTION: 
 					asrJuvenilRows[AsrJuvenileRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getFemaleAgeGroups()[ageGroup.ordinal()] ++;
+					asrJuvenilRows[AsrJuvenileRowName.PROSTITUTION_AND_COMMERCIALIZED_VICE.ordinal()].getFemaleAgeGroups()[JuvenileAgeGroup.TOTAL.ordinal()] ++;
 					break;
 				case GAMBLING_TOTAL: 
 					asrJuvenilRows[AsrJuvenileRowName.GAMBLING_ALL_OTHER.ordinal()].getFemaleAgeGroups()[ageGroup.ordinal()] ++;
