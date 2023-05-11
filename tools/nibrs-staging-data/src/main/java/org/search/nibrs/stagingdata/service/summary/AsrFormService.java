@@ -434,6 +434,9 @@ public class AsrFormService {
 		if (asrAdultRowName.equals(Optional.empty())) {
 			asrAdultRowName = Optional.of(AsrAdultRowName.DRUG_ABUSE_VIOLATIONS_GRAND_TOTAL.name());
 		}
+		
+		log.debug("ASR Adult Row Name : " + asrAdultRowName);
+		log.debug("incident number: " + arresteeSegment.getAdministrativeSegment().getIncidentNumber());
 		return asrAdultRowName;
 	}
 
@@ -556,7 +559,11 @@ public class AsrFormService {
 	
 	private void countToAdultAgeGroups(AsrAdultRow[] asrAdultRows, Integer averageAge, String sexCode,
 			AsrAdultRowName asrAdultRowName) {
-		AdultAgeGroup ageGroup = getAdultAgeGroup(averageAge);
+		AdultAgeGroup ageGroup  = getAdultAgeGroup(averageAge);
+		if (ageGroup==AdultAgeGroup._18 && asrAdultRowName.name().startsWith("DRUG")) {
+			log.info("Age group:" + ageGroup.name());
+			log.info("ASR adult row name:" + asrAdultRowName.name());
+		}
 		if (ageGroup != null){
 			switch( sexCode ){
 			case "M":
