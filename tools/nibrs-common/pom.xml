@@ -31,7 +31,7 @@
 
 	<properties>
 		<saxon-version>8.7</saxon-version>
-		<apache-tika-version>1.18</apache-tika-version>
+		<apache-tika-version>1.28.3</apache-tika-version>
 		<spring-boot-version>2.6.14</spring-boot-version>
 		<xmlunit-version>2.2.1</xmlunit-version>
 		<owner>SEARCH-The National Consortium for Justice Information and Statistics</owner>
