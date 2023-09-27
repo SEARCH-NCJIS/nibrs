@@ -30,7 +30,7 @@
 	</parent>
 
 	<properties>
-		<apache-tika-version>1.18</apache-tika-version>
+		<apache-tika-version>1.22</apache-tika-version>
 		<nibrs-validation-version>[1.0.1,)</nibrs-validation-version>
     <nibrs-common-version>[1.0.0,)</nibrs-common-version>
     <nibrs-flatfile-version>[1.0.0,)</nibrs-flatfile-version>
