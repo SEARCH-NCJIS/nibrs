@@ -506,7 +506,9 @@ public class XmlReportGenerator {
 			
 			for (PropertyType propertyType : sortedPropertyTypes) {
 				String nibrsCode = propertyType.getPropertyDescriptionType().getNibrsCode();
-				if (nibrsCode != null && !("10".equals(nibrsCode) && contains35A) ) {
+				if (nibrsCode != null && 
+						!("10".equals(nibrsCode) && contains35A 
+								&& property.getTypePropertyLossEtcType().getTypePropertyLossEtcTypeId() !=7 ) ) {
 					Element itemElement = XmlUtils.appendChildElement(reportElement, Namespace.NC, "Item");
 					
 					addItemStatus(property, itemElement);
@@ -582,7 +584,8 @@ public class XmlReportGenerator {
 			
 			for (PropertyType propertyType : sortedPropertyTypes) {
 				String description = propertyType.getPropertyDescriptionType().getNibrsCode();
-				if ("10".equals(description)) {
+				//Per FBI exception,  use nc:item only for stolen drugs. 
+				if ("10".equals(description) && property.getTypePropertyLossEtcType().getTypePropertyLossEtcTypeId() != 7) {
 					
 					if (property.getSuspectedDrugTypes().size() > 0){
 						for (SuspectedDrugType suspectedDrugType : property.getSuspectedDrugTypes()){
