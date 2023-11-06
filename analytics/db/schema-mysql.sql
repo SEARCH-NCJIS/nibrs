@@ -33,6 +33,18 @@ CREATE TABLE Owner (
 create unique index owner_federationId_idx on Owner(FederationId); 
 
 
+CREATE TABLE FileUploadLogs (
+                FileUploadLogsId INT AUTO_INCREMENT NOT NULL,
+                OwnerId INT NOT NULL,
+                UploadFileNames VARCHAR(2000) NOT NULL,
+                PersistedCount INT DEFAULT 0 NOT NULL,
+                FailedToPersistCount INT DEFAULT 0 NOT NULL,
+                ValidationErrorsCount INT DEFAULT 0 NOT NULL,
+                FileUploadCompleteTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                PRIMARY KEY (FileUploadLogsId)
+);
+
+
 CREATE TABLE NibrsErrorCodeType (
                 NibrsErrorCodeTypeId INT AUTO_INCREMENT NOT NULL,
                 Code VARCHAR(3) NOT NULL,
@@ -146,9 +158,9 @@ CREATE TABLE TypeOfWeaponForceInvolvedType (
                 TypeOfWeaponForceInvolvedTypeID INT AUTO_INCREMENT NOT NULL,
                 StateCode VARCHAR(2) NOT NULL,
                 StateDescription VARCHAR(30) NOT NULL,
+                TypeOfWeaponForceInvolvedCategory VARCHAR(40) NOT NULL,
                 NIBRSCode VARCHAR(2) NOT NULL,
                 NIBRSDescription VARCHAR(30) NOT NULL,
-                TypeOfWeaponForceInvolvedCategory VARCHAR(40) NOT NULL,
                 PRIMARY KEY (TypeOfWeaponForceInvolvedTypeID)
 );
 
@@ -746,6 +758,12 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
 ALTER TABLE LEOKASegment ADD CONSTRAINT ownerid_leokasegment_fk
+FOREIGN KEY (OwnerInd)
+REFERENCES Owner (OwnerId)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE FileUploadLogs ADD CONSTRAINT owner_fileuploadlogs_fk
 FOREIGN KEY (OwnerId)
 REFERENCES Owner (OwnerId)
 ON DELETE NO ACTION

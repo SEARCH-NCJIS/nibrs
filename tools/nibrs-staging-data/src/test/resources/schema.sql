@@ -24,6 +24,7 @@ CREATE schema search_nibrs_staging;
 Use search_nibrs_staging; 
 
 
+
 CREATE TABLE Owner (
                 OwnerId IDENTITY NOT NULL,
                 FederationId VARCHAR(100) NOT NULL,
@@ -33,6 +34,18 @@ CREATE TABLE Owner (
                 CONSTRAINT OwnerId PRIMARY KEY (OwnerId)
 );
 create unique index owner_federationId_idx on Owner(FederationId); 
+
+
+CREATE TABLE FileUploadLogs (
+                FileUploadLogsId IDENTITY NOT NULL,
+                OwnerId INTEGER NOT NULL,
+                UploadFileNames VARCHAR(2000) NOT NULL,
+                PersistedCount INTEGER DEFAULT 0 NOT NULL,
+                FailedToPersistCount INTEGER DEFAULT 0 NOT NULL,
+                ValidationErrorsCount INTEGER DEFAULT 0 NOT NULL,
+                FileUploadCompleteTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                CONSTRAINT FileUploadLogsId PRIMARY KEY (FileUploadLogsId)
+);
 
 
 CREATE TABLE NibrsErrorCodeType (
@@ -741,6 +754,12 @@ ON UPDATE NO ACTION;
 
 ALTER TABLE LEOKASegment ADD CONSTRAINT OwnerId_LEOKASegment_fk
 FOREIGN KEY (OwnerInd)
+REFERENCES Owner (OwnerId)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE FileUploadLogs ADD CONSTRAINT Owner_FileUploadLogs_fk
+FOREIGN KEY (OwnerId)
 REFERENCES Owner (OwnerId)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
