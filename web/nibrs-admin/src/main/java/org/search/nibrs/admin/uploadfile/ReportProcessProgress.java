@@ -26,6 +26,7 @@ public class ReportProcessProgress{
 
 	private Integer totalCount;
 	private Integer processedCount = 0;
+	private Integer persistedCount = 0;
 	private List<String> failedToProcess = new ArrayList<>(); 
 	private boolean aborted = false;
 	private boolean started = false; 
@@ -109,4 +110,17 @@ public class ReportProcessProgress{
 	public void setOutputFolder(String outputFolder) {
 		this.outputFolder = outputFolder;
 	}
+
+	public Integer getPersistedCount() {
+		return persistedCount;
+	}
+
+	public void increasePersistedCount() {
+		this.persistedCount ++;
+	}
+
+	public void increasePersistedCount(int count) {
+		this.persistedCount += count ;
+	}
+	
 }

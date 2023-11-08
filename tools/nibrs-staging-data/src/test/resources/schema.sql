@@ -40,6 +40,8 @@ CREATE TABLE FileUploadLogs (
                 FileUploadLogsId IDENTITY NOT NULL,
                 OwnerId INTEGER NOT NULL,
                 UploadFileNames VARCHAR(2000) NOT NULL,
+                TotalReportsCount INTEGER DEFAULT 0 NOT NULL,
+                ValidReportsCount INTEGER DEFAULT 0 NOT NULL,
                 PersistedCount INTEGER DEFAULT 0 NOT NULL,
                 FailedToPersistCount INTEGER DEFAULT 0 NOT NULL,
                 ValidationErrorsCount INTEGER DEFAULT 0 NOT NULL,

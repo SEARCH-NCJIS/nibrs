@@ -49,6 +49,8 @@ public class FileUploadLogs implements Serializable{
 	private Owner owner; 
 
 	private String uploadFileNames; 
+	private Integer totalReportsCount; 
+	private Integer validReportsCount; 
 	private Integer persistedCount; 
 	private Integer failedToPersistCount; 
 	private Integer validationErrorsCount; 
@@ -141,6 +143,22 @@ public class FileUploadLogs implements Serializable{
 	@Override
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public Integer getTotalReportsCount() {
+		return totalReportsCount;
+	}
+
+	public void setTotalReportsCount(Integer totalReportsCount) {
+		this.totalReportsCount = totalReportsCount;
+	}
+
+	public Integer getValidReportsCount() {
+		return validReportsCount;
+	}
+
+	public void setValidReportsCount(Integer validReportsCount) {
+		this.validReportsCount = validReportsCount;
 	}
 	
 }
