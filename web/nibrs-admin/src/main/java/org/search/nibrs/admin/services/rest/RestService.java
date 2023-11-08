@@ -34,6 +34,7 @@ import org.search.nibrs.admin.uploadfile.ReportProcessProgress;
 import org.search.nibrs.common.NIBRSError;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.GroupBArrestReport;
+import org.search.nibrs.stagingdata.model.FileUploadLogs;
 import org.search.nibrs.stagingdata.model.Owner;
 import org.search.nibrs.stagingdata.model.PreCertificationError;
 import org.search.nibrs.stagingdata.model.SubmissionTrigger;
@@ -55,6 +56,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 
 @Service
 @Profile({"incident-search"})
@@ -163,7 +165,17 @@ public class RestService{
 			.block();
 			
 			persistReportTask.increaseProcessedCount(groupBArrestReports.size());
+			persistReportTask.increasePersistedCount(groupBArrestReports.size());
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
+		}
+		catch(WebClientRequestException wre){
+			List<String> identifiers = groupBArrestReports.stream()
+					.map(GroupBArrestReport::getIdentifier)
+					.collect(Collectors.toList());
+			log.error("Failed to connect to the rest service to process the Group B Arrest Reports " + 
+					" with Identifiers " + identifiers);
+			persistReportTask.setAborted(true);
+			throw wre;
 		}
 		catch(ResourceAccessException rae){
 			List<String> identifiers = groupBArrestReports.stream()
@@ -198,7 +210,17 @@ public class RestService{
 				.bodyToMono(String.class)
 				.block();
 			persistReportTask.increaseProcessedCount(groupAIncidentReports.size());
+			persistReportTask.increasePersistedCount(groupAIncidentReports.size());
 			log.info("Progress: " + persistReportTask.getProcessedCount() + "/" + persistReportTask.getTotalCount());
+		}
+		catch(WebClientRequestException wre){
+			List<String> identifiers = groupAIncidentReports.stream()
+					.map(GroupAIncidentReport::getIncidentNumber)
+					.collect(Collectors.toList());
+			log.error("Failed to connect to the rest service to process the group A reports " + 
+					"  Identifiers " + identifiers);
+			persistReportTask.setAborted(true);
+			throw wre;
 		}
 		catch(ResourceAccessException rae){
 			List<String> identifiers = groupAIncidentReports.stream()
@@ -310,28 +332,25 @@ public class RestService{
 	}
 	
 	@Async
-	public void persistValidReportsAsync(ReportProcessProgress persistReportTask, ValidationResults validationResults, AuthUser authUser) {
+	public void persistValidReportsAsync(ReportProcessProgress persistReportTask, ValidationResults validationResults) {
 		log.info("Execute method asynchronously. "
 			      + Thread.currentThread().getName());
 		persistReportTask.setStarted(true);
 		for(List<GroupAIncidentReport> groupAIncidentReports: ListUtils.partition(validationResults.getGroupAIncidentReports(), 30)){
-			if (authUser != null) {
-				groupAIncidentReports.forEach(report-> report.setOwnerId(authUser.getUserId()));
-			}
+			groupAIncidentReports.forEach(report-> report.setOwnerId(validationResults.getOwnerId()));
 			this.persistGroupAReport(groupAIncidentReports, persistReportTask);
 		}
 		
-		List<List<GroupBArrestReport>> groupBArrestReportsSublists = ListUtils.partition(validationResults.getGroupBArrestReports(), 30); 
+		List<List<GroupBArrestReport>> groupBArrestReportsSublists = 
+				ListUtils.partition(validationResults.getGroupBArrestReports(), 30); 
 		for(List<GroupBArrestReport> groupBArrestReports: groupBArrestReportsSublists){
-			if (authUser != null) {
-				groupBArrestReports.forEach(report-> report.setOwnerId(authUser.getUserId()));
-			}
+			groupBArrestReports.forEach(report-> report.setOwnerId(validationResults.getOwnerId()));
 			this.persistGroupBReport(groupBArrestReports, persistReportTask);
 		}
 		
 	}
 	
-	public String persistPreCertificationErrors(List<NIBRSError> nibrsErrors, AuthUser authUser) {
+	public String persistPreCertificationErrors(List<NIBRSError> nibrsErrors, Integer ownerId) {
 		log.info("Execute method asynchronously. "
 				+ Thread.currentThread().getName());
 		
@@ -339,9 +358,7 @@ public class RestService{
 				.map(nibrsError -> new PreCertificationError(nibrsError))
 				.collect(Collectors.toList());
 		
-		if (authUser != null) {
-			preCertificationErrors.forEach(error -> error.setOwnerId(authUser.getUserId()));
-		}
+		preCertificationErrors.forEach(error -> error.setOwnerId(ownerId));
 		
 		Integer savedCount = webClient.post().uri("/preCertificationErrors")
 			.body(BodyInserters.fromValue(preCertificationErrors))
@@ -424,8 +441,6 @@ public class RestService{
 					new CustomPair<String, List<GroupBArrestReport>>(outputFolder, groupBArrestReports); 
 			this.convertGroupBReport(groupBArrestsToConvert, reportConversionProgress);
 		}
-		
-		
 	}
 
 	private String getRootFolderPath(AuthUser authUser) {
@@ -516,6 +531,16 @@ public class RestService{
 			log.info("Progress: " + reportConversionProgress.getProcessedCount() + "/" + reportConversionProgress.getTotalCount());
 		}
 		
+	}
+
+	public void saveFileUploadLogs(FileUploadLogs fileUploadLogs) {
+		log.info("Saving FileUploadLogs " + fileUploadLogs);
+		webClient.post().uri("/fileUploadLogs")
+			.body(BodyInserters.fromValue(fileUploadLogs))
+			.retrieve()
+			.bodyToMono(FileUploadLogs.class)
+			.block();
+
 	}
 	
 }

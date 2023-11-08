@@ -39,7 +39,8 @@ public class ValidationResults{
 	private Integer persistedCount = 0; 
 	private List<AbstractReport> failedToPersist = new ArrayList<>();
 	private LocalTime validateTimestamp;
-	private String owner; 
+	private Integer ownerId; 
+	private String filenames; 
 	
 	public ValidationResults() {
 		super();
@@ -122,20 +123,28 @@ public class ValidationResults{
 		this.groupBArrestReports = groupBArrestReports;
 	}
 
-	public String getOwner() {
-		return owner;
-	}
-
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
-
 	public LocalTime getValidateTimestamp() {
 		return validateTimestamp;
 	}
 
 	public void setValidateTimestamp(LocalTime validateTimestamp) {
 		this.validateTimestamp = validateTimestamp;
+	}
+
+	public String getFilenames() {
+		return filenames;
+	}
+
+	public void setFilenames(String filenames) {
+		this.filenames = filenames;
+	}
+
+	public Integer getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Integer ownerId) {
+		this.ownerId = ownerId;
 	}
 
 }

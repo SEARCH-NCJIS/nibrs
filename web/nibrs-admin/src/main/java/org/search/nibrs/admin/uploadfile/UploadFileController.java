@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,6 +46,8 @@ import org.search.nibrs.importer.ReportListener;
 import org.search.nibrs.model.AbstractReport;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.GroupBArrestReport;
+import org.search.nibrs.stagingdata.model.FileUploadLogs;
+import org.search.nibrs.stagingdata.model.Owner;
 import org.search.nibrs.util.NibrsFileUtils;
 import org.search.nibrs.validate.common.SubmissionFileValidator;
 import org.search.nibrs.validate.common.ValidationResults;
@@ -116,6 +119,8 @@ public class UploadFileController {
 		log.info("processing file: " + multipartFiles.length);
 		
 		ValidationResults validationResults = getNibrsErrors(multipartFiles); 
+		Integer ownerId = (Integer) model.getAttribute("ownerId");
+		validationResults.setOwnerId(ownerId);
 		model.addAttribute("validationResults", validationResults);
 		
 		List<AbstractReport> validReports = validationResults.getReportsWithoutErrors(); 
@@ -221,11 +226,13 @@ public class UploadFileController {
 			}
 		};
 		
+		StringBuilder filenames = new StringBuilder(); 
 		for (MultipartFile multipartFile: multipartFiles){
+			
 			if (!acceptedFileTypes.contains(multipartFile.getContentType())){
 				throw new IllegalArgumentException("The file type is not supported"); 
 			}
-			
+			filenames.append(multipartFile.getOriginalFilename());
 			if (multipartFile.getContentType().equals("application/zip") || multipartFile.getContentType().equals("application/x-zip-compressed")){
 				validateZippedFile( validatorListener, multipartFile.getInputStream());
 			}
@@ -236,6 +243,7 @@ public class UploadFileController {
 			
 		}
 		
+		validationResults.setFilenames(filenames.toString()); 
 		return validationResults;
 	}
 
@@ -303,11 +311,7 @@ public class UploadFileController {
 		
 		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		
-		AuthUser authUser = null; 
-		if (!appProperties.getPrivateSummaryReportSite()) {
-			authUser = (AuthUser) model.get("authUser"); 
-		}
-		restService.persistValidReportsAsync(persistReportTask, validationResults, authUser);
+		restService.persistValidReportsAsync(persistReportTask, validationResults);
 		
 		log.info("called the aync method"); 
 		return "Server processing the valid reports.";
@@ -326,7 +330,8 @@ public class UploadFileController {
 		if (!appProperties.getPrivateSummaryReportSite()) {
 			authUser = (AuthUser) model.get("authUser"); 
 		}
-		restService.convertValidReportsAsync(reportConversionProgress, validationToConvertResults, authUser);
+		restService.convertValidReportsAsync(reportConversionProgress, validationToConvertResults, 
+				authUser);
 		
 		log.info("called the conversion aync method"); 
 		return "Server processing the valid reports.";
@@ -336,8 +341,8 @@ public class UploadFileController {
 	public @ResponseBody String persistPreCertificationErrors(Map<String, Object> model) {
 		
 		ValidationResults validationResults = (ValidationResults) model.get("validationResults");
-		AuthUser authUser = (AuthUser) model.get("authUser"); 
-		String response = restService.persistPreCertificationErrors(validationResults.getErrorList(), authUser);
+		String response = restService.persistPreCertificationErrors(
+				validationResults.getErrorList(), validationResults.getOwnerId());
 		
 		return response;
 	}
@@ -346,6 +351,22 @@ public class UploadFileController {
 	public @ResponseBody ReportProcessProgress getUploadStatus(Map<String, Object> model) {
 		
 		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
+		
+		if (persistReportTask.getProgress()>=100 && persistReportTask.getPersistedCount()>0) {
+			FileUploadLogs fileUploadLogs = new FileUploadLogs();
+			ValidationResults validationResults = (ValidationResults) model.get("validationResults");
+			fileUploadLogs.setOwner(new Owner(validationResults.getOwnerId())); 
+			fileUploadLogs.setTotalReportsCount(validationResults.getTotalReportCount());
+			fileUploadLogs.setValidReportsCount(validationResults.getCountOfValidReport());
+			Integer failedToProcessCount = persistReportTask.getFailedToProcess().size(); 
+			fileUploadLogs.setFailedToPersistCount(failedToProcessCount); 
+			fileUploadLogs.setPersistedCount(persistReportTask.getPersistedCount());
+			fileUploadLogs.setValidationErrorsCount(validationResults.getErrorList().size()); 
+			fileUploadLogs.setUploadFileNames(validationResults.getFilenames());
+			fileUploadLogs.setFileUploadCompleteTimestamp(LocalDateTime.now()); 
+			restService.saveFileUploadLogs(fileUploadLogs); 
+		}
+		
 		return persistReportTask;
 	}
 	

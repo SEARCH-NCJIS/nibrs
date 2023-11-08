@@ -130,12 +130,18 @@
                     }
                     
                     if (data.failedToProcess.length > 0){
-                  	  contentArray.push('<br>' + data.failedToProcess.length + ' incidents failed to persist due to error: ');
-                  	  contentArray.push('<ul>');
-                  	  for (i=0; i<data.failedToProcess.length; i++ ) {
-                  		  contentArray.push('<li>' + data.failedToProcess[i] + '</li>');
-                  		}
-                      contentArray.push('</ul>');
+                    	if (data.persistedCount > 0){
+	                  	  contentArray.push('<br>' + data.failedToProcess.length + ' incidents failed to persist due to error: ');
+	                  	  contentArray.push('<ul>');
+	                  	  for (i=0; i<data.failedToProcess.length; i++ ) {
+	                  		  contentArray.push('<li>' + data.failedToProcess[i] + '</li>');
+	                  		}
+	                      contentArray.push('</ul>');
+                    	}
+                    }
+                    
+                    if (data.persistedCount == 0){
+                    	contentArray.push('<br> No incident is persisted ');
                     }
                     
                     
