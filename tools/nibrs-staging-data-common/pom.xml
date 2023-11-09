@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>nibrs-staging-data-common</artifactId>
-
+  <version>1.0.1</version>
 	<parent>
 	  <groupId>org.search.nibrs</groupId>
 	  <artifactId>nibrs-tools-aggregate</artifactId>

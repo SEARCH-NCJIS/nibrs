@@ -36,6 +36,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <nibrs-common-version>[1.0.0,)</nibrs-common-version>
+    <nibrs-staging-data-common-version>[1.0.0,)</nibrs-staging-data-common-version>
 		<java.version>1.8</java.version>
 		<poi-version>3.17</poi-version>
 	</properties>
@@ -116,7 +117,7 @@
 		<dependency>
 			<groupId>org.search.nibrs</groupId>
 			<artifactId>nibrs-staging-data-common</artifactId>
-			<version>1.0.0</version>
+			<version>${nibrs-staging-data-common-version}</version>
 		</dependency>
 		<!-- poi libs -->
 		<dependency>
