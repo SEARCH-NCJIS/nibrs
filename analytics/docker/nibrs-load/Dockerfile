@@ -15,7 +15,7 @@
 
 # Docker image definition for containers with an R environment needed to load NIBRS data
 
-# Before building this image, you need to copy ../../../tools/r-packages/nibrs_1.0.0.tar.gz into the files/ directory
+# Before building this image, you need to copy ../../../tools/r-packages/nibrs_1.0.x.tar.gz into the files/ directory
 
 # To load local ICPSR data into a local staging db:
 
@@ -41,5 +41,5 @@ LABEL maintainer="SEARCH" \
 RUN apt-get update && apt-get install -y libmariadb-dev libmariadbclient-dev && R -e 'install.packages("RMariaDB")'
 RUN R -e 'install.packages(c("furrr","sergeant"))'
 
-COPY files/nibrs_1.0.0.tar.gz /tmp/
-RUN R -e 'install.packages("/tmp/nibrs_1.0.0.tar.gz", repos = NULL, type="source")'
+COPY files/nibrs_1.0.1.tar.gz /tmp/
+RUN R -e 'install.packages("/tmp/nibrs_1.0.1.tar.gz", repos = NULL, type="source")'
