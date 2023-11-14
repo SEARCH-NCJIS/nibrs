@@ -28,7 +28,7 @@ importFrom(DBI,dbReadTable)
 importFrom(DBI,dbSendQuery)
 importFrom(DBI,dbWriteTable)
 importFrom(furrr,future_map)
-importFrom(future,multiprocess)
+
 importFrom(future,plan)
 importFrom(jsonlite,fromJSON)
 importFrom(lubridate,as_date)
