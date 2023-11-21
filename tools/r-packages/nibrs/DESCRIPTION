@@ -1,7 +1,7 @@
 Package: nibrs
 Type: Package
 Title: Support for Processing FBI NIBRS Data
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: person("SEARCH - The National Consortium for Justice Information and Statistics", email = "info@search.org",
   role = c("aut", "cre"))
 Description: This package provides support for processing National Incident Based Reporting System (NIBRS) data in various formats.
@@ -14,4 +14,4 @@ Imports: tidyverse,
   lubridate,
   furrr
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

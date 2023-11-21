@@ -46,14 +46,6 @@ loadMultiStateYearDataToParquetDimensional <- function(zipDirectory, codeTableLi
 
   mapf <- map
 
-#  if (parallel) {
-#    plan(multiprocess)
-#    mapf <- future_map
-#    if (writeProgressDetail) {
-#      warning('Writing progress detail with parallel processing can negate the benefit of parallelism because of the shared writeLines() connection.  Consider setting writeProgressDetail to FALSE.')
-#    }
-#  }
-
   keepTablesOfType <- function(dfList, type) {
     keep(dfList, function(tdf) {
       attr(tdf, "type")==type
@@ -330,7 +322,6 @@ getStateCodeFromFile <- function(file) {
 #' @import dplyr
 #' @import purrr
 #' @importFrom furrr future_map
-#' @importFrom future plan multiprocess
 #' @export
 loadMultiStateYearDataToStaging <- function(zipDirectory, codeTableList=NULL, zipFileSampleFraction=1, stateAbbreviationRegex=NULL, yearRegex=NULL, parallel=FALSE, writeProgressDetail=TRUE) {
 
@@ -357,12 +348,6 @@ loadMultiStateYearDataToStaging <- function(zipDirectory, codeTableList=NULL, zi
 
   mapf <- map
   reducef <- reduce
-
-  #if (parallel) {
-  #  plan(multiprocess)
-  #  mapf <- future_map
-    # unfortunately, no parallel reduce is available...
-  #}
 
   ret <- files %>% mapf(function(file) {
     state <- gsub(x=basename(file), pattern='^(.{2})-.+', replacement='\\1')
