@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.search.nibrs.model.AbstractReport;
 
 public class ReportProcessProgress{
 
@@ -36,9 +35,9 @@ public class ReportProcessProgress{
 		super();
 	}
 
-	public ReportProcessProgress(List<AbstractReport> reportsToProcess) {
+	public ReportProcessProgress(int validReportCount) {
 		this();
-		this.totalCount = reportsToProcess.size();
+		this.totalCount = validReportCount;
 	}
 	
 	@Override

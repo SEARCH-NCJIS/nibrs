@@ -34,6 +34,8 @@ public class ValidationResults{
 	private List<GroupAIncidentReport> groupAIncidentReports = new ArrayList<>();
 	private List<GroupBArrestReport> groupBArrestReports = new ArrayList<>();
 	private Integer totalReportCount = 0;
+	private Integer validReportCount = 0;
+
 	private List<AbstractReport> reportWithAllowableErrors;
 
 	private Integer persistedCount = 0; 
@@ -70,7 +72,7 @@ public class ValidationResults{
 	}
 
 	public Integer getCountOfValidReport() {
-		return reportsWithoutErrors.size();
+		return validReportCount;
 	}
 	
 	public void increaseTotalReportCount() {
@@ -145,6 +147,14 @@ public class ValidationResults{
 
 	public void setOwnerId(Integer ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public Integer getValidReportCount() {
+		return validReportCount;
+	}
+
+	public void increaseValidReportCount() {
+		this.validReportCount++;
 	}
 
 }

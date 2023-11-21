@@ -123,8 +123,7 @@ public class UploadFileController {
 		validationResults.setOwnerId(ownerId);
 		model.addAttribute("validationResults", validationResults);
 		
-		List<AbstractReport> validReports = validationResults.getReportsWithoutErrors(); 
-		ReportProcessProgress persistReportTask = new ReportProcessProgress(validReports);
+		ReportProcessProgress persistReportTask = new ReportProcessProgress(validationResults.getCountOfValidReport());
 		model.addAttribute("persistReportTask", persistReportTask);
 
         return "validationReport :: #content";
@@ -139,8 +138,7 @@ public class UploadFileController {
     	ValidationResults validationToConvertResults = getNibrsErrors(multipartFiles); 
     	model.addAttribute("validationToConvertResults", validationToConvertResults);
     	
-    	List<AbstractReport> validReports = validationToConvertResults.getReportsWithoutErrors(); 
-    	ReportProcessProgress reportConversionProgress = new ReportProcessProgress(validReports);
+    	ReportProcessProgress reportConversionProgress = new ReportProcessProgress(validationToConvertResults.getCountOfValidReport());
     	model.addAttribute("reportConversionProgress", reportConversionProgress);
     	
     	return "validationToConvertReport :: #content";
@@ -352,7 +350,7 @@ public class UploadFileController {
 		
 		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		
-		if (persistReportTask.getProgress()>=100 && persistReportTask.getPersistedCount()>0) {
+		if (persistReportTask.isComplete() && persistReportTask.getPersistedCount()>0) {
 			FileUploadLogs fileUploadLogs = new FileUploadLogs();
 			ValidationResults validationResults = (ValidationResults) model.get("validationResults");
 			fileUploadLogs.setOwner(new Owner(validationResults.getOwnerId())); 
@@ -418,9 +416,11 @@ public class UploadFileController {
 	private void allocateTheReport(ValidationResults validationResults, AbstractReport report) {
 		if (report instanceof GroupAIncidentReport) {
 			validationResults.getGroupAIncidentReports().add((GroupAIncidentReport) report);
+			validationResults.increaseValidReportCount();
 		}
 		else if(report instanceof GroupBArrestReport) {
 			validationResults.getGroupBArrestReports().add((GroupBArrestReport) report);
+			validationResults.increaseValidReportCount();
 		}
 	}
 	
