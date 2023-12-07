@@ -99,19 +99,7 @@
 			              rowId: "primaryKey",
 			              stateSave: true,
 		                stateDuration:0,
-			              columns: [
-			                  { "data": "incidentIdentifier" },
-			                  { "data": "agencyName" },
-			                  { "data": "incidentDate" },
-			                  { "data": "submissionDateString" },
-			                  { "data": "ucrOffenseCodeTypeId" },
-			                  { "data": "reportType" },
-			                  { "data": "fbiStatus"}, 
-			                  { "data": "faultCode"}, 
-			                  { "data": "fbiSubmissionTimestamp"}, 
-			                  { "data": "reportTimestamp", "visible":false}, 
-			                  { "data": "primaryKey", "visible":false}
-			              ], 
+			              columns: getColumns(allowSubmitToFbi), 
 			              buttons: [
 			                  {
 			                      extend: 'excelHtml5',
@@ -174,18 +162,10 @@
 		
 				          });
 				          
-				          
-				          if (!allowSubmitToFbi){
-				        	  table.columns( [6] ).visible( false );
-				        	  table.columns( [7] ).visible( false );
-				        	  table.columns( [8] ).visible( false );
-				          }
-				          
 				          $('[data-toggle="tooltip"]').tooltip({
 				              trigger : 'hover'
 				          });   
 				
-				                  
 				          $('#searchResultsTable tbody').on('dblclick', 'tr',function() {
 				            table.$('tr.selected').removeClass('selected');
 				            $(this).addClass('selected');  
@@ -212,8 +192,37 @@
 				              $('#reportDetailModal').modal('show');
 				            }).fail(ojbc.displayFailMessage);
 				          });
-				        }); 
-				
+				        });
+				         
+				        function getColumns(allowSubmitToFbi){
+                  if (allowSubmitToFbi){
+                    return [
+                        { "data": "incidentIdentifier" },
+                        { "data": "agencyName" },
+                        { "data": "incidentDate" },
+                        { "data": "submissionDateString" },
+                        { "data": "ucrOffenseCodeTypeId" },
+                        { "data": "reportType" },
+                        { "data": "fbiStatus"}, 
+                        { "data": "faultCode"}, 
+                        { "data": "fbiSubmissionTimestamp"}, 
+                        { "data": "reportTimestamp", "visible":false}, 
+                        { "data": "primaryKey", "visible":false}
+                    ];
+                  }
+                  else{
+                    return [
+                        { "data": "incidentIdentifier" },
+                        { "data": "agencyName" },
+                        { "data": "incidentDate" },
+                        { "data": "submissionDateString" },
+                        { "data": "ucrOffenseCodeTypeId" },
+                        { "data": "reportType" },
+                        { "data": "reportTimestamp", "visible":false}, 
+                        { "data": "primaryKey", "visible":false}
+                    ];
+                  }
+                }
 		      	</script>
      	  </div>
       	
