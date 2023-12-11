@@ -503,6 +503,7 @@ convertStagingTablesToDimensional <- function(dimensionTables, factTables, ageGr
       TypeDrugMeasurementTypeID=case_when(is.na(TypeDrugMeasurementTypeID) ~ 99998L, TRUE ~ TypeDrugMeasurementTypeID),
       EstimatedDrugQuantity=case_when(is.na(EstimatedDrugQuantity) ~ 0, TRUE ~ EstimatedDrugQuantity),
       IncidentHour=as.integer(IncidentHour),
+      LastUpdateTimestamp=format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
       CompletionStatusIndicator=case_when(
         is.na(OffenseAttemptedCompleted) | OffenseAttemptedCompleted=='' ~ 99998L,
         OffenseAttemptedCompleted=='C' ~ 1L,
@@ -623,7 +624,8 @@ convertStagingTablesToDimensional <- function(dimensionTables, factTables, ageGr
       ClearanceType,
       RecoveredMotorVehiclesDim,
       StolenMotorVehiclesDim,
-      CompletionStatusIndicator
+      CompletionStatusIndicator,
+      LastUpdateTimestamp
     )
 
   if (writeProgressDetail) writeLines('Creating Victim-Offense View')
