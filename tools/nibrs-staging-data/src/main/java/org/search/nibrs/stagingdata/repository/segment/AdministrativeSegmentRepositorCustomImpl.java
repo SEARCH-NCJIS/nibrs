@@ -55,6 +55,7 @@ public class AdministrativeSegmentRepositorCustomImpl implements AdministrativeS
 
 	@Override
 	public List<IncidentPointer> findAllByCriteria(IncidentSearchRequest incidentSearchRequest) {
+		
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<IncidentPointer> query = criteriaBuilder.createQuery(IncidentPointer.class);
         Root<AdministrativeSegment> root = query.from(AdministrativeSegment.class);

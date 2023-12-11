@@ -27,13 +27,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
-
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.search.nibrs.model.ArresteeSegment;
 import org.search.nibrs.model.GroupBArrestReport;
 import org.search.nibrs.model.reports.SummaryReportRequest;
+import org.search.nibrs.stagingdata.AppProperties;
 import org.search.nibrs.stagingdata.controller.BadRequestException;
 import org.search.nibrs.stagingdata.model.Agency;
 import org.search.nibrs.stagingdata.model.AgencyType;
@@ -167,6 +168,8 @@ public class ArrestReportService {
 	public CodeTableService codeTableService; 
 	@Autowired
 	public XmlReportGenerator xmlReportGenerator; 
+	@Autowired
+	public AppProperties appProperties; 
 	
 	@Transactional
 	public ArrestReportSegment saveArrestReportSegment(ArrestReportSegment arrestReportSegment){
@@ -280,7 +283,7 @@ public class ArrestReportService {
 			
 			String reportActionType = String.valueOf(groupBArrestReport.getReportActionType()).trim();
 			if (!Objects.equals("D", reportActionType) && !Objects.equals("R", reportActionType)
-					&& groupBArrestReport.getOwnerId() == null){
+					&& appProperties.isToUpdateSegmentActionType()){
 				if (arrestReportSegmentRepository
 						.existsByArrestTransactionNumberAndOri(groupBArrestReport.getIdentifier(), groupBArrestReport.getOri())){
 					reportActionType = "R"; 

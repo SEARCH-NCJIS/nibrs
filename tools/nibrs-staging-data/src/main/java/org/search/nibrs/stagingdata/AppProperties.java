@@ -33,6 +33,10 @@ public class AppProperties {
 	private Map<String, Integer> stateRaceCodeMapping = new HashMap<>();
 	private Integer reportSearchResultsLimit = 10000;
 	private Integer summaryReportProcessingBatchSize = 500;
+	/*
+	 * Segment action type matters to update records
+	 */
+	private boolean toUpdateSegmentActionType = true;
 
 	public AppProperties() {
 		super();
@@ -226,6 +230,14 @@ public class AppProperties {
 
 	public void setStateRaceCodeMapping(Map<String, Integer> stateRaceCodeMapping) {
 		this.stateRaceCodeMapping = stateRaceCodeMapping;
+	}
+
+	public boolean isToUpdateSegmentActionType() {
+		return toUpdateSegmentActionType;
+	}
+
+	public void setToUpdateSegmentActionType(boolean toUpdateSegmentActionType) {
+		this.toUpdateSegmentActionType = toUpdateSegmentActionType;
 	}
 
 }

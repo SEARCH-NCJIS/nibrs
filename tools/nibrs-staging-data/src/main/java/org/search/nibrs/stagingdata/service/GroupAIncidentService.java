@@ -34,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.search.nibrs.common.ParsedObject;
 import org.search.nibrs.model.GroupAIncidentReport;
 import org.search.nibrs.model.NIBRSAge;
+import org.search.nibrs.stagingdata.AppProperties;
 import org.search.nibrs.stagingdata.controller.BadRequestException;
 import org.search.nibrs.stagingdata.model.AdditionalJustifiableHomicideCircumstancesType;
 import org.search.nibrs.stagingdata.model.Agency;
@@ -126,6 +127,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class GroupAIncidentService {
 	private static final Log log = LogFactory.getLog(GroupAIncidentService.class);
 	private static final String BAD_DELETE_REQUEST = "The incident number is required to delete an incident";
+	@Autowired
+	AppProperties appProperties;
 	@Autowired
 	AdministrativeSegmentRepository administrativeSegmentRepository;
 	@Autowired
@@ -281,7 +284,7 @@ public class GroupAIncidentService {
 			
 			String reportActionType = String.valueOf(groupAIncidentReport.getReportActionType()).trim();
 			if (!Objects.equals("D", reportActionType) && !Objects.equals("R", reportActionType)
-					&& groupAIncidentReport.getOwnerId() == null){
+					&& appProperties.isToUpdateSegmentActionType()){
 				if (administrativeSegmentRepository
 						.existsByIncidentNumberAndOri(groupAIncidentReport.getIncidentNumber(), groupAIncidentReport.getOri())){
 					reportActionType = "R"; 
