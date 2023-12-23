@@ -224,13 +224,13 @@ public class UploadFileController {
 			}
 		};
 		
-		StringBuilder filenames = new StringBuilder(); 
+		List<String> filenames = new ArrayList<>(); 
 		for (MultipartFile multipartFile: multipartFiles){
 			
 			if (!acceptedFileTypes.contains(multipartFile.getContentType())){
 				throw new IllegalArgumentException("The file type is not supported"); 
 			}
-			filenames.append(multipartFile.getOriginalFilename());
+			filenames.add(multipartFile.getOriginalFilename());
 			if (multipartFile.getContentType().equals("application/zip") || multipartFile.getContentType().equals("application/x-zip-compressed")){
 				validateZippedFile( validatorListener, multipartFile.getInputStream());
 			}
@@ -241,7 +241,7 @@ public class UploadFileController {
 			
 		}
 		
-		validationResults.setFilenames(filenames.toString()); 
+		validationResults.setFilenames(StringUtils.join(filenames, ", ")); 
 		return validationResults;
 	}
 
@@ -350,7 +350,8 @@ public class UploadFileController {
 		
 		ReportProcessProgress persistReportTask = (ReportProcessProgress) model.get("persistReportTask");
 		
-		if (persistReportTask.isComplete() && persistReportTask.getPersistedCount()>0) {
+		if ((persistReportTask.isComplete() || persistReportTask.getProgress() >= 100) && persistReportTask.getPersistedCount()>0) {
+			log.info(persistReportTask); 
 			FileUploadLogs fileUploadLogs = new FileUploadLogs();
 			ValidationResults validationResults = (ValidationResults) model.get("validationResults");
 			fileUploadLogs.setOwner(new Owner(validationResults.getOwnerId())); 
