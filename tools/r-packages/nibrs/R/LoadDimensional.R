@@ -246,6 +246,8 @@ loadDimensionalFromStagingDatabase <- function(
   }
 
   ret
+  
+  
 
 }
 
@@ -540,6 +542,7 @@ convertStagingTablesToDimensional <- function(dimensionTables, factTables, ageGr
     left_join(dimensionTables$State %>% select(StateCode, StateID), by='StateCode') %>%
     select(
       AdministrativeSegmentID,
+      IncidentNumber,
       StateID,
       IncidentHour,
       ClearedExceptionallyTypeID,
