@@ -68,11 +68,27 @@ applyStagingEdits <- function(
 
   # remove deleted Group Bs
 
-  deletedGroupB <- factTables$ArrestReportSegment %>% filter(SegmentActionTypeTypeID==2) %>% select(ArrestReportSegmentID)
-  writeLines(paste0("Deleting ", nrow(deletedGroupB), " Group B records with action type of D"))
+  editedArrests <- factTables$ArrestReportSegment %>%
+    select(ArrestTransactionNumber, AgencyID) %>% distinct() %>%
+    inner_join(factTables$ArrestReportSegment %>%
+                 select(ArrestReportSegmentID, ArrestTransactionNumber, ReportTimestamp, SegmentActionTypeTypeID, AgencyID), by=c('ArrestTransactionNumber', 'AgencyID')) %>%
+    group_by(ArrestTransactionNumber, AgencyID)
+  writeLines(paste0("editedArrests row count: ", nrow(editedArrests)))
 
-  factTables$ArrestReportSegment <- factTables$ArrestReportSegment %>% anti_join(deletedGroupB, by='ArrestReportSegmentID')
-  factTables$ArrestReportSegmentWasArmedWith <- factTables$ArrestReportSegmentWasArmedWith %>% anti_join(deletedGroupB, by='ArrestReportSegmentID')
+  latestArrests <- editedArrests %>%
+    filter(ReportTimestamp==max(ReportTimestamp)) %>%
+    group_by(ArrestTransactionNumber, AgencyID, ReportTimestamp) %>%
+    filter(ArrestReportSegmentID==max(ArrestReportSegmentID)) %>%
+    ungroup()
+  writeLines(paste0("latestArrests row count: ", nrow(latestArrests)))
+
+  editedArrests <- editedArrests %>% ungroup()
+
+  latestArrestWithoutDeletes <-latestArrests  %>% filter(SegmentActionTypeTypeID != 2 )
+  writeLines(paste0("latestArrests without Segment Action Type D row count: ", nrow(latestArrestWithoutDeletes)))
+
+  factTables$ArrestReportSegment <- factTables$ArrestReportSegment %>% semi_join(latestArrestWithoutDeletes, by='ArrestReportSegmentID')
+  factTables$ArrestReportSegmentWasArmedWith <- factTables$ArrestReportSegmentWasArmedWith %>% semi_join(latestArrestWithoutDeletes, by='ArrestReportSegmentID')
 
   tables <- c(dimensionTables, factTables)
 
