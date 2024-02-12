@@ -31,7 +31,6 @@ applyStagingEdits <- function(
   # group by IncidentNumber
 
   editedIncidents <- factTables$AdministrativeSegment %>%
-#    filter(SegmentActionTypeTypeID != 3) %>%
     select(IncidentNumber, AgencyID) %>% distinct() %>%
     inner_join(factTables$AdministrativeSegment %>%
                  select(AdministrativeSegmentID, IncidentNumber, ReportTimestamp, SegmentActionTypeTypeID, AgencyID), by=c('IncidentNumber', 'AgencyID')) %>%
