@@ -41,5 +41,5 @@ LABEL maintainer="SEARCH" \
 RUN apt-get update && apt-get install -y libmariadb-dev libmariadbclient-dev && R -e 'install.packages("RMariaDB")'
 RUN R -e 'install.packages(c("furrr","sergeant"))'
 
-COPY files/nibrs_1.0.3.tar.gz /tmp/
-RUN R -e 'install.packages("/tmp/nibrs_1.0.3.tar.gz", repos = NULL, type="source")'
+COPY files/nibrs_1.0.4.tar.gz /tmp/
+RUN R -e 'install.packages("/tmp/nibrs_1.0.4.tar.gz", repos = NULL, type="source")'
