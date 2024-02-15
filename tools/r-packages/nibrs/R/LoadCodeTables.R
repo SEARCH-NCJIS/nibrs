@@ -20,6 +20,7 @@
 #' @export
 loadCodeTables <- function(spreadsheetFile=NULL, conn=NULL, quiet=FALSE) {
 
+  writeLines(paste0('Loading code tables package name ', getPackageName()))
   if (is.null(spreadsheetFile)) {
     spreadsheetFile <- system.file("raw", "NIBRSCodeTables.xlsx", package=getPackageName())
   }
