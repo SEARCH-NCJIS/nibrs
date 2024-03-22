@@ -95,7 +95,7 @@ writeDataFrameToDatabase <- function(conn, x, tableName, append = TRUE, viaBulk 
       } else {
         f <- tempfile(tmpdir = "/tmp", pattern = tableName)
       }
-      if ('MariaDBConnection'==cc) {
+      if ('MariaDBConnection'==cc || 'MySQLConnection' == cc) {
         if (nrow(x) > 0) {
           if (!append) {
             executeSQL(paste0("truncate ", tableName))
