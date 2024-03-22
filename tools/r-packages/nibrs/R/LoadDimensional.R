@@ -936,7 +936,7 @@ convertStagingTablesToDimensional <- function(dimensionTables, factTables, ageGr
       ArresteeUcrAgeGroup=createUcrAgeGroup(AgeOfArresteeMin, NonNumericAge),
       ArresteeUcrAgeGroupSort=createUcrAgeGroupSort(AgeOfArresteeMin, NonNumericAge),
       ArresteeWasArmedWithTypeID=case_when(is.na(ArresteeWasArmedWithTypeID) ~ -1L, TRUE ~ ArresteeWasArmedWithTypeID),
-      AutomaticWeaponIndicator=case_when(is.na(AutomaticWeaponIndicator) | (AutomaticWeaponIndicator == '') ~ 'N', TRUE ~ AutomaticWeaponIndicator),
+      AutomaticWeaponIndicator=case_when(is.na(AutomaticWeaponIndicator) ~ 'N', TRUE ~ AutomaticWeaponIndicator),
       ArrestDateID=case_when(is.na(ArrestDateID) ~ 99998L, TRUE ~ ArrestDateID)
     ) %>%
     left_join(dimensionTables$State %>% select(StateCode, StateID), by='StateCode') %>%
@@ -1053,6 +1053,14 @@ createIndexIfNotExists<- function(dimensionalConn, tableName, indexName, columnN
 	isIndexExists = dbGetQuery(dimensionalConn, paste0("select count(*) > 0 from information_schema.statistics where table_name = '",  tableName, "' and index_name='", indexName, "' and table_schema = database()"))
 	writeLines(paste0('isIndexExists: ', isIndexExists == 1))
 	if (isIndexExists != 1){
+	  isVarchar0 = dbGetQuery(dimensionalConn, paste0("SELECT lower(column_type)='varchar(0)' FROM INFORMATION_SCHEMA.COLUMNS
+        where table_name = '",  tableName, "' and COLUMN_NAME='", columnName, "' and table_schema = database()"));
+
+    if (isVarchar0 == 1){
+       writeLines(paste0('alter varchar(0) column to varchar(1): ', tableName, '.', columnName))
+       alterVarcharLength = paste0 ("ALTER TABLE ",  tableName , ' CHANGE COLUMN ', columnName, ' ',  columnName,  ' VARCHAR(1) NULL DEFAULT NULL')
+       dbExecute(dimensionalConn, alterVarcharLength)
+    }
 		createIndexStatement = paste0('create index ', indexName, ' on ', tableName, '(', columnName, ');')
 		writeLines(createIndexStatement)
 		dbExecute(dimensionalConn, createIndexStatement)
