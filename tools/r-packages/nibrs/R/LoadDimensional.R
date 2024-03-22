@@ -936,7 +936,7 @@ convertStagingTablesToDimensional <- function(dimensionTables, factTables, ageGr
       ArresteeUcrAgeGroup=createUcrAgeGroup(AgeOfArresteeMin, NonNumericAge),
       ArresteeUcrAgeGroupSort=createUcrAgeGroupSort(AgeOfArresteeMin, NonNumericAge),
       ArresteeWasArmedWithTypeID=case_when(is.na(ArresteeWasArmedWithTypeID) ~ -1L, TRUE ~ ArresteeWasArmedWithTypeID),
-      AutomaticWeaponIndicator=case_when(is.na(AutomaticWeaponIndicator) ~ 'N', TRUE ~ AutomaticWeaponIndicator),
+      AutomaticWeaponIndicator=case_when(is.na(AutomaticWeaponIndicator) | (AutomaticWeaponIndicator == '') ~ 'N', TRUE ~ AutomaticWeaponIndicator),
       ArrestDateID=case_when(is.na(ArrestDateID) ~ 99998L, TRUE ~ ArrestDateID)
     ) %>%
     left_join(dimensionTables$State %>% select(StateCode, StateID), by='StateCode') %>%
@@ -1038,7 +1038,7 @@ loadDimensionalFromObjectLists <- function(
       ddf %>% head(0) %>% select_if(~!(is.double(.x) | is.Date(.x))) %>% colnames() %>% head(63) %>% walk(function(cnm) {
         # head(63) because MariaDB only supports creating indexes for 64 columns
         writeLines(paste0('Creating index for FK ', cnm))
-		createIndexIfNotExists(dimensionalConn, tableName, paste0('idx_', cnm), cnm)
+		    createIndexIfNotExists(dimensionalConn, tableName, paste0('idx_', cnm), cnm)
       })
     }
   })
